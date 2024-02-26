@@ -1,1 +1,15 @@
-{}
+{
+  "Actions": "Actions",
+  "Create NetworkAttachmentDefinition": "Create NetworkAttachmentDefinition",
+  "Delete NetworkAttachmentDefinition": "Delete NetworkAttachmentDefinition",
+  "Edit annotations": "Edit annotations",
+  "Edit labels": "Edit labels",
+  "Edit NetworkAttachmentDefinition": "Edit NetworkAttachmentDefinition",
+  "Learn how to use NetworkAttachmentDefinitions": "Learn how to use NetworkAttachmentDefinitions",
+  "Name": "Name",
+  "Namespace": "Namespace",
+  "NetworkAttachmentDefinition": "NetworkAttachmentDefinition",
+  "No NetworkAttachmentDefinition found": "No NetworkAttachmentDefinition found",
+  "Type": "Type",
+  "You don't have permission to perform this action": "You don't have permission to perform this action"
+}

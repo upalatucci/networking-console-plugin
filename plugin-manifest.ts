@@ -1,6 +1,7 @@
 import { EncodedExtension } from '@openshift/dynamic-plugin-sdk-webpack';
 import { ConsolePluginBuildMetadata } from '@openshift-console/dynamic-plugin-sdk-webpack/lib/build-types';
 import { YAMLExposedModules, YAMLExtensions } from './src/templates/manifest';
+import { NADsExposedModules, NADsExtensions } from './src/views/nads/manifest';
 import {
   FlagsExposedModules,
   FlagsExtensions,
@@ -13,6 +14,7 @@ export const pluginMetadata: ConsolePluginBuildMetadata = {
   description: 'Plugin responsible for all the networking section ui code',
   exposedModules: {
     ...YAMLExposedModules,
+    ...NADsExposedModules,
     ...FlagsExposedModules,
   },
   dependencies: {
@@ -22,5 +24,6 @@ export const pluginMetadata: ConsolePluginBuildMetadata = {
 
 export const extensions: EncodedExtension[] = [
   ...YAMLExtensions,
+  ...NADsExtensions,
   ...FlagsExtensions,
 ];
