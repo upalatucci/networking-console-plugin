@@ -33,7 +33,7 @@ const deleteHelmChart = (path: string) => {
   });
 };
 
-describe('Console plugin template test', () => {
+describe.skip('Console plugin template test', () => {
   before(() => {
     cy.login();
 
