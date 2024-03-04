@@ -1,6 +1,7 @@
 import { EncodedExtension } from '@openshift/dynamic-plugin-sdk-webpack';
 import { ConsolePluginBuildMetadata } from '@openshift-console/dynamic-plugin-sdk-webpack/lib/build-types';
 import {
+  ResourceDetailsPage,
   ResourceListPage,
   ResourceNSNavItem,
   RoutePage,
@@ -54,6 +55,13 @@ export const NADsExtensions: EncodedExtension[] = [
       },
     },
   } as EncodedExtension<RoutePage>,
+  {
+    properties: {
+      component: { $codeRef: 'NetworkAttachmentDefinitionPage' },
+      model: NetworkAttachmentDefinitionExtensionModel,
+    },
+    type: 'console.page/resource/details',
+  } as EncodedExtension<ResourceDetailsPage>,
 ];
 
 export const NADsExposedModules: ConsolePluginBuildMetadata['exposedModules'] =
@@ -62,4 +70,6 @@ export const NADsExposedModules: ConsolePluginBuildMetadata['exposedModules'] =
       './views/nads/list/NetworkAttachmentDefinitionList.tsx',
     NetworkAttachmentDefinitionsForm:
       './views/nads/new/NetworkAttachmentDefinitionsForm',
+    NetworkAttachmentDefinitionPage:
+      './views/nads/details/NetworkAttachmentDefinitionPage.tsx',
   };
