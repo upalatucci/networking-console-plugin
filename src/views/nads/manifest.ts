@@ -44,10 +44,10 @@ export const NADsExtensions: EncodedExtension[] = [
       perspective: 'admin',
       exact: true,
       path: [
-        `/k8s/ns/:ns/k8s.cni.cncf.io~v1~NetworkAttachmentDefinition/~new/test`,
+        `/k8s/ns/:ns/k8s.cni.cncf.io~v1~NetworkAttachmentDefinition/~new/form`,
       ],
       component: {
-        $codeRef: 'NetworkAttachmentDefinitionList',
+        $codeRef: 'NetworkAttachmentDefinitionsForm',
       },
       flags: {
         required: [FLAG_NET_ATTACH_DEF],
@@ -60,4 +60,6 @@ export const NADsExposedModules: ConsolePluginBuildMetadata['exposedModules'] =
   {
     NetworkAttachmentDefinitionList:
       './views/nads/list/NetworkAttachmentDefinitionList.tsx',
+    NetworkAttachmentDefinitionsForm:
+      './views/nads/new/NetworkAttachmentDefinitionsForm',
   };

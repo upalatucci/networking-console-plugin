@@ -1,19 +1,14 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-env node */
 
-import {
-  DefinePlugin,
-  ProvidePlugin,
-  Configuration as WebpackConfiguration,
-} from 'webpack';
+import { Configuration as WebpackConfiguration } from 'webpack';
 import { Configuration as WebpackDevServerConfiguration } from 'webpack-dev-server';
 import * as path from 'path';
 import { ConsoleRemotePlugin } from '@openshift-console/dynamic-plugin-sdk-webpack';
 import { pluginMetadata, extensions } from './plugin-manifest';
 
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 interface Configuration extends WebpackConfiguration {
   devServer?: WebpackDevServerConfiguration;
@@ -21,9 +16,8 @@ interface Configuration extends WebpackConfiguration {
 
 const config: Configuration = {
   mode: 'development',
-  // No regular entry points. The remote container entry is handled by ConsoleRemotePlugin.
-  entry: {},
   context: path.resolve(__dirname, 'src'),
+  entry: {},
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name]-bundle.js',
@@ -31,8 +25,33 @@ const config: Configuration = {
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
-    modules: [path.join(__dirname, 'node_modules')],
     plugins: [new TsconfigPathsPlugin()],
+  },
+  devServer: {
+    // Allow bridge running in a container to connect to the plugin dev server.
+    allowedHosts: 'all',
+    client: {
+      progress: true,
+      webSocketURL: {
+        port: 9001,
+      },
+    },
+    devMiddleware: {
+      writeToDisk: true,
+    },
+    headers: {
+      'Access-Control-Allow-Headers':
+        'X-Requested-With, Content-Type, Authorization',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+      'Access-Control-Allow-Origin': '*',
+      'Cache-Control': 'no-store',
+    },
+    hot: true,
+    liveReload: true,
+    port: 9001,
+    static: {
+      directory: path.join(__dirname, 'dist'),
+    },
   },
   module: {
     rules: [
@@ -44,74 +63,22 @@ const config: Configuration = {
             loader: 'ts-loader',
             options: {
               configFile: path.resolve(__dirname, 'tsconfig.json'),
-              transpileOnly: true,
             },
           },
         ],
       },
       {
-        exclude:
-          /node_modules\/(?!(@patternfly|@openshift-console\/plugin-shared|@openshift-console\/dynamic-plugin-sdk)\/).*/,
-        test: /\.scss$/,
-        use: [
-          { loader: 'style-loader' },
-          {
-            loader: 'css-loader',
-            options: {
-              sourceMap: true,
-            },
-          },
-          {
-            loader: 'resolve-url-loader',
-            options: {
-              sourceMap: true,
-            },
-          },
-          {
-            loader: 'sass-loader',
-            options: {
-              sassOptions: {
-                outputStyle: 'compressed',
-              },
-              sourceMap: true,
-            },
-          },
-        ],
-      },
-      {
-        test: /\.css$/,
+        test: /\.s?(css)$/,
         use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.(png|jpg|jpeg|gif|svg|woff2?|ttf|eot|otf)(\?.*$|$)/,
-        type: 'asset/resource',
-        generator: {
-          filename: 'assets/[name].[ext]',
-        },
-      },
-      {
-        test: /\.m?js/,
-        resolve: {
-          fullySpecified: false,
+        loader: 'file-loader',
+        options: {
+          name: 'assets/[name].[ext]',
         },
       },
     ],
-  },
-  devServer: {
-    static: './dist',
-    port: 9001,
-    // Allow bridge running in a container to connect to the plugin dev server.
-    allowedHosts: 'all',
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-      'Access-Control-Allow-Headers':
-        'X-Requested-With, Content-Type, Authorization',
-    },
-    hot: true,
-    devMiddleware: {
-      writeToDisk: true,
-    },
   },
   plugins: [
     new ConsoleRemotePlugin({
@@ -120,22 +87,6 @@ const config: Configuration = {
     }),
     new CopyWebpackPlugin({
       patterns: [{ from: path.resolve(__dirname, 'locales'), to: 'locales' }],
-    }),
-    new ForkTsCheckerWebpackPlugin({
-      typescript: {
-        configFile: path.resolve(__dirname, 'tsconfig.json'),
-        diagnosticOptions: {
-          semantic: true,
-          syntactic: true,
-        },
-        memoryLimit: 4096,
-      },
-    }),
-    new ProvidePlugin({
-      process: 'process/browser',
-    }),
-    new DefinePlugin({
-      'process.env': JSON.stringify({ NODE_ENV: process.env.NODE_ENV }),
     }),
   ],
   devtool: 'source-map',
@@ -151,11 +102,11 @@ if (process.env.NODE_ENV === 'production') {
     config.output.filename = '[name]-bundle-[hash].min.js';
     config.output.chunkFilename = '[name]-chunk-[chunkhash].min.js';
   }
+
   if (config.optimization) {
     config.optimization.chunkIds = 'deterministic';
     config.optimization.minimize = true;
   }
-  config.devtool = false;
 }
 
 export default config;
