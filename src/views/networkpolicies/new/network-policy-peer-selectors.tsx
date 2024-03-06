@@ -1,12 +1,21 @@
 import * as React from 'react';
 import { Button } from '@patternfly/react-core';
-import { Trans, useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 import { NetworkPolicyConditionalSelector } from './network-policy-conditional-selector';
 import { NetworkPolicySelectorPreview } from './network-policy-selector-preview';
+import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
-export const NetworkPolicyPeerSelectors: React.FC<PeerSelectorProps> = (props) => {
-  const { t } = useTranslation();
-  const { policyNamespace, direction, onChange, podSelector, namespaceSelector } = props;
+export const NetworkPolicyPeerSelectors: React.FC<PeerSelectorProps> = (
+  props,
+) => {
+  const { t } = useNetworkingTranslation();
+  const {
+    policyNamespace,
+    direction,
+    onChange,
+    podSelector,
+    namespaceSelector,
+  } = props;
 
   const handlePodSelectorChange = (updated: string[][]) => {
     onChange(updated, namespaceSelector);

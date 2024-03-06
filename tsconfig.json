@@ -18,7 +18,7 @@
     "sourceMap": true,
     "target": "es2016"
   },
-  "exclude": ["**/node_modules", "**/dist", "./src/views/networkpolicies/new/**"],
+  "exclude": ["**/node_modules", "**/dist"],
   "include": ["src", "images"],
   "ts-node": {
     "files": true,

@@ -1,0 +1,10 @@
+{
+  "Can't preview pods": "Can't preview pods",
+  "Input error: selectors must start and end by a letter or number, and can only contain -, _, / or . Offending value: {{offendingSelector}}": "Input error: selectors must start and end by a letter or number, and can only contain -, _, / or . Offending value: {{offendingSelector}}",
+  "List of pods": "List of pods",
+  "List of pods matching": "List of pods matching",
+  "No pods matching the provided labels in the current namespace": "No pods matching the provided labels in the current namespace",
+  "No selector": "No selector",
+  "Showing {{shown}} from {{total}} results": "Showing {{shown}} from {{total}} results",
+  "View all {{total}} results": "View all {{total}} results"
+}

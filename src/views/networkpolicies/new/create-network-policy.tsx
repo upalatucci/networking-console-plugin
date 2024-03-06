@@ -1,28 +1,30 @@
-import * as React from 'react';
+import React, { FC } from 'react';
 import * as _ from 'lodash';
-import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom-v5-compat';
-import { CreateYAML } from '@console/internal/components/create-yaml';
-import { PageHeading } from '@console/internal/components/utils';
-import { NetworkPolicyModel } from '@console/internal/models';
-import { NetworkPolicyKind } from '@console/internal/module/k8s';
-import { SyncedEditor } from '@console/shared/src/components/synced-editor';
-import { EditorType } from '@console/shared/src/components/synced-editor/editor-toggle';
 import { NetworkPolicyForm } from './network-policy-form';
 import {
-  isNetworkPolicyConversionError,
   NetworkPolicy,
+  isNetworkPolicyConversionError,
   networkPolicyFromK8sResource,
   networkPolicyNormalizeK8sResource,
   networkPolicyToK8sResource,
-} from './network-policy-model';
+} from '@utils/models';
 
 import './_create-network-policy.scss';
+import { NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
+import { NetworkPolicyKind } from '@utils/resources/networkpolicies/types';
+import { CodeEditor } from '@openshift-console/dynamic-plugin-sdk';
+import { Text, TextContent, TextVariants, Title } from '@patternfly/react-core';
+import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { SyncedEditor } from '@utils/components/SyncedEditor/SyncedEditor';
+import { EditorType } from '@utils/components/SyncedEditor/EditorToggle';
 
-const LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY = 'console.createNetworkPolicy.editor.lastView';
+const LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY =
+  'console.createNetworkPolicy.editor.lastView';
 
-export const CreateNetworkPolicy: React.FC<{}> = () => {
-  const { t } = useTranslation();
+const CreateNetworkPolicy: FC = () => {
+  const { t } = useNetworkingTranslation();
+
   const p = useParams();
   const params: any = { ...p, plural: NetworkPolicyModel.plural };
   const initialPolicy: NetworkPolicy = {
@@ -39,19 +41,20 @@ export const CreateNetworkPolicy: React.FC<{}> = () => {
     },
   };
 
-  const formHelpText = t('console-app~Create by completing the form.');
+  const formHelpText = t('Create by completing the form.');
   const yamlHelpText = t(
-    'console-app~Create by manually entering YAML or JSON definitions, or by dragging and dropping a file into the editor.',
+    'Create by manually entering YAML or JSON definitions, or by dragging and dropping a file into the editor.',
   );
 
   const [helpText, setHelpText] = React.useState(formHelpText);
 
   const k8sObj = networkPolicyToK8sResource(initialPolicy);
 
-  const YAMLEditor: React.FC<YAMLEditorProps> = ({ onChange, initialYAML = '' }) => {
-    return (
-      <CreateYAML hideHeader match={{ params } as any} onChange={onChange} template={initialYAML} />
-    );
+  const YAMLEditor: React.FC<YAMLEditorProps> = ({
+    onChange,
+    initialYAML = '',
+  }) => {
+    return <CodeEditor onChange={onChange} value={initialYAML} />;
   };
 
   const checkPolicyValidForForm = (obj: NetworkPolicyKind) => {
@@ -65,7 +68,7 @@ export const CreateNetworkPolicy: React.FC<{}> = () => {
       if (!_.isEqual(normalizedK8S, reconverted)) {
         throw new Error(
           t(
-            'console-app~Not all YAML property values are supported in the form editor. Some data would be lost.',
+            'Not all YAML property values are supported in the form editor. Some data would be lost.',
           ),
         );
       }
@@ -77,13 +80,24 @@ export const CreateNetworkPolicy: React.FC<{}> = () => {
     onChange?: (yaml: string) => void;
   };
 
+  console.log(k8sObj);
+
   return (
     <>
-      <PageHeading
-        className="create-network-policy__page-heading"
-        title={t('console-app~Create NetworkPolicy')}
-        helpText={helpText}
-      />
+      <div className="co-m-nav-title co-m-nav-title--detail">
+        <div>
+          <Title headingLevel="h2">{t('NetworkPolicies')}</Title>
+          <TextContent>
+            <Text
+              component={TextVariants.p}
+              className="help-block co-m-pane__heading-help-text"
+            >
+              {helpText}
+            </Text>
+          </TextContent>
+        </div>
+      </div>
+
       <SyncedEditor
         context={{
           formContext: { networkPolicy: initialPolicy },
@@ -103,3 +117,5 @@ export const CreateNetworkPolicy: React.FC<{}> = () => {
     </>
   );
 };
+
+export default CreateNetworkPolicy;

@@ -1,24 +1,8 @@
 import * as React from 'react';
 import { Button } from '@patternfly/react-core';
 import { PlusCircleIcon } from '@patternfly/react-icons/dist/esm/icons/plus-circle-icon';
-import { useTranslation } from 'react-i18next';
-import {
-  AsyncComponent,
-  AsyncComponentProps,
-} from '@console/internal/components/utils/async';
-
-const NameValueEditorComponent = (
-  props: Omit<AsyncComponentProps, 'loader'>,
-) => (
-  <AsyncComponent
-    loader={() =>
-      import('@console/internal/components/utils/name-value-editor').then(
-        (c) => c.NameValueEditor,
-      )
-    }
-    {...props}
-  />
-);
+import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import LabelSelectorEditor from '@utils/components/LabelSelectorEditor/LabelSelectorEditor';
 
 type NetworkPolicyConditionalSelectorProps = {
   selectorType: 'pod' | 'namespace';
@@ -31,12 +15,12 @@ type NetworkPolicyConditionalSelectorProps = {
 export const NetworkPolicyConditionalSelector: React.FunctionComponent<
   NetworkPolicyConditionalSelectorProps
 > = (props) => {
-  const { t } = useTranslation();
+  const { t } = useNetworkingTranslation();
   const { selectorType, helpText, values, onChange, dataTest } = props;
   const [isVisible, setVisible] = React.useState(values.length > 0);
 
-  const handleSelectorChange = (updated: { nameValuePairs: string[][] }) => {
-    onChange(updated.nameValuePairs);
+  const handleSelectorChange = (nameValuePairs: string[][]) => {
+    onChange(nameValuePairs);
   };
 
   const title =
@@ -69,13 +53,9 @@ export const NetworkPolicyConditionalSelector: React.FunctionComponent<
               {secondHelpText}
             </p>
           </div>
-          <NameValueEditorComponent
-            nameValuePairs={values.length > 0 ? values : [['', '']]}
-            valueString={t('Selector')}
-            nameString={t('Label')}
-            addString={t('Add label')}
-            readOnly={false}
-            allowSorting={false}
+
+          <LabelSelectorEditor
+            labelSelectorPairs={values.length > 0 ? values : [['', '']]}
             updateParentData={handleSelectorChange}
             onLastItemRemoved={() => setVisible(false)}
           />

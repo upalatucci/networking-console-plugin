@@ -1,6 +1,6 @@
+import { Dropdown, DropdownItem, MenuToggle } from '@patternfly/react-core';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Dropdown } from '@console/internal/components/utils';
 
 export type NetworkPolicyPeerType = 'sameNS' | 'anyNS' | 'ipBlock';
 
@@ -9,26 +9,38 @@ export const NetworkPolicyAddPeerDropdown: React.FunctionComponent<
 > = (props) => {
   const { t } = useTranslation();
   const { title, onSelect } = props;
-  const options = [
-    t('console-app~Allow pods from the same namespace'),
-    t('console-app~Allow pods from inside the cluster'),
-    t('console-app~Allow peers by IP block'),
-  ];
+
+  const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
+
   return (
     <div className="form-group co-create-networkpolicy__add-peer">
       <Dropdown
-        dropDownClassName="dropdown--full-width"
-        items={{
-          sameNS: <>{options[0]}</>,
-          anyNS: <>{options[1]}</>,
-          ipblock: <>{options[2]}</>,
+        onSelect={(event, networkType: NetworkPolicyPeerType) => {
+          onSelect(networkType);
+          setIsDropdownOpen(false);
         }}
-        title={title}
-        onChange={onSelect}
-        noSelection
-        buttonClassName="pf-v5-c-button pf-m-secondary"
         data-test="add-peer"
-      />
+        toggle={() => (
+          <MenuToggle
+            id="toggle-basic"
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            isExpanded={isDropdownOpen}
+          >
+            {title}
+          </MenuToggle>
+        )}
+        isOpen={isDropdownOpen}
+      >
+        <DropdownItem value="sameNS">
+          {t('Allow pods from the same namespace')}
+        </DropdownItem>
+        <DropdownItem value="anyNS">
+          {t('Allow pods from inside the cluster')}
+        </DropdownItem>
+        <DropdownItem value="ipblock">
+          {t('Allow peers by IP block')}
+        </DropdownItem>
+      </Dropdown>
     </div>
   );
 };
