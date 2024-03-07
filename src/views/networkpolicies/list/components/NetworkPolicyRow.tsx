@@ -6,12 +6,12 @@ import {
   getGroupVersionKindForModel,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { getName, getNamespace } from '@utils/resources/shared';
-import NetworkAttachmentDefinitionModel from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
 import NetworkPolicyActions from '@views/networkpolicies/actions/NetworkPolicyActions';
 import { NetworkPolicyKind } from '@utils/resources/networkpolicies/types';
 import { Link } from 'react-router-dom-v5-compat';
 import * as _ from 'lodash';
 import { Selector } from '@utils/components/Selector/Selector';
+import { NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
 
 type NetworkPolicyRowType = RowProps<NetworkPolicyKind>;
 
@@ -26,9 +26,7 @@ const NetworkPolicyRow: FC<NetworkPolicyRowType> = ({
     <>
       <TableData activeColumnIDs={activeColumnIDs} id="name">
         <ResourceLink
-          groupVersionKind={getGroupVersionKindForModel(
-            NetworkAttachmentDefinitionModel,
-          )}
+          groupVersionKind={getGroupVersionKindForModel(NetworkPolicyModel)}
           name={name}
           namespace={namespace}
         />
