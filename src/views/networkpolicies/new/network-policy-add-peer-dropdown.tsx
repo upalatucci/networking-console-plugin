@@ -1,4 +1,10 @@
-import { Dropdown, DropdownItem, MenuToggle } from '@patternfly/react-core';
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownList,
+  MenuToggle,
+  MenuToggleElement,
+} from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import * as React from 'react';
 
@@ -20,26 +26,29 @@ export const NetworkPolicyAddPeerDropdown: React.FunctionComponent<
           setIsDropdownOpen(false);
         }}
         data-test="add-peer"
-        toggle={() => (
+        toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
           <MenuToggle
             id="toggle-basic"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             isExpanded={isDropdownOpen}
+            ref={toggleRef}
           >
             {title}
           </MenuToggle>
         )}
         isOpen={isDropdownOpen}
       >
-        <DropdownItem value="sameNS">
-          {t('Allow pods from the same namespace')}
-        </DropdownItem>
-        <DropdownItem value="anyNS">
-          {t('Allow pods from inside the cluster')}
-        </DropdownItem>
-        <DropdownItem value="ipblock">
-          {t('Allow peers by IP block')}
-        </DropdownItem>
+        <DropdownList className="add-peer-dropdown">
+          <DropdownItem value="sameNS">
+            {t('Allow pods from the same namespace')}
+          </DropdownItem>
+          <DropdownItem value="anyNS">
+            {t('Allow pods from inside the cluster')}
+          </DropdownItem>
+          <DropdownItem value="ipblock">
+            {t('Allow peers by IP block')}
+          </DropdownItem>
+        </DropdownList>
       </Dropdown>
     </div>
   );

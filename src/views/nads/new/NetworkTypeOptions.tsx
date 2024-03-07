@@ -8,6 +8,7 @@ import {
   HelperText,
   HelperTextItem,
   MenuToggle,
+  MenuToggleElement,
   Popover,
   PopoverPosition,
   TextArea,
@@ -181,11 +182,12 @@ const NetworkTypeOptions = (props) => {
                 )
               }
               onSelect={() => setIsDropdownOpen(false)}
-              toggle={() => (
+              toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
                 <MenuToggle
-                  id="toggle-basic"
+                  id="toggle-networktype"
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   isExpanded={isDropdownOpen}
+                  ref={toggleRef}
                 >
                   {parameter?.values[value] || parameter.hintText}
                 </MenuToggle>

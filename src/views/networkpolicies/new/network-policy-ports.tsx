@@ -4,6 +4,7 @@ import {
   Dropdown,
   DropdownItem,
   MenuToggle,
+  MenuToggleElement,
 } from '@patternfly/react-core';
 import { MinusCircleIcon } from '@patternfly/react-icons/dist/esm/icons/minus-circle-icon';
 import { PlusCircleIcon } from '@patternfly/react-icons/dist/esm/icons/plus-circle-icon';
@@ -52,11 +53,12 @@ export const NetworkPolicyPorts: React.FunctionComponent<
                       idx,
                     );
                   }}
-                  toggle={() => (
+                  toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
                     <MenuToggle
-                      id="toggle-basic"
+                      id={`toggle-${key}`}
                       onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                       isExpanded={isDropdownOpen}
+                      ref={toggleRef}
                     >
                       {port.protocol}
                     </MenuToggle>

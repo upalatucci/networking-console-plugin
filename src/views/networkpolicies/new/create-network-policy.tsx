@@ -80,8 +80,6 @@ const CreateNetworkPolicy: FC = () => {
     onChange?: (yaml: string) => void;
   };
 
-  console.log(k8sObj);
-
   return (
     <>
       <div className="co-m-nav-title co-m-nav-title--detail">

@@ -2,7 +2,6 @@ import * as _ from 'lodash-es';
 import * as React from 'react';
 import { SearchIcon } from '@patternfly/react-icons/dist/esm/icons/search-icon';
 import { Link } from 'react-router-dom-v5-compat';
-import { useTranslation } from 'react-i18next';
 import { Selector as SelectorKind } from '@openshift-console/dynamic-plugin-sdk';
 import { selectorToString } from './utilts';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
