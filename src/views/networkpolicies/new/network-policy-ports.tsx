@@ -1,16 +1,11 @@
 import * as React from 'react';
-import {
-  Button,
-  Dropdown,
-  DropdownItem,
-  MenuToggle,
-  MenuToggleElement,
-} from '@patternfly/react-core';
+import { Button } from '@patternfly/react-core';
 import { MinusCircleIcon } from '@patternfly/react-icons/dist/esm/icons/minus-circle-icon';
 import { PlusCircleIcon } from '@patternfly/react-icons/dist/esm/icons/plus-circle-icon';
 import * as _ from 'lodash';
 import { NetworkPolicyPort } from '@utils/models';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import PortsDropdown from './PortsDropdown';
 
 export const NetworkPolicyPorts: React.FunctionComponent<
   NetworkPolicyPortsProps
@@ -26,8 +21,6 @@ export const NetworkPolicyPorts: React.FunctionComponent<
     onChange([...ports.slice(0, index), ...ports.slice(index + 1)]);
   };
 
-  const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
-
   return (
     <>
       {
@@ -41,37 +34,14 @@ export const NetworkPolicyPorts: React.FunctionComponent<
             </p>
           </div>
           {ports.map((port, idx) => {
-            const key = `port-${idx}`;
+            const key = `${port}-${idx}`;
             return (
               <div className="pf-v5-c-input-group" key={key}>
-                <Dropdown
-                  selected={port.protocol}
-                  onSelect={(event, protocol) => {
-                    setIsDropdownOpen(false);
-                    onSingleChange(
-                      { ...port, protocol: protocol.toString() },
-                      idx,
-                    );
-                  }}
-                  toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
-                    <MenuToggle
-                      id={`toggle-${key}`}
-                      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                      isExpanded={isDropdownOpen}
-                      ref={toggleRef}
-                    >
-                      {port.protocol}
-                    </MenuToggle>
-                  )}
-                  isOpen={isDropdownOpen}
-                  data-test="port-protocol"
-                >
-                  <DropdownItem value="TCP">TCP</DropdownItem>
-
-                  <DropdownItem value="UDP">UDP</DropdownItem>
-
-                  <DropdownItem value="SCTP">SCTP</DropdownItem>
-                </Dropdown>
+                <PortsDropdown
+                  onSingleChange={onSingleChange}
+                  port={port}
+                  index={idx}
+                />
                 <input
                   className="pf-v5-c-form-control"
                   onChange={(event) =>
