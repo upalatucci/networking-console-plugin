@@ -36,6 +36,7 @@
   "Cancel": "Cancel",
   "CIDR": "CIDR",
   "Configure via:": "Configure via:",
+  "Confirm": "Confirm",
   "Create": "Create",
   "Create by completing the form.": "Create by completing the form.",
   "Create by manually entering YAML or JSON definitions, or by dragging and dropping a file into the editor.": "Create by manually entering YAML or JSON definitions, or by dragging and dropping a file into the editor.",
