@@ -72,22 +72,21 @@ const factorOutError = <T>(
 const errors = {
   isMissing: (t: TFunction, path: string): ConversionError => ({
     kind: 'invalid',
-    error: t('console-app~{{path}} is missing.', { path }),
+    error: t('{{path}} is missing.', { path }),
   }),
   shouldBeAnArray: (t: TFunction, path: string): ConversionError => ({
     kind: 'invalid',
-    error: t('console-app~{{path}} should be an Array.', { path }),
+    error: t('{{path}} should be an Array.', { path }),
   }),
   shouldNotBeEmpty: (t: TFunction, path: string): ConversionError => ({
     kind: 'invalid',
-    error: t('console-app~{{path}} should not be empty.', { path }),
+    error: t('{{path}} should not be empty.', { path }),
   }),
   notSupported: (t: TFunction, path: string): ConversionError => ({
     kind: 'unsupported',
-    error: t(
-      'console-app~{{path}} found in resource, but is not supported in form.',
-      { path },
-    ),
+    error: t('{{path}} found in resource, but is not supported in form.', {
+      path,
+    }),
   }),
 };
 
@@ -197,15 +196,13 @@ const checkRulesValidity = (
       if (peer.podSelector && !isValidSelector(peer.podSelector)) {
         return {
           kind: 'invalid',
-          error: t('console-app~Duplicate keys found in peer pod selector'),
+          error: t('Duplicate keys found in peer pod selector'),
         };
       }
       if (peer.namespaceSelector && !isValidSelector(peer.namespaceSelector)) {
         return {
           kind: 'invalid',
-          error: t(
-            'console-app~Duplicate keys found in peer namespace selector',
-          ),
+          error: t('Duplicate keys found in peer namespace selector'),
         };
       }
     }
@@ -220,7 +217,7 @@ export const checkNetworkPolicyValidity = (
   if (!isValidSelector(from.podSelector)) {
     return {
       kind: 'invalid',
-      error: t('console-app~Duplicate keys found in main pod selector'),
+      error: t('Duplicate keys found in main pod selector'),
     };
   }
   const errIn = checkRulesValidity(from.ingress.rules, t);

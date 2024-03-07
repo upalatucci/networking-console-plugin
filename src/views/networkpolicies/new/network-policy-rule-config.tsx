@@ -9,9 +9,7 @@ import {
   FormFieldGroupHeader,
 } from '@patternfly/react-core';
 import { TrashIcon } from '@patternfly/react-icons/dist/esm/icons/trash-icon';
-import i18next from 'i18next';
 import * as _ from 'lodash';
-import { useTranslation } from 'react-i18next';
 import {
   NetworkPolicyAddPeerDropdown,
   NetworkPolicyPeerType,
@@ -20,6 +18,10 @@ import { NetworkPolicyPeerIPBlock } from './network-policy-peer-ipblock';
 import { NetworkPolicyPeerSelectors } from './network-policy-peer-selectors';
 import { NetworkPolicyPorts } from './network-policy-ports';
 import { NetworkPolicyRule, NetworkPolicyPeer } from '@utils/models';
+import {
+  t,
+  useNetworkingTranslation,
+} from '@utils/hooks/useNetworkingTranslation';
 
 const getPeerRuleTitle = (
   direction: 'ingress' | 'egress',
@@ -27,17 +29,17 @@ const getPeerRuleTitle = (
 ) => {
   if (peer.ipBlock) {
     return direction === 'ingress'
-      ? i18next.t('console-app~Allow traffic from peers by IP block')
-      : i18next.t('console-app~Allow traffic to peers by IP block');
+      ? t('Allow traffic from peers by IP block')
+      : t('Allow traffic to peers by IP block');
   }
   if (peer.namespaceSelector) {
     return direction === 'ingress'
-      ? i18next.t('console-app~Allow traffic from pods inside the cluster')
-      : i18next.t('console-app~Allow traffic to pods inside the cluster');
+      ? t('Allow traffic from pods inside the cluster')
+      : t('Allow traffic to pods inside the cluster');
   }
   return direction === 'ingress'
-    ? i18next.t('console-app~Allow traffic from pods in the same namespace')
-    : i18next.t('console-app~Allow traffic to pods in the same namespace');
+    ? t('Allow traffic from pods in the same namespace')
+    : t('Allow traffic to pods in the same namespace');
 };
 
 const emptyPeer = (type: NetworkPolicyPeerType): NetworkPolicyPeer => {
@@ -66,15 +68,15 @@ const emptyPeer = (type: NetworkPolicyPeerType): NetworkPolicyPeer => {
 export const NetworkPolicyRuleConfigPanel: React.FunctionComponent<
   RuleConfigProps
 > = (props) => {
-  const { t } = useTranslation();
+  const { t } = useNetworkingTranslation();
   const { policyNamespace, direction, onChange, onRemove, rule } = props;
   const peersHelp =
     direction === 'ingress'
       ? t(
-          'console-app~Sources added to this rule will allow traffic to the pods defined above. Sources in this list are combined using a logical OR operation.',
+          'Sources added to this rule will allow traffic to the pods defined above. Sources in this list are combined using a logical OR operation.',
         )
       : t(
-          'console-app~Destinations added to this rule will allow traffic from the pods defined above. Destinations in this list are combined using a logical OR operation.',
+          'Destinations added to this rule will allow traffic from the pods defined above. Destinations in this list are combined using a logical OR operation.',
         );
 
   const addPeer = (type: NetworkPolicyPeerType) => {
@@ -92,9 +94,7 @@ export const NetworkPolicyRuleConfigPanel: React.FunctionComponent<
       <CardTitle component="h4">
         <div className="co-create-networkpolicy__rule-header">
           <label>
-            {direction === 'ingress'
-              ? t('console-app~Ingress rule')
-              : t('console-app~Egress rule')}
+            {direction === 'ingress' ? t('Ingress rule') : t('Egress rule')}
           </label>
           <div className="co-create-networkpolicy__rule-header-right">
             <Button
@@ -102,14 +102,14 @@ export const NetworkPolicyRuleConfigPanel: React.FunctionComponent<
               onClick={onRemove}
               data-test={`remove-${direction}-rule`}
             >
-              {t('console-app~Remove')}
+              {t('Remove')}
             </Button>
           </div>
           <NetworkPolicyAddPeerDropdown
             title={
               direction === 'ingress'
-                ? t('console-app~Add allowed source')
-                : t('console-app~Add allowed destination')
+                ? t('Add allowed source')
+                : t('Add allowed destination')
             }
             onSelect={addPeer}
           />
@@ -157,7 +157,7 @@ export const NetworkPolicyRuleConfigPanel: React.FunctionComponent<
                     }}
                     actions={
                       <Button
-                        aria-label={t('console-app~Remove peer')}
+                        aria-label={t('Remove peer')}
                         className="co-create-networkpolicy__remove-peer"
                         onClick={() => removePeer(idx)}
                         type="button"

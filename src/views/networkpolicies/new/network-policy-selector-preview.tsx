@@ -8,7 +8,6 @@ import {
   TreeViewDataItem,
 } from '@patternfly/react-core';
 import * as _ from 'lodash';
-import { useTranslation } from 'react-i18next';
 import {
   K8sModel,
   K8sResourceCommon,
@@ -20,6 +19,7 @@ import { resourcePathFromModel } from '@utils/utils';
 import { IoK8sApiCoreV1Pod } from '@kubevirt-ui/kubevirt-api/kubernetes/models/IoK8sApiCoreV1Pod';
 import { NamespaceModel, PodModel } from '@kubevirt-ui/kubevirt-api/console';
 import { selectorToK8s } from '@utils/models';
+import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 enum FilterType {
   NAME = 'Name',
@@ -137,7 +137,7 @@ export const PodsPreview: React.FunctionComponent<PodsPreviewProps> = (
   props,
 ) => {
   const { namespace, podSelector, namespaceSelector } = props;
-  const { t } = useTranslation();
+  const { t } = useNetworkingTranslation();
 
   const [safeNsSelector, offendingNsSelector] = React.useMemo(
     () => safeSelector(namespaceSelector),
@@ -160,7 +160,7 @@ export const PodsPreview: React.FunctionComponent<PodsPreviewProps> = (
   const selectorError = React.useMemo(() => {
     if (offendingPodSelector || offendingNsSelector) {
       return t(
-        'public~Input error: selectors must start and end by a letter ' +
+        'Input error: selectors must start and end by a letter ' +
           'or number, and can only contain -, _, / or . ' +
           'Offending value: {{offendingSelector}}',
         {
@@ -271,7 +271,7 @@ export const PodsPreview: React.FunctionComponent<PodsPreviewProps> = (
       data-test="pods-preview-alert"
       variant="danger"
       isInline
-      title={t("public~Can't preview pods")}
+      title={t("Can't preview pods")}
     >
       <p>{String(preview.error)}</p>
     </Alert>
@@ -279,9 +279,7 @@ export const PodsPreview: React.FunctionComponent<PodsPreviewProps> = (
     <>
       {watchPodLoaded && preview.pods?.length === 0 && (
         <div data-test="pods-preview-title">
-          {t(
-            'public~No pods matching the provided labels in the current namespace',
-          )}
+          {t('No pods matching the provided labels in the current namespace')}
         </div>
       )}
       {preview.pods && preview.pods.length > 0 && (
@@ -289,10 +287,10 @@ export const PodsPreview: React.FunctionComponent<PodsPreviewProps> = (
           <div data-test="pods-preview-title">
             {labelList?.length > 0 ? (
               <>
-                {t('public~List of pods matching')} {labelBadges}
+                {t('List of pods matching')} {labelBadges}
               </>
             ) : (
-              t('public~List of pods')
+              t('List of pods')
             )}
           </div>
           <TreeView
@@ -313,7 +311,7 @@ export const PodsPreview: React.FunctionComponent<PodsPreviewProps> = (
                   )}${podsFilterQuery}`}
                   data-test="pods-preview-footer-link"
                 >
-                  {t('public~View all {{total}} results', {
+                  {t('View all {{total}} results', {
                     total: preview.total,
                   })}
                 </a>
@@ -323,7 +321,7 @@ export const PodsPreview: React.FunctionComponent<PodsPreviewProps> = (
                 // So if the namespace selector has labels, we disable the link to avoid
                 // directing the user to incorrect data
                 <p data-test="pods-preview-footer">
-                  {t('public~Showing {{shown}} from {{total}} results', {
+                  {t('Showing {{shown}} from {{total}} results', {
                     shown: maxPreviewPods,
                     total: preview.total,
                   })}

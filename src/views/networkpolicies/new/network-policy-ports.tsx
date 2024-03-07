@@ -8,14 +8,14 @@ import {
 import { MinusCircleIcon } from '@patternfly/react-icons/dist/esm/icons/minus-circle-icon';
 import { PlusCircleIcon } from '@patternfly/react-icons/dist/esm/icons/plus-circle-icon';
 import * as _ from 'lodash';
-import { useTranslation } from 'react-i18next';
 import { NetworkPolicyPort } from '@utils/models';
+import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 export const NetworkPolicyPorts: React.FunctionComponent<
   NetworkPolicyPortsProps
 > = (props) => {
   const { ports, onChange } = props;
-  const { t } = useTranslation();
+  const { t } = useNetworkingTranslation();
 
   const onSingleChange = (port: NetworkPolicyPort, index: number) => {
     onChange([...ports.slice(0, index), port, ...ports.slice(index + 1)]);
@@ -31,11 +31,11 @@ export const NetworkPolicyPorts: React.FunctionComponent<
     <>
       {
         <div className="form-group co-create-networkpolicy__ports-list">
-          <label>{t('console-app~Ports')}</label>
+          <label>{t('Ports')}</label>
           <div className="help-block" id="ingress-peers-help">
             <p>
               {t(
-                'console-app~Add ports to restrict traffic through them. If no ports are provided, your policy will make all ports accessible to traffic.',
+                'Add ports to restrict traffic through them. If no ports are provided, your policy will make all ports accessible to traffic.',
               )}
             </p>
           </div>
@@ -86,7 +86,7 @@ export const NetworkPolicyPorts: React.FunctionComponent<
                   data-test="port-input"
                 />
                 <Button
-                  aria-label={t('console-app~Remove port')}
+                  aria-label={t('Remove port')}
                   className="co-create-networkpolicy__remove-port"
                   onClick={() => onRemove(idx)}
                   type="button"
@@ -112,7 +112,7 @@ export const NetworkPolicyPorts: React.FunctionComponent<
               data-test="add-port"
             >
               <PlusCircleIcon className="co-icon-space-r" />
-              {t('console-app~Add port')}
+              {t('Add port')}
             </Button>
           </div>
         </div>

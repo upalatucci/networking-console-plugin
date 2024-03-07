@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom-v5-compat';
 import { useTranslation } from 'react-i18next';
 import { Selector as SelectorKind } from '@openshift-console/dynamic-plugin-sdk';
 import { selectorToString } from './utilts';
+import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 const Requirement: React.FC<RequirementProps> = ({
   kind,
@@ -42,11 +43,11 @@ export const Selector: React.FC<SelectorProps> = ({
   selector = {},
   namespace = undefined,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useNetworkingTranslation();
   return (
     <div className="co-m-selector">
       {_.isEmpty(selector) ? (
-        <p className="text-muted">{t('public~No selector')}</p>
+        <p className="text-muted">{t('No selector')}</p>
       ) : (
         <Requirement
           kind={kind}

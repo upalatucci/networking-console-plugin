@@ -1,13 +1,13 @@
 import { Dropdown, DropdownItem, MenuToggle } from '@patternfly/react-core';
+import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import * as React from 'react';
-import { useTranslation } from 'react-i18next';
 
 export type NetworkPolicyPeerType = 'sameNS' | 'anyNS' | 'ipBlock';
 
 export const NetworkPolicyAddPeerDropdown: React.FunctionComponent<
   NetworkPolicyAddPeerDropdownProps
 > = (props) => {
-  const { t } = useTranslation();
+  const { t } = useNetworkingTranslation();
   const { title, onSelect } = props;
 
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);

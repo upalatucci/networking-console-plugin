@@ -3,14 +3,14 @@ import { Button } from '@patternfly/react-core';
 import { MinusCircleIcon } from '@patternfly/react-icons/dist/esm/icons/minus-circle-icon';
 import { PlusCircleIcon } from '@patternfly/react-icons/dist/esm/icons/plus-circle-icon';
 import * as _ from 'lodash';
-import { useTranslation } from 'react-i18next';
 import { NetworkPolicyIPBlock } from '@utils/models';
 import { useClusterNetworkFeatures } from '@utils/hooks/useClusterNetworkFeatures';
+import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 export const NetworkPolicyPeerIPBlock: React.FunctionComponent<
   PeerIPBlockProps
 > = (props) => {
-  const { t } = useTranslation();
+  const { t } = useNetworkingTranslation();
   const { onChange, ipBlock, direction } = props;
   const [networkFeatures, networkFeaturesLoaded] = useClusterNetworkFeatures();
 
@@ -28,7 +28,7 @@ export const NetworkPolicyPeerIPBlock: React.FunctionComponent<
     <>
       <div className="form-group co-create-networkpolicy__ipblock">
         <label className="co-required" htmlFor="cidr">
-          {t('console-app~CIDR')}
+          {t('CIDR')}
         </label>
         <input
           className="pf-v5-c-form-control"
@@ -46,10 +46,10 @@ export const NetworkPolicyPeerIPBlock: React.FunctionComponent<
           <p>
             {direction === 'ingress'
               ? t(
-                  'console-app~If this field is empty, traffic will be allowed from all external sources.',
+                  'If this field is empty, traffic will be allowed from all external sources.',
                 )
               : t(
-                  'console-app~If this field is empty, traffic will be allowed to all external sources.',
+                  'If this field is empty, traffic will be allowed to all external sources.',
                 )}
           </p>
         </div>
@@ -57,7 +57,7 @@ export const NetworkPolicyPeerIPBlock: React.FunctionComponent<
       {networkFeaturesLoaded &&
         networkFeatures.PolicyPeerIPBlockExceptions !== false && (
           <div className="form-group co-create-networkpolicy__exceptions">
-            <label>{t('console-app~Exceptions')}</label>
+            <label>{t('Exceptions')}</label>
             {ipBlock.except.map((exc, idx) => (
               <div className="pf-v5-c-input-group" key={exc.key}>
                 <input
@@ -74,7 +74,7 @@ export const NetworkPolicyPeerIPBlock: React.FunctionComponent<
                   data-test="ipblock-exception-input"
                 />
                 <Button
-                  aria-label={t('console-app~Remove exception')}
+                  aria-label={t('Remove exception')}
                   className="co-create-networkpolicy__remove-exception"
                   onClick={() => {
                     ipBlock.except = [
@@ -106,7 +106,7 @@ export const NetworkPolicyPeerIPBlock: React.FunctionComponent<
                 data-test="ipblock-add-exception"
               >
                 <PlusCircleIcon className="co-icon-space-r" />
-                {t('console-app~Add exception')}
+                {t('Add exception')}
               </Button>
             </div>
           </div>

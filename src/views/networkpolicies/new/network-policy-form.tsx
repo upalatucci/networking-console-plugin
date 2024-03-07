@@ -13,7 +13,7 @@ import {
   AlertVariant,
 } from '@patternfly/react-core';
 import * as _ from 'lodash';
-import { Trans, useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 import { NetworkPolicyConditionalSelector } from './network-policy-conditional-selector';
 import {
   isNetworkPolicyConversionError,
@@ -45,6 +45,7 @@ import ExternalLink from '@utils/components/ExternalLink/ExternalLink';
 import ConfirmModal, {
   ConfirmModalProps,
 } from '@utils/components/ConfirmModal/ConfirmModal';
+import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 const emptyRule = (): NetworkPolicyRule => {
   return {
@@ -64,7 +65,7 @@ export const NetworkPolicyForm: React.FC<NetworkPolicyFormProps> = ({
   onChange,
 }) => {
   const history = useHistory();
-  const { t } = useTranslation();
+  const { t } = useNetworkingTranslation();
   const isOpenShift = useFlag(FLAGS.OPENSHIFT);
 
   const createModal = useModal();
@@ -287,7 +288,7 @@ export const NetworkPolicyForm: React.FC<NetworkPolicyFormProps> = ({
             dataTest="main-pod-selector"
           />
           <p>
-            <Trans ns="console-app">
+            <Trans t={t}>
               Show a preview of the{' '}
               <Button
                 data-test="show-affected-pods"

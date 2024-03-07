@@ -29,18 +29,18 @@ export const NetworkPolicyPeerSelectors: React.FC<PeerSelectorProps> = (
   if (direction === 'ingress') {
     helpTextPodSelector = namespaceSelector
       ? t(
-          'console-app~If no pod selector is provided, traffic from all pods in eligible namespaces will be allowed.',
+          'If no pod selector is provided, traffic from all pods in eligible namespaces will be allowed.',
         )
       : t(
-          'console-app~If no pod selector is provided, traffic from all pods in this namespace will be allowed.',
+          'If no pod selector is provided, traffic from all pods in this namespace will be allowed.',
         );
   } else {
     helpTextPodSelector = namespaceSelector
       ? t(
-          'console-app~If no pod selector is provided, traffic to all pods in eligible namespaces will be allowed.',
+          'If no pod selector is provided, traffic to all pods in eligible namespaces will be allowed.',
         )
       : t(
-          'console-app~If no pod selector is provided, traffic to all pods in this namespace will be allowed.',
+          'If no pod selector is provided, traffic to all pods in this namespace will be allowed.',
         );
   }
 
@@ -51,7 +51,7 @@ export const NetworkPolicyPeerSelectors: React.FC<PeerSelectorProps> = (
           <NetworkPolicyConditionalSelector
             selectorType="namespace"
             helpText={t(
-              'console-app~If no namespace selector is provided, pods from all namespaces will be eligible.',
+              'If no namespace selector is provided, pods from all namespaces will be eligible.',
             )}
             values={namespaceSelector}
             onChange={handleNamespaceSelectorChange}
@@ -70,7 +70,7 @@ export const NetworkPolicyPeerSelectors: React.FC<PeerSelectorProps> = (
       </div>
       <p>
         {props.direction === 'ingress' ? (
-          <Trans ns="console-app">
+          <Trans t={t}>
             Show a preview of the{' '}
             <Button
               data-test="show-affected-pods-ingress"
@@ -83,7 +83,7 @@ export const NetworkPolicyPeerSelectors: React.FC<PeerSelectorProps> = (
             that this ingress rule will apply to.
           </Trans>
         ) : (
-          <Trans ns="console-app">
+          <Trans t={t}>
             Show a preview of the{' '}
             <Button
               data-test="show-affected-pods-egress"
