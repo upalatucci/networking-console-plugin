@@ -1,6 +1,7 @@
 import { EncodedExtension } from '@openshift/dynamic-plugin-sdk-webpack';
 import { ConsolePluginBuildMetadata } from '@openshift-console/dynamic-plugin-sdk-webpack/lib/build-types';
 import {
+  ResourceDetailsPage,
   ResourceListPage,
   ResourceNSNavItem,
   RoutePage,
@@ -53,10 +54,19 @@ export const NetworkPoliciesExtensions: EncodedExtension[] = [
       },
     },
   } as EncodedExtension<RoutePage>,
+  {
+    properties: {
+      component: { $codeRef: 'NetworkPolicyDetails' },
+      model: NetworkPolicyExtensionModel,
+    },
+    type: 'console.page/resource/details',
+  } as EncodedExtension<ResourceDetailsPage>,
 ];
 
 export const NetworkPoliciesExposedModules: ConsolePluginBuildMetadata['exposedModules'] =
   {
     NetworkPolicyList: './views/networkpolicies/list/NetworkPolicyList.tsx',
     NetworkPolicyForm: './views/networkpolicies/new/create-network-policy.tsx',
+    NetworkPolicyDetails:
+      './views/networkpolicies/details/NetworkPolicyDetailsPage.tsx',
   };
