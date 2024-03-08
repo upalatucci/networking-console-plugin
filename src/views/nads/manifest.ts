@@ -45,7 +45,7 @@ export const NADsExtensions: EncodedExtension[] = [
       perspective: 'admin',
       exact: true,
       path: [
-        `/k8s/ns/:ns/k8s.cni.cncf.io~v1~NetworkAttachmentDefinition/~new/form`,
+        `/k8s/ns/:ns/${NetworkAttachmentDefinitionExtensionModel.group}~${NetworkAttachmentDefinitionExtensionModel.version}~${NetworkAttachmentDefinitionExtensionModel.kind}/~new/form`,
       ],
       component: {
         $codeRef: 'NetworkAttachmentDefinitionsForm',

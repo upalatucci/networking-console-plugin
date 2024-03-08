@@ -1,3 +1,5 @@
+export * from './network-policy';
+
 import { K8sModel } from '@openshift-console/dynamic-plugin-sdk';
 
 export const QuickStartModel: K8sModel = {

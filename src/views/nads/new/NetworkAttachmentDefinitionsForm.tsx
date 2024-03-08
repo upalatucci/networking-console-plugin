@@ -14,6 +14,7 @@ import {
   HelperText,
   HelperTextItem,
   MenuToggle,
+  MenuToggleElement,
   Popover,
   PopoverPosition,
   TextInput,
@@ -463,11 +464,12 @@ const NetworkAttachmentDefinitionFormBase = ({ match }) => {
             selected={networkType}
             onSelect={() => setIsDropdownOpen(false)}
             popperProps={{ enableFlip: true, position: 'right' }}
-            toggle={() => (
+            toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
               <MenuToggle
-                id="toggle-basic"
+                id="toggle-nads-network-type"
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 isExpanded={isDropdownOpen}
+                ref={toggleRef}
               >
                 {networkTypeItems[networkType] || networkTypeTitle}
               </MenuToggle>
