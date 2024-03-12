@@ -1,5 +1,21 @@
 /* eslint-disable react/prop-types */
 import * as React from 'react';
+import { Trans } from 'react-i18next';
+import { useHistory } from 'react-router';
+import { Link } from 'react-router-dom-v5-compat';
+import * as _ from 'lodash';
+import { adjectives, animals, uniqueNamesGenerator } from 'unique-names-generator';
+
+import NetworkAttachmentDefinitionModel from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
+import SriovNetworkNodePolicyModel from '@kubevirt-ui/kubevirt-api/console/models/SriovNetworkNodePolicyModel';
+import {
+  getGroupVersionKindForModel,
+  k8sCreate,
+  K8sResourceKind,
+  RedExclamationCircleIcon,
+  useK8sModels,
+  useK8sWatchResource,
+} from '@openshift-console/dynamic-plugin-sdk';
 import {
   ActionGroup,
   Alert,
@@ -20,45 +36,27 @@ import {
   TextInput,
 } from '@patternfly/react-core';
 import { HelpIcon } from '@patternfly/react-icons';
-import * as _ from 'lodash';
-import { Trans } from 'react-i18next';
-import { Link } from 'react-router-dom-v5-compat';
-import NetworkAttachmentDefinitionModel from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
-import SriovNetworkNodePolicyModel from '@kubevirt-ui/kubevirt-api/console/models/SriovNetworkNodePolicyModel';
 import {
-  adjectives,
-  animals,
-  uniqueNamesGenerator,
-} from 'unique-names-generator';
+  cnvBridgeNetworkType,
+  NET_ATTACH_DEF_HEADER_LABEL,
+  networkTypeParams,
+  networkTypes,
+  ovnKubernetesNetworkType,
+  ovnKubernetesSecondaryLocalnet,
+} from '@utils/constants';
+import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import {
   NetworkAttachmentDefinitionAnnotations,
   NetworkAttachmentDefinitionConfig,
   TypeParamsData,
 } from '@utils/resources/nads/types';
 import {
-  ValidationErrorType,
   resourcePathFromModel,
   validateDNS1123SubdomainValue,
+  ValidationErrorType,
 } from '@utils/utils';
-import {
-  NET_ATTACH_DEF_HEADER_LABEL,
-  cnvBridgeNetworkType,
-  networkTypeParams,
-  networkTypes,
-  ovnKubernetesNetworkType,
-  ovnKubernetesSecondaryLocalnet,
-} from '@utils/constants';
-import {
-  K8sResourceKind,
-  RedExclamationCircleIcon,
-  getGroupVersionKindForModel,
-  k8sCreate,
-  useK8sModels,
-  useK8sWatchResource,
-} from '@openshift-console/dynamic-plugin-sdk';
+
 import NetworkTypeOptions from './NetworkTypeOptions';
-import { useHistory } from 'react-router';
-import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 import './nad-form.scss';
 
@@ -69,9 +67,9 @@ const buildConfig = (
   namespace,
 ): NetworkAttachmentDefinitionConfig => {
   const config: NetworkAttachmentDefinitionConfig = {
+    cniVersion: '0.3.1',
     name,
     type: networkType,
-    cniVersion: '0.3.1',
   };
 
   let ipam = {};
@@ -135,9 +133,7 @@ const createNetAttachDef = (
   setLoading(true);
   setError(null);
 
-  const config = JSON.stringify(
-    buildConfig(name, networkType, typeParamsData, namespace),
-  );
+  const config = JSON.stringify(buildConfig(name, networkType, typeParamsData, namespace));
   const resourceName = getResourceName(networkType, typeParamsData);
   const annotations: NetworkAttachmentDefinitionAnnotations = {
     ...(resourceName && { 'k8s.v1.cni.cncf.io/resourceName': resourceName }),
@@ -151,43 +147,28 @@ const createNetAttachDef = (
     apiVersion: `${NetworkAttachmentDefinitionModel.apiGroup}/${NetworkAttachmentDefinitionModel.apiVersion}`,
     kind: NetworkAttachmentDefinitionModel.kind,
     metadata: {
+      annotations,
       name,
       namespace,
-      annotations,
     },
     spec: {
       config,
     },
   };
 
-  k8sCreate({ model: NetworkAttachmentDefinitionModel, data: newNetAttachDef })
+  k8sCreate({ data: newNetAttachDef, model: NetworkAttachmentDefinitionModel })
     .then(() => {
       setLoading(false);
-      history.push(
-        resourcePathFromModel(
-          NetworkAttachmentDefinitionModel,
-          name,
-          namespace,
-        ),
-      );
+      history.push(resourcePathFromModel(NetworkAttachmentDefinitionModel, name, namespace));
     })
     .catch((err) => {
       setError(err);
       setLoading(false);
-      console.error(
-        'Error while create a NetworkAttachmentDefinitionModel',
-        err,
-      ); // eslint-disable-line no-console
+      console.error('Error while create a NetworkAttachmentDefinitionModel', err); // eslint-disable-line no-console
     });
 };
 
-const handleNameChange = (
-  enteredName,
-  namespace,
-  fieldErrors,
-  setName,
-  setFieldErrors,
-) => {
+const handleNameChange = (enteredName, namespace, fieldErrors, setName, setFieldErrors) => {
   const fieldErrorsUpdate = { ...fieldErrors };
   delete fieldErrorsUpdate.nameValidationMsg;
 
@@ -199,14 +180,12 @@ const handleNameChange = (
     // t('Network attachment definition name is too long')
     // t('Network attachment definition name is too short')
     emptyMsg: 'Network attachment definition name cannot be empty',
-    errorMsg:
-      'Network attachment definition name can contain only alphanumeric characters',
-    startEndAlphanumbericMsg:
-      'Network attachment definition name must start/end with alphanumeric character',
-    uppercaseMsg:
-      'Network attachment definition name cannot contain uppercase characters',
+    errorMsg: 'Network attachment definition name can contain only alphanumeric characters',
     longMsg: 'Network attachment definition name is too long',
     shortMsg: 'Network attachment definition name is too short',
+    startEndAlphanumbericMsg:
+      'Network attachment definition name must start/end with alphanumeric character',
+    uppercaseMsg: 'Network attachment definition name cannot contain uppercase characters',
   });
   if (_.get(nameValidation, 'type', null) === ValidationErrorType.Error) {
     fieldErrorsUpdate.nameValidationMsg = nameValidation.messageKey;
@@ -216,11 +195,7 @@ const handleNameChange = (
   setFieldErrors(fieldErrorsUpdate);
 };
 
-const getNetworkTypes = (
-  hasSriovNetNodePolicyCRD,
-  hasHyperConvergedCRD,
-  hasOVNK8sNetwork,
-) => {
+const getNetworkTypes = (hasSriovNetNodePolicyCRD, hasHyperConvergedCRD, hasOVNK8sNetwork) => {
   const types = _.clone(networkTypes);
   if (!hasSriovNetNodePolicyCRD) {
     delete types.sriov;
@@ -242,11 +217,7 @@ const allTypeParamFieldsValid = (typeParamsData) => {
   return !_.some(typeParamsData, ({ validationMsg }) => validationMsg !== null);
 };
 
-const allRequiredFieldsFilled = (
-  name,
-  networkType,
-  typeParamsData,
-): boolean => {
+const allRequiredFieldsFilled = (name, networkType, typeParamsData): boolean => {
   if (_.isEmpty(name) || networkType === null) {
     return false;
   }
@@ -262,13 +233,7 @@ const allRequiredFieldsFilled = (
   });
 };
 
-const validateForm = (
-  fieldErrors,
-  name,
-  networkType,
-  typeParamsData,
-  setError,
-) => {
+const validateForm = (fieldErrors, name, networkType, typeParamsData, setError) => {
   setError(null);
   const nameIsValid = _.get(fieldErrors, 'nameValidationMsg', '') === '';
 
@@ -304,39 +269,32 @@ const NetworkAttachmentDefinitionFormBase = ({ match }) => {
     ];
 
   const { t } = useNetworkingTranslation();
-  const [loading, setLoading] = React.useState(
-    hasSriovNetNodePolicyCRD && !loaded,
-  );
+  const [loading, setLoading] = React.useState(hasSriovNetNodePolicyCRD && !loaded);
   const [name, setName] = React.useState(generateNADName());
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
   const [description, setDescription] = React.useState('');
   const [networkType, setNetworkType] = React.useState(null);
-  const [typeParamsData, setTypeParamsData] = React.useState<TypeParamsData>(
-    {},
-  );
+  const [typeParamsData, setTypeParamsData] = React.useState<TypeParamsData>({});
   const [error, setError] = React.useState(null);
   const [fieldErrors, setFieldErrors] = React.useState<FieldErrors>({});
 
   const formIsValid = React.useMemo(
-    () =>
-      validateForm(fieldErrors, name, networkType, typeParamsData, setError),
+    () => validateForm(fieldErrors, name, networkType, typeParamsData, setError),
     [fieldErrors, name, networkType, typeParamsData],
   );
 
-  const [networkConfig, networkConfigLoaded] =
-    useK8sWatchResource<K8sResourceKind>({
-      groupVersionKind: {
-        kind: 'Network',
-        version: 'v1',
-        group: 'operator.openshift.io',
-      },
-      isList: false,
-      name: 'cluster',
-      namespaced: false,
-    });
+  const [networkConfig, networkConfigLoaded] = useK8sWatchResource<K8sResourceKind>({
+    groupVersionKind: {
+      group: 'operator.openshift.io',
+      kind: 'Network',
+      version: 'v1',
+    },
+    isList: false,
+    name: 'cluster',
+    namespaced: false,
+  });
 
-  const hasOVNK8sNetwork =
-    networkConfig?.spec?.defaultNetwork?.type === 'OVNKubernetes';
+  const hasOVNK8sNetwork = networkConfig?.spec?.defaultNetwork?.type === 'OVNKubernetes';
 
   const networkTypeItems = getNetworkTypes(
     hasSriovNetNodePolicyCRD,
@@ -346,10 +304,10 @@ const NetworkAttachmentDefinitionFormBase = ({ match }) => {
 
   const dropdownItems = Object.keys(networkTypeItems).map((itemKey) => (
     <DropdownItem
-      key={itemKey}
-      value={itemKey}
       component="button"
+      key={itemKey}
       onClick={() => setNetworkType(itemKey)}
+      value={itemKey}
     >
       {networkTypeItems[itemKey]}
     </DropdownItem>
@@ -358,8 +316,7 @@ const NetworkAttachmentDefinitionFormBase = ({ match }) => {
   const networkTypeTitle = t('Network Type');
 
   React.useEffect(
-    () =>
-      setLoading(hasSriovNetNodePolicyCRD && !loaded && !networkConfigLoaded),
+    () => setLoading(hasSriovNetNodePolicyCRD && !loaded && !networkConfigLoaded),
     [hasSriovNetNodePolicyCRD, networkConfigLoaded, loaded],
   );
 
@@ -372,7 +329,7 @@ const NetworkAttachmentDefinitionFormBase = ({ match }) => {
       <h1 className="co-m-pane__heading co-m-pane__heading--baseline">
         <div className="co-m-pane__name">{NET_ATTACH_DEF_HEADER_LABEL}</div>
         <div className="co-m-pane__heading-link">
-          <Link to={`${nadsList}/~new`} id="yaml-link" replace>
+          <Link id="yaml-link" replace to={`${nadsList}/~new`}>
             {t('Edit YAML')}
           </Link>
         </div>
@@ -386,9 +343,7 @@ const NetworkAttachmentDefinitionFormBase = ({ match }) => {
             <Popover
               aria-label={'Help'}
               bodyContent={() =>
-                t(
-                  'Networks are not project-bound. Using the same name creates a shared NAD.',
-                )
+                t('Networks are not project-bound. Using the same name creates a shared NAD.')
               }
               position={PopoverPosition.right}
             >
@@ -397,28 +352,19 @@ const NetworkAttachmentDefinitionFormBase = ({ match }) => {
           }
         >
           <TextInput
-            type="text"
-            placeholder={name}
             id="network-attachment-definition-name"
             onChange={(_event, value) =>
-              handleNameChange(
-                value,
-                namespace,
-                fieldErrors,
-                setName,
-                setFieldErrors,
-              )
+              handleNameChange(value, namespace, fieldErrors, setName, setFieldErrors)
             }
+            placeholder={name}
+            type="text"
             value={name}
           />
 
           {fieldErrors.nameValidationMsg && (
             <FormHelperText>
               <HelperText>
-                <HelperTextItem
-                  variant="error"
-                  icon={<RedExclamationCircleIcon />}
-                >
+                <HelperTextItem icon={<RedExclamationCircleIcon />} variant="error">
                   {t(fieldErrors.nameValidationMsg)}
                 </HelperTextItem>
               </HelperText>
@@ -426,55 +372,51 @@ const NetworkAttachmentDefinitionFormBase = ({ match }) => {
           )}
         </FormGroup>
 
-        <FormGroup
-          fieldId="basic-settings-description"
-          label={t('Description')}
-        >
+        <FormGroup fieldId="basic-settings-description" label={t('Description')}>
           <TextInput
-            type="text"
             id="network-attachment-definition-description"
             onChange={(_event, value) => setDescription(value)}
+            type="text"
             value={description}
           />
         </FormGroup>
 
         <FormGroup
-          fieldId="basic-settings-network-type"
-          required
-          label={networkTypeTitle}
           className="network-type"
+          fieldId="basic-settings-network-type"
+          label={networkTypeTitle}
+          required
         >
           {_.isEmpty(networkTypeItems) && (
             <Alert
               className="co-alert"
               isInline
-              variant="warning"
               title={'Missing installed operators'}
+              variant="warning"
             >
               <Trans t={t}>
                 <strong>OpenShift Virtualization Operator</strong> or{' '}
                 <strong>SR-IOV Network Operator </strong>
-                needs to be installed on the cluster, in order to pick the
-                Network Type.
+                needs to be installed on the cluster, in order to pick the Network Type.
               </Trans>
             </Alert>
           )}
           <Dropdown
             id="network-type"
-            selected={networkType}
+            isOpen={isDropdownOpen}
             onSelect={() => setIsDropdownOpen(false)}
             popperProps={{ enableFlip: true, position: 'right' }}
+            selected={networkType}
             toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
               <MenuToggle
                 id="toggle-nads-network-type"
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 isExpanded={isDropdownOpen}
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 ref={toggleRef}
               >
                 {networkTypeItems[networkType] || networkTypeTitle}
               </MenuToggle>
             )}
-            isOpen={isDropdownOpen}
           >
             <DropdownList>{dropdownItems}</DropdownList>
           </Dropdown>
@@ -518,12 +460,7 @@ const NetworkAttachmentDefinitionFormBase = ({ match }) => {
           >
             {t('Create')}
           </Button>
-          <Button
-            id="cancel"
-            onClick={history.goBack}
-            type="button"
-            variant="secondary"
-          >
+          <Button id="cancel" onClick={history.goBack} type="button" variant="secondary">
             {t('Cancel')}
           </Button>
         </ActionGroup>

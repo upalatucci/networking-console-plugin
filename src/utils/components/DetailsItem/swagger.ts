@@ -1,30 +1,24 @@
-import {
-  K8sModel,
-  getGroupVersionKindForModel,
-} from '@openshift-console/dynamic-plugin-sdk';
 import * as _ from 'lodash';
+
+import { getGroupVersionKindForModel, K8sModel } from '@openshift-console/dynamic-plugin-sdk';
 
 export const getDefinitionKey = _.memoize(
   (model: K8sModel, definitions: SwaggerDefinitions): string => {
     return _.findKey(definitions, (def: SwaggerDefinition) => {
-      return _.some(
-        def['x-kubernetes-group-version-kind'],
-        ({ group, version, kind }) => {
-          return (
-            (model?.apiGroup ?? '') === (group || '') &&
-            model?.apiVersion === version &&
-            model?.kind === kind
-          );
-        },
-      );
+      return _.some(def['x-kubernetes-group-version-kind'], ({ group, kind, version }) => {
+        return (
+          (model?.apiGroup ?? '') === (group || '') &&
+          model?.apiVersion === version &&
+          model?.kind === kind
+        );
+      });
     });
   },
   getGroupVersionKindForModel,
 );
 
 let swaggerDefinitions: SwaggerDefinitions;
-export const getSwaggerDefinitions = (): SwaggerDefinitions =>
-  swaggerDefinitions;
+export const getSwaggerDefinitions = (): SwaggerDefinitions => swaggerDefinitions;
 
 const getRef = (definition: SwaggerDefinition): string => {
   const ref = definition.$ref || _.get(definition, 'items.$ref');
@@ -53,10 +47,7 @@ export const getSwaggerPath = (
   return followRef && ref ? [ref] : nextPath;
 };
 
-export const findDefinition = (
-  kindObj: K8sModel,
-  propertyPath: string[],
-): SwaggerDefinition => {
+export const findDefinition = (kindObj: K8sModel, propertyPath: string[]): SwaggerDefinition => {
   if (!swaggerDefinitions) {
     return null;
   }
@@ -69,12 +60,7 @@ export const findDefinition = (
       }
       // Don't follow the last reference since the description is not as good.
       const followRef = i !== propertyPath.length - 1;
-      return getSwaggerPath(
-        swaggerDefinitions,
-        currentPath,
-        nextProperty,
-        followRef,
-      );
+      return getSwaggerPath(swaggerDefinitions, currentPath, nextProperty, followRef);
     },
     [rootPath],
   );
@@ -100,16 +86,16 @@ export const getResourceDescription = _.memoize((kindObj: K8sModel): string => {
 }, getGroupVersionKindForModel);
 
 export type SwaggerDefinition = {
+  $ref?: string;
   definitions?: SwaggerDefinitions;
   description?: string;
-  type?: string[] | string;
   enum?: string[];
-  $ref?: string;
   items?: SwaggerDefinition;
-  required?: string[];
   properties?: {
     [prop: string]: SwaggerDefinition;
   };
+  required?: string[];
+  type?: string | string[];
 };
 
 export type SwaggerDefinitions = {
@@ -117,8 +103,8 @@ export type SwaggerDefinitions = {
 };
 
 export type SwaggerAPISpec = {
-  swagger: string;
+  definitions: SwaggerDefinitions;
   info: { title: string; version: string };
   paths: { [path: string]: any };
-  definitions: SwaggerDefinitions;
+  swagger: string;
 };

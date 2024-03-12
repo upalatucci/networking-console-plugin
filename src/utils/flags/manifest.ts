@@ -3,10 +3,10 @@ import { FeatureFlag } from '@openshift-console/dynamic-plugin-sdk';
 
 export const FlagsExtensions: EncodedExtension[] = [
   {
-    type: 'console.flag',
     properties: {
       handler: { $codeRef: 'networkingFlags.enableNetworkingDynamicFlag' },
     },
+    type: 'console.flag',
   } as EncodedExtension<FeatureFlag>,
 ];
 

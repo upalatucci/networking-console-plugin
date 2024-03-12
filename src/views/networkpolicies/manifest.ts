@@ -1,17 +1,18 @@
 import { EncodedExtension } from '@openshift/dynamic-plugin-sdk-webpack';
-import { ConsolePluginBuildMetadata } from '@openshift-console/dynamic-plugin-sdk-webpack/lib/build-types';
 import {
   ResourceDetailsPage,
   ResourceListPage,
   ResourceNSNavItem,
   RoutePage,
 } from '@openshift-console/dynamic-plugin-sdk';
+import { ConsolePluginBuildMetadata } from '@openshift-console/dynamic-plugin-sdk-webpack/lib/build-types';
+
 import { FLAG_KUBEVIRT, FLAG_NET_ATTACH_DEF } from '../../utils/flags/consts';
 
 const NetworkPolicyExtensionModel = {
-  version: 'v1',
   group: 'networking.k8s.io',
   kind: 'NetworkPolicy',
+  version: 'v1',
 };
 
 export const NetworkPoliciesExtensions: EncodedExtension[] = [
@@ -23,36 +24,36 @@ export const NetworkPoliciesExtensions: EncodedExtension[] = [
     type: 'console.page/resource/list',
   } as EncodedExtension<ResourceListPage>,
   {
-    type: 'console.navigation/resource-ns',
+    flags: {
+      required: [FLAG_NET_ATTACH_DEF, FLAG_KUBEVIRT],
+    },
     properties: {
-      id: 'networkPolicies',
-      section: 'networking',
-      name: 'NetworkPolicies',
-      model: NetworkPolicyExtensionModel,
       dataAttributes: {
         'data-quickstart-id': 'qs-nav-nads',
         'data-test-id': 'nads-nav-item',
       },
+      id: 'networkPolicies',
+      model: NetworkPolicyExtensionModel,
+      name: 'NetworkPolicies',
+      section: 'networking',
     },
-    flags: {
-      required: [FLAG_NET_ATTACH_DEF, FLAG_KUBEVIRT],
-    },
+    type: 'console.navigation/resource-ns',
   } as EncodedExtension<ResourceNSNavItem>,
   {
-    type: 'console.page/route',
     properties: {
-      perspective: 'admin',
-      exact: true,
-      path: [
-        `/k8s/ns/:ns/${NetworkPolicyExtensionModel.group}~${NetworkPolicyExtensionModel.version}~${NetworkPolicyExtensionModel.kind}/~new/form`,
-      ],
       component: {
         $codeRef: 'NetworkPolicyForm',
       },
+      exact: true,
       flags: {
         required: [FLAG_NET_ATTACH_DEF],
       },
+      path: [
+        `/k8s/ns/:ns/${NetworkPolicyExtensionModel.group}~${NetworkPolicyExtensionModel.version}~${NetworkPolicyExtensionModel.kind}/~new/form`,
+      ],
+      perspective: 'admin',
     },
+    type: 'console.page/route',
   } as EncodedExtension<RoutePage>,
   {
     properties: {
@@ -63,10 +64,8 @@ export const NetworkPoliciesExtensions: EncodedExtension[] = [
   } as EncodedExtension<ResourceDetailsPage>,
 ];
 
-export const NetworkPoliciesExposedModules: ConsolePluginBuildMetadata['exposedModules'] =
-  {
-    NetworkPolicyList: './views/networkpolicies/list/NetworkPolicyList.tsx',
-    NetworkPolicyForm: './views/networkpolicies/new/create-network-policy.tsx',
-    NetworkPolicyDetails:
-      './views/networkpolicies/details/NetworkPolicyDetailsPage.tsx',
-  };
+export const NetworkPoliciesExposedModules: ConsolePluginBuildMetadata['exposedModules'] = {
+  NetworkPolicyDetails: './views/networkpolicies/details/NetworkPolicyDetailsPage.tsx',
+  NetworkPolicyForm: './views/networkpolicies/new/create-network-policy.tsx',
+  NetworkPolicyList: './views/networkpolicies/list/NetworkPolicyList.tsx',
+};

@@ -1,5 +1,11 @@
 import React, { FC } from 'react';
+import { useHistory } from 'react-router';
 
+import {
+  modelToGroupVersionKind,
+  modelToRef,
+  NetworkPolicyModel,
+} from '@kubevirt-ui/kubevirt-api/console';
 import {
   ListPageBody,
   ListPageCreateButton,
@@ -10,15 +16,10 @@ import {
   VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import useNetworkPolicyColumn from './hooks/useNetworkPolicyColumn';
-import NetworkPolicyRow from './components/NetworkPolicyRow';
-import { useHistory } from 'react-router';
-import {
-  modelToGroupVersionKind,
-  modelToRef,
-  NetworkPolicyModel,
-} from '@kubevirt-ui/kubevirt-api/console';
 import { NetworkPolicyKind } from '@utils/resources/networkpolicies/types';
+
+import NetworkPolicyRow from './components/NetworkPolicyRow';
+import useNetworkPolicyColumn from './hooks/useNetworkPolicyColumn';
 
 type NetworkPolicyListProps = {
   kind: string;
@@ -30,8 +31,8 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
   const history = useHistory();
 
   const [nads, loaded, loadError] = useK8sWatchResource<NetworkPolicyKind[]>({
-    isList: true,
     groupVersionKind: modelToGroupVersionKind(NetworkPolicyModel),
+    isList: true,
     namespace,
   });
   const [data, filteredData, onFilterChange] = useListPageFilter(nads);
@@ -41,28 +42,22 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
     <>
       <ListPageHeader title={t('NetworkPolicies')}>
         <ListPageCreateButton
+          className="list-page-create-button-margin"
           createAccessReview={{
             groupVersionKind: modelToGroupVersionKind(NetworkPolicyModel),
             namespace,
           }}
           onClick={() =>
             history.push(
-              `/k8s/ns/${namespace || 'default'}/${modelToRef(
-                NetworkPolicyModel,
-              )}/~new/form`,
+              `/k8s/ns/${namespace || 'default'}/${modelToRef(NetworkPolicyModel)}/~new/form`,
             )
           }
-          className="list-page-create-button-margin"
         >
           {t('Create NetworkPolicy')}
         </ListPageCreateButton>
       </ListPageHeader>
       <ListPageBody>
-        <ListPageFilter
-          data={data}
-          loaded={loaded}
-          onFilterChange={onFilterChange}
-        />
+        <ListPageFilter data={data} loaded={loaded} onFilterChange={onFilterChange} />
         <VirtualizedTable<NetworkPolicyKind>
           columns={columns}
           data={filteredData}

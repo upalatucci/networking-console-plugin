@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 import {
   Dropdown,
   DropdownItem,
@@ -6,48 +8,41 @@ import {
   MenuToggleElement,
 } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import * as React from 'react';
 
-export type NetworkPolicyPeerType = 'sameNS' | 'anyNS' | 'ipBlock';
+export type NetworkPolicyPeerType = 'anyNS' | 'ipBlock' | 'sameNS';
 
 export const NetworkPolicyAddPeerDropdown: React.FunctionComponent<
   NetworkPolicyAddPeerDropdownProps
 > = (props) => {
   const { t } = useNetworkingTranslation();
-  const { title, onSelect } = props;
+  const { onSelect, title } = props;
 
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
 
   return (
     <div className="form-group co-create-networkpolicy__add-peer">
       <Dropdown
+        data-test="add-peer"
+        isOpen={isDropdownOpen}
         onSelect={(event, networkType: NetworkPolicyPeerType) => {
           onSelect(networkType);
           setIsDropdownOpen(false);
         }}
-        data-test="add-peer"
         toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
           <MenuToggle
             id="toggle-basic"
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             isExpanded={isDropdownOpen}
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             ref={toggleRef}
           >
             {title}
           </MenuToggle>
         )}
-        isOpen={isDropdownOpen}
       >
         <DropdownList className="add-peer-dropdown">
-          <DropdownItem value="sameNS">
-            {t('Allow pods from the same namespace')}
-          </DropdownItem>
-          <DropdownItem value="anyNS">
-            {t('Allow pods from inside the cluster')}
-          </DropdownItem>
-          <DropdownItem value="ipblock">
-            {t('Allow peers by IP block')}
-          </DropdownItem>
+          <DropdownItem value="sameNS">{t('Allow pods from the same namespace')}</DropdownItem>
+          <DropdownItem value="anyNS">{t('Allow pods from inside the cluster')}</DropdownItem>
+          <DropdownItem value="ipblock">{t('Allow peers by IP block')}</DropdownItem>
         </DropdownList>
       </Dropdown>
     </div>
@@ -55,6 +50,6 @@ export const NetworkPolicyAddPeerDropdown: React.FunctionComponent<
 };
 
 type NetworkPolicyAddPeerDropdownProps = {
-  title: string;
   onSelect: (type: NetworkPolicyPeerType) => void;
+  title: string;
 };

@@ -3,7 +3,7 @@
       "cypress/globals": true,
       "node": true
     },
-    "extends": ["../.eslintrc.yml", "plugin:cypress/recommended"],
+    "extends": ["../.eslintrc.json", "plugin:cypress/recommended"],
     "plugins": ["cypress"],
     "rules": {
       "no-console": "off",

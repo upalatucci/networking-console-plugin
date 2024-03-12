@@ -1,26 +1,27 @@
 import React, { FC } from 'react';
-import * as _ from 'lodash';
 import { useParams } from 'react-router-dom-v5-compat';
-import { NetworkPolicyForm } from './network-policy-form';
+import * as _ from 'lodash';
+
+import { NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
+import { CodeEditor } from '@openshift-console/dynamic-plugin-sdk';
+import { Text, TextContent, TextVariants, Title } from '@patternfly/react-core';
+import { EditorType } from '@utils/components/SyncedEditor/EditorToggle';
+import { SyncedEditor } from '@utils/components/SyncedEditor/SyncedEditor';
+import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import {
-  NetworkPolicy,
   isNetworkPolicyConversionError,
+  NetworkPolicy,
   networkPolicyFromK8sResource,
   networkPolicyNormalizeK8sResource,
   networkPolicyToK8sResource,
 } from '@utils/models';
+import { NetworkPolicyKind } from '@utils/resources/networkpolicies/types';
+
+import { NetworkPolicyForm } from './network-policy-form';
 
 import './_create-network-policy.scss';
-import { NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
-import { NetworkPolicyKind } from '@utils/resources/networkpolicies/types';
-import { CodeEditor } from '@openshift-console/dynamic-plugin-sdk';
-import { Text, TextContent, TextVariants, Title } from '@patternfly/react-core';
-import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { SyncedEditor } from '@utils/components/SyncedEditor/SyncedEditor';
-import { EditorType } from '@utils/components/SyncedEditor/EditorToggle';
 
-const LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY =
-  'console.createNetworkPolicy.editor.lastView';
+const LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY = 'console.createNetworkPolicy.editor.lastView';
 
 const CreateNetworkPolicy: FC = () => {
   const { t } = useNetworkingTranslation();
@@ -28,17 +29,17 @@ const CreateNetworkPolicy: FC = () => {
   const p = useParams();
   const params: any = { ...p, plural: NetworkPolicyModel.plural };
   const initialPolicy: NetworkPolicy = {
-    name: '',
-    namespace: params.ns,
-    podSelector: [['', '']],
-    ingress: {
-      denyAll: false,
-      rules: [],
-    },
     egress: {
       denyAll: false,
       rules: [],
     },
+    ingress: {
+      denyAll: false,
+      rules: [],
+    },
+    name: '',
+    namespace: params.ns,
+    podSelector: [['', '']],
   };
 
   const formHelpText = t('Create by completing the form.');
@@ -50,10 +51,7 @@ const CreateNetworkPolicy: FC = () => {
 
   const k8sObj = networkPolicyToK8sResource(initialPolicy);
 
-  const YAMLEditor: React.FC<YAMLEditorProps> = ({
-    onChange,
-    initialYAML = '',
-  }) => {
+  const YAMLEditor: React.FC<YAMLEditorProps> = ({ initialYAML = '', onChange }) => {
     return <CodeEditor onChange={onChange} value={initialYAML} />;
   };
 
@@ -86,10 +84,7 @@ const CreateNetworkPolicy: FC = () => {
         <div>
           <Title headingLevel="h2">{t('NetworkPolicies')}</Title>
           <TextContent>
-            <Text
-              component={TextVariants.p}
-              className="help-block co-m-pane__heading-help-text"
-            >
+            <Text className="help-block co-m-pane__heading-help-text" component={TextVariants.p}>
               {helpText}
             </Text>
           </TextContent>
@@ -101,16 +96,16 @@ const CreateNetworkPolicy: FC = () => {
           formContext: { networkPolicy: initialPolicy },
           yamlContext: {},
         }}
+        displayConversionError
         FormEditor={NetworkPolicyForm}
         initialData={k8sObj}
         initialType={EditorType.Form}
+        lastViewUserSettingKey={LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY}
+        onChange={checkPolicyValidForForm}
         onChangeEditorType={(type) =>
           setHelpText(type === EditorType.Form ? formHelpText : yamlHelpText)
         }
-        onChange={checkPolicyValidForForm}
         YAMLEditor={YAMLEditor}
-        lastViewUserSettingKey={LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY}
-        displayConversionError
       />
     </>
   );

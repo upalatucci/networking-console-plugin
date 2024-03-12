@@ -9,9 +9,7 @@ type NetworkPolicyYAMLPageProps = {
   obj?: NetworkPolicyKind;
 };
 
-const NetworkPolicyYAMLPage: FC<NetworkPolicyYAMLPageProps> = ({
-  obj: networkPolicy,
-}) => {
+const NetworkPolicyYAMLPage: FC<NetworkPolicyYAMLPageProps> = ({ obj: networkPolicy }) => {
   const loading = (
     <Bullseye>
       <Loading />

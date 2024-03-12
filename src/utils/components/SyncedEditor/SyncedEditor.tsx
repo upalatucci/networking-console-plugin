@@ -1,18 +1,20 @@
 import * as React from 'react';
-import { Alert, Bullseye, Button } from '@patternfly/react-core';
 import * as _ from 'lodash';
-import { useEditorType } from './useEditorType';
-import { EditorToggle, EditorType } from './EditorToggle';
-import { asyncYAMLToJS, safeJSToYAML } from './yaml';
+
 import { K8sResourceKind } from '@openshift-console/dynamic-plugin-sdk';
-import Loading from '../Loading/Loading';
+import { Alert, Bullseye, Button } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+
+import Loading from '../Loading/Loading';
+
+import { EditorToggle, EditorType } from './EditorToggle';
+import { useEditorType } from './useEditorType';
+import { asyncYAMLToJS, safeJSToYAML } from './yaml';
 
 const YAML_KEY_ORDER = ['apiVerion', 'kind', 'metadata', 'spec', 'status'];
 export const YAML_TO_JS_OPTIONS = {
   skipInvalid: true,
-  sortKeys: (a, b) =>
-    _.indexOf(YAML_KEY_ORDER, a) - _.indexOf(YAML_KEY_ORDER, b),
+  sortKeys: (a, b) => _.indexOf(YAML_KEY_ORDER, a) - _.indexOf(YAML_KEY_ORDER, b),
 };
 
 // Provides toggling and syncing between a form and yaml editor. The formData state is the source
@@ -30,15 +32,15 @@ export const YAML_TO_JS_OPTIONS = {
 //  TODO Add an extra step when switching from yaml to form to warn user if they are about to lose changes.
 export const SyncedEditor: React.FC<SyncedEditorProps> = ({
   context = {} as SyncedEditorProps['context'],
+  displayConversionError,
   FormEditor,
-  initialType = EditorType.Form,
   initialData = {},
-  onChangeEditorType = _.noop,
+  initialType = EditorType.Form,
+  lastViewUserSettingKey,
   onChange = _.noop,
+  onChangeEditorType = _.noop,
   prune,
   YAMLEditor,
-  lastViewUserSettingKey,
-  displayConversionError,
 }) => {
   const { formContext, yamlContext } = context;
   const { t } = useNetworkingTranslation();
@@ -50,10 +52,7 @@ export const SyncedEditor: React.FC<SyncedEditorProps> = ({
   );
   const [switchError, setSwitchError] = React.useState<string | undefined>();
   const [yamlWarning, setYAMLWarning] = React.useState<boolean>(false);
-  const [editorType, setEditorType, loaded] = useEditorType(
-    lastViewUserSettingKey,
-    initialType,
-  );
+  const [editorType, setEditorType, loaded] = useEditorType(lastViewUserSettingKey, initialType);
 
   const handleFormDataChange = (newFormData: K8sResourceKind = {}) => {
     if (!_.isEqual(newFormData, formData)) {
@@ -67,9 +66,7 @@ export const SyncedEditor: React.FC<SyncedEditorProps> = ({
       .then((js) => {
         setSwitchError(undefined);
         handleFormDataChange(js);
-        setYAML(
-          safeJSToYAML(prune?.(formData) ?? formData, yaml, YAML_TO_JS_OPTIONS),
-        );
+        setYAML(safeJSToYAML(prune?.(formData) ?? formData, yaml, YAML_TO_JS_OPTIONS));
       })
       .catch((err) => setSwitchError(String(err)));
   };
@@ -88,9 +85,7 @@ export const SyncedEditor: React.FC<SyncedEditorProps> = ({
   };
 
   const handleToggleToYAML = () => {
-    setYAML(
-      safeJSToYAML(prune?.(formData) ?? formData, yaml, YAML_TO_JS_OPTIONS),
-    );
+    setYAML(safeJSToYAML(prune?.(formData) ?? formData, yaml, YAML_TO_JS_OPTIONS));
     changeEditorType(EditorType.YAML);
   };
 
@@ -119,21 +114,21 @@ export const SyncedEditor: React.FC<SyncedEditorProps> = ({
 
   return loaded ? (
     <>
-      <EditorToggle value={editorType} onChange={onChangeType} />
+      <EditorToggle onChange={onChangeType} value={editorType} />
       {yamlWarning && (
         <Alert
           className="co-synced-editor__yaml-warning"
-          variant="danger"
           isInline
           title={t('Invalid YAML cannot be persisted')}
+          variant="danger"
         >
           {displayConversionError && <p>{switchError}</p>}
           <p>{t('Switching to form view will delete any invalid YAML.')}</p>
-          <Button variant="danger" onClick={onClickYAMLWarningConfirm}>
+          <Button onClick={onClickYAMLWarningConfirm} variant="danger">
             {t('Switch and delete')}
           </Button>
           &nbsp;
-          <Button variant="secondary" onClick={onClickYAMLWarningCancel}>
+          <Button onClick={onClickYAMLWarningCancel} variant="secondary">
             {t('Cancel')}
           </Button>
         </Alert>
@@ -146,11 +141,7 @@ export const SyncedEditor: React.FC<SyncedEditorProps> = ({
           {...formContext}
         />
       ) : (
-        <YAMLEditor
-          initialYAML={yaml}
-          onChange={handleYAMLChange}
-          {...yamlContext}
-        />
+        <YAMLEditor initialYAML={yaml} onChange={handleYAMLChange} {...yamlContext} />
       )}
     </>
   ) : (
@@ -176,13 +167,13 @@ type SyncedEditorProps = {
     formContext: { [key: string]: any };
     yamlContext: { [key: string]: any };
   };
+  displayConversionError?: boolean;
   FormEditor: React.ComponentType<FormEditorProps>;
-  initialType?: EditorType;
   initialData?: K8sResourceKind;
-  onChangeEditorType?: (newType: EditorType) => void;
+  initialType?: EditorType;
+  lastViewUserSettingKey: string;
   onChange?: (data: K8sResourceKind) => void;
+  onChangeEditorType?: (newType: EditorType) => void;
   prune?: (data: K8sResourceKind) => any;
   YAMLEditor: React.ComponentType<YAMLEditorProps>;
-  lastViewUserSettingKey: string;
-  displayConversionError?: boolean;
 };

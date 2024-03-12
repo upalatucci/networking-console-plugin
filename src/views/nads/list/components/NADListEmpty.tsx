@@ -1,23 +1,21 @@
-import { modelToGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console/modelUtils';
+import React, { FC } from 'react';
+import { useHistory } from 'react-router';
+
 import { NetworkAttachmentDefinitionModelRef } from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
-import {
-  useActiveNamespace,
-  useK8sWatchResource,
-} from '@openshift-console/dynamic-plugin-sdk';
+import { modelToGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console/modelUtils';
+import { useActiveNamespace, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { QuickStart } from '@patternfly/quickstarts';
 import {
-  EmptyState,
-  EmptyStateHeader,
-  EmptyStateFooter,
-  EmptyStateActions,
   Button,
+  EmptyState,
+  EmptyStateActions,
+  EmptyStateFooter,
+  EmptyStateHeader,
 } from '@patternfly/react-core';
+import { RocketIcon } from '@patternfly/react-icons/dist/esm/icons/rocket-icon';
 import { ALL_NAMESPACES_KEY, DEFAULT_NAMESPACE } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { QuickStartModel } from '@utils/models';
-import React, { FC } from 'react';
-import { useHistory } from 'react-router';
-import { RocketIcon } from '@patternfly/react-icons/dist/esm/icons/rocket-icon';
 
 const NADListEmpty: FC = () => {
   const history = useHistory();
@@ -32,7 +30,7 @@ const NADListEmpty: FC = () => {
   const hasQuickStarts =
     quickStartsLoaded &&
     quickStarts.find(
-      ({ spec: { displayName, description } }) =>
+      ({ spec: { description, displayName } }) =>
         displayName.toLowerCase().includes(searchText) ||
         description.toLowerCase().includes(searchText),
     );
@@ -40,13 +38,12 @@ const NADListEmpty: FC = () => {
   return (
     <EmptyState>
       <EmptyStateHeader
-        titleText={<>{t('No NetworkAttachmentDefinition found')}</>}
         headingLevel="h4"
+        titleText={<>{t('No NetworkAttachmentDefinition found')}</>}
       />
       <EmptyStateFooter>
         <Button
           data-test-id="create-nad-empty"
-          variant="primary"
           onClick={() =>
             history.push(
               `/k8s/ns/${
@@ -54,6 +51,7 @@ const NADListEmpty: FC = () => {
               }/${NetworkAttachmentDefinitionModelRef}/~new/form`,
             )
           }
+          variant="primary"
         >
           {t('Create NetworkAttachmentDefinition')}
         </Button>
@@ -61,12 +59,8 @@ const NADListEmpty: FC = () => {
           <EmptyStateActions>
             <Button
               data-test-id="nad-quickstart"
+              onClick={() => history.push('/quickstart?keyword=network+attachment+definition')}
               variant="secondary"
-              onClick={() =>
-                history.push(
-                  '/quickstart?keyword=network+attachment+definition',
-                )
-              }
             >
               <RocketIcon className="nad-quickstart-icon" />
               {t('Learn how to use NetworkAttachmentDefinitions')}

@@ -1,4 +1,5 @@
 import { SetFeatureFlag } from '@openshift-console/dynamic-plugin-sdk';
+
 import { FLAG_NET_ATTACH_DEF } from './consts';
 
 export const enableNetworkingDynamicFlag = (setFeatureFlag: SetFeatureFlag) =>

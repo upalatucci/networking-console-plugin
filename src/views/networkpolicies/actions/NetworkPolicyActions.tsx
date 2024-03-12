@@ -1,18 +1,16 @@
 import React, { FC } from 'react';
 
-import useNetworkPolicyActions from './hooks/useNetworkPolicyActions';
 import ActionsDropdown from '@utils/components/ActionsDropdown/ActionsDropdown';
 import { NetworkPolicyKind } from '@utils/resources/networkpolicies/types';
 
+import useNetworkPolicyActions from './hooks/useNetworkPolicyActions';
+
 type NetworkPolicyActionsProps = {
-  obj: NetworkPolicyKind;
   isKebabToggle?: boolean;
+  obj: NetworkPolicyKind;
 };
 
-const NetworkPolicyActions: FC<NetworkPolicyActionsProps> = ({
-  obj,
-  isKebabToggle,
-}) => {
+const NetworkPolicyActions: FC<NetworkPolicyActionsProps> = ({ isKebabToggle, obj }) => {
   const [actions] = useNetworkPolicyActions(obj);
 
   return (

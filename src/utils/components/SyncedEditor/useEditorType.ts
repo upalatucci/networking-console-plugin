@@ -1,35 +1,31 @@
 import * as React from 'react';
-import { EditorType } from './EditorToggle';
+
 import { useUserSettings } from '@openshift-console/dynamic-plugin-sdk-internal';
 import {
   PREFERRED_CREATE_EDIT_METHOD_USER_SETTING_VALUE_LATEST,
   usePreferredCreateEditMethod,
 } from '@utils/hooks/usePreferredCreateEditMethod';
 
+import { EditorType } from './EditorToggle';
+
 export const useEditorType = (
   lastViewUserSettingKey: string,
   defaultValue: EditorType,
   checkEditorTypeEnabled?: (type: EditorType) => boolean,
 ): [EditorType, (type: EditorType) => void, boolean] => {
-  const [
-    lastViewedEditorType,
-    setLastViewedEditorType,
-    lastViewedEditorTypeLoaded,
-  ] = useUserSettings<EditorType>(lastViewUserSettingKey);
+  const [lastViewedEditorType, setLastViewedEditorType, lastViewedEditorTypeLoaded] =
+    useUserSettings<EditorType>(lastViewUserSettingKey);
 
-  const [preferredEditorType, preferredEditorTypeLoaded] =
-    usePreferredCreateEditMethod();
+  const [preferredEditorType, preferredEditorTypeLoaded] = usePreferredCreateEditMethod();
   const isEditorTypeEnabled = (type: EditorType): boolean =>
     checkEditorTypeEnabled ? checkEditorTypeEnabled(type) : true;
 
-  const resourceLoaded: boolean =
-    lastViewedEditorTypeLoaded && preferredEditorTypeLoaded;
+  const resourceLoaded: boolean = lastViewedEditorTypeLoaded && preferredEditorTypeLoaded;
 
   const getEditorType = (): EditorType => {
     if (
       preferredEditorType &&
-      preferredEditorType !==
-        PREFERRED_CREATE_EDIT_METHOD_USER_SETTING_VALUE_LATEST &&
+      preferredEditorType !== PREFERRED_CREATE_EDIT_METHOD_USER_SETTING_VALUE_LATEST &&
       isEditorTypeEnabled(preferredEditorType as EditorType)
     ) {
       return preferredEditorType as EditorType;
@@ -40,8 +36,7 @@ export const useEditorType = (
     return defaultValue;
   };
 
-  const [activeEditorType, setActiveEditorType] =
-    React.useState<EditorType>(null);
+  const [activeEditorType, setActiveEditorType] = React.useState<EditorType>(null);
   const setEditorType = (type: EditorType) => {
     setActiveEditorType(type);
     setLastViewedEditorType(type);
@@ -59,7 +54,6 @@ export const useEditorType = (
     // eslint-disable-next-line
   }, [resourceLoaded]);
 
-  const loaded: boolean =
-    resourceLoaded && (!!activeEditorType || !defaultValue);
+  const loaded: boolean = resourceLoaded && (!!activeEditorType || !defaultValue);
   return [activeEditorType, setEditorType, loaded];
 };

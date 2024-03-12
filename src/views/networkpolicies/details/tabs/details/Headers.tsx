@@ -1,5 +1,6 @@
-import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import React from 'react';
+
+import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 export const IngressHeader = () => {
   const { t } = useNetworkingTranslation();

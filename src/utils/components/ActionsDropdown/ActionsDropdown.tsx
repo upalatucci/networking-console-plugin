@@ -1,10 +1,11 @@
 import React, { FC, memo, useState } from 'react';
 
-import DropdownToggle from '@utils/components/Toggles/DropdownToggle';
-import KebabToggle from '@utils/components/Toggles/KebabToggle';
 import { Action } from '@openshift-console/dynamic-plugin-sdk';
 import { Dropdown, DropdownList } from '@patternfly/react-core';
+import DropdownToggle from '@utils/components/Toggles/DropdownToggle';
+import KebabToggle from '@utils/components/Toggles/KebabToggle';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+
 import ActionDropdownItem from '../ActionDropdownItem/ActionDropdownItem';
 
 type ActionsDropdownProps = {
@@ -52,11 +53,7 @@ const ActionsDropdown: FC<ActionsDropdownProps> = ({
     >
       <DropdownList>
         {actions?.map((action) => (
-          <ActionDropdownItem
-            action={action}
-            key={action?.id}
-            setIsOpen={setIsOpen}
-          />
+          <ActionDropdownItem action={action} key={action?.id} setIsOpen={setIsOpen} />
         ))}
       </DropdownList>
     </Dropdown>

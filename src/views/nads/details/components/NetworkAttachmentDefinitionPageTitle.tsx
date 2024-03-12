@@ -1,20 +1,20 @@
 import React, { FC } from 'react';
-
-import { Breadcrumb, BreadcrumbItem } from '@patternfly/react-core';
 import { Link } from 'react-router-dom-v5-compat';
+
+import { NetworkAttachmentDefinitionModelRef } from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
+import { Breadcrumb, BreadcrumbItem } from '@patternfly/react-core';
+import { useLastNamespacePath } from '@utils/hooks/useLastNamespacePath';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
-import { NetworkAttachmentDefinitionModelRef } from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
 import NADsActions from '@views/nads/actions/NADActions';
-import { useLastNamespacePath } from '@utils/hooks/useLastNamespacePath';
 
 type NetworkAttachmentDefinitionPageTitleProps = {
   nad: NetworkAttachmentDefinitionKind;
 };
 
-const NetworkAttachmentDefinitionPageTitle: FC<
-  NetworkAttachmentDefinitionPageTitleProps
-> = ({ nad }) => {
+const NetworkAttachmentDefinitionPageTitle: FC<NetworkAttachmentDefinitionPageTitleProps> = ({
+  nad,
+}) => {
   const { t } = useNetworkingTranslation();
   const namespacePath = useLastNamespacePath();
 
@@ -23,15 +23,11 @@ const NetworkAttachmentDefinitionPageTitle: FC<
       <div>
         <Breadcrumb className="pf-c-breadcrumb co-breadcrumb">
           <BreadcrumbItem>
-            <Link
-              to={`/k8s/${namespacePath}/${NetworkAttachmentDefinitionModelRef}`}
-            >
+            <Link to={`/k8s/${namespacePath}/${NetworkAttachmentDefinitionModelRef}`}>
               {t('NetworkAttachmentDefinitions')}
             </Link>
           </BreadcrumbItem>
-          <BreadcrumbItem>
-            {t('NetworkAttachmentDefinition details')}
-          </BreadcrumbItem>
+          <BreadcrumbItem>{t('NetworkAttachmentDefinition details')}</BreadcrumbItem>
         </Breadcrumb>
       </div>
       <span className="co-m-pane__heading">

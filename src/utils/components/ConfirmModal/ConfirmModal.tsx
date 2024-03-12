@@ -8,37 +8,30 @@ import {
   Modal,
   ModalVariant,
 } from '@patternfly/react-core';
-
-import './ConfirmModal.scss';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
+import './ConfirmModal.scss';
+
 export type ConfirmModalProps = {
-  executeFn: () => void;
-  title: string;
-  message: string | JSX.Element;
-  btnText: string | JSX.Element;
+  btnText: JSX.Element | string;
   closeModal?: () => void;
+  executeFn: () => void;
+  message: JSX.Element | string;
+  title: string;
 };
 
 const ConfirmModal: FC<ConfirmModalProps> = ({
-  title,
+  btnText,
   closeModal,
   executeFn,
-  btnText,
   message,
+  title,
 }) => {
   const { t } = useNetworkingTranslation();
 
   return (
     <Modal
       className="ocs-modal networking-confirm-modal"
-      id="confirm-modal"
-      isOpen
-      onClose={closeModal}
-      position={'top'}
-      title={title}
-      variant={ModalVariant.small}
-      titleIconVariant="warning"
       footer={
         <ActionList className="tabmodal-footer">
           <ActionListItem>
@@ -53,6 +46,13 @@ const ConfirmModal: FC<ConfirmModalProps> = ({
           </ActionListItem>
         </ActionList>
       }
+      id="confirm-modal"
+      isOpen
+      onClose={closeModal}
+      position={'top'}
+      title={title}
+      titleIconVariant="warning"
+      variant={ModalVariant.small}
     >
       {message}
     </Modal>

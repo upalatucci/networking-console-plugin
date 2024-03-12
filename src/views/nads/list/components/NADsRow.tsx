@@ -1,14 +1,15 @@
 import React, { FC } from 'react';
+
+import NetworkAttachmentDefinitionModel from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
 import {
+  getGroupVersionKindForModel,
   ResourceLink,
   RowProps,
   TableData,
-  getGroupVersionKindForModel,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { getName, getNamespace } from '@utils/resources/shared';
-import NetworkAttachmentDefinitionModel from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
 import { getConfigAsJSON, getType } from '@utils/resources/nads/selectors';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
+import { getName, getNamespace } from '@utils/resources/shared';
 import NADsActions from '@views/nads/actions/NADActions';
 
 type NADsRowType = RowProps<NetworkAttachmentDefinitionKind>;
@@ -24,9 +25,7 @@ const NADsRow: FC<NADsRowType> = ({ activeColumnIDs, obj }) => {
     <>
       <TableData activeColumnIDs={activeColumnIDs} id="name">
         <ResourceLink
-          groupVersionKind={getGroupVersionKindForModel(
-            NetworkAttachmentDefinitionModel,
-          )}
+          groupVersionKind={getGroupVersionKindForModel(NetworkAttachmentDefinitionModel)}
           name={name}
           namespace={namespace}
         />

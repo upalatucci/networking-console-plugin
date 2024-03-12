@@ -6,9 +6,9 @@ export type NetworkAttachmentDefinitionAnnotations = {
 };
 
 export type IPAMConfig = {
-  type?: string;
-  subnet?: string;
   dataDir?: string;
+  subnet?: string;
+  type?: string;
 };
 
 export type NetworkAttachmentDefinitionPlugin = {
@@ -16,20 +16,20 @@ export type NetworkAttachmentDefinitionPlugin = {
 };
 
 export type NetworkAttachmentDefinitionConfig = {
-  cniVersion: string;
-  name: string;
-  type?: string;
   bridge?: string;
+  cniVersion: string;
+  ipam?: IPAMConfig;
   isGateway?: true;
   macspoofchk?: boolean;
-  vlan?: number;
-  ipam?: IPAMConfig;
-  plugins?: NetworkAttachmentDefinitionPlugin[];
-  topology?: string;
-  netAttachDefName?: string;
-  preserveDefaultVlan?: boolean;
-  vlanID?: number;
   mtu?: number;
+  name: string;
+  netAttachDefName?: string;
+  plugins?: NetworkAttachmentDefinitionPlugin[];
+  preserveDefaultVlan?: boolean;
+  topology?: string;
+  type?: string;
+  vlan?: number;
+  vlanID?: number;
 };
 
 // The config is a JSON object with the NetworkAttachmentDefinitionConfig type stored as a string
@@ -42,8 +42,8 @@ export type NetworkAttachmentDefinitionKind = {
 } & K8sResourceKind;
 
 export type TypeParamsDataItem = {
-  value?: any;
   validationMsg?: string;
+  value?: any;
 };
 
 export type TypeParamsData = {

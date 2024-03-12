@@ -1,8 +1,8 @@
 export enum ValidationErrorType {
   Error = 'error',
+  Info = 'info',
   TrivialError = 'trivial-error', // should not be visible but affects data validation
   Warn = 'warning',
-  Info = 'info',
 }
 
 export type ValidationObject = {
@@ -20,11 +20,11 @@ export const asValidationObject = (
 
 type DNSValidationMsgs = {
   emptyMsg: string;
-  startEndAlphanumbericMsg: string;
   errorMsg: string;
-  uppercaseMsg: string;
   longMsg: string;
   shortMsg: string;
+  startEndAlphanumbericMsg: string;
+  uppercaseMsg: string;
 };
 
 const alphanumericRegex = '[a-zA-Z0-9]';
@@ -37,14 +37,14 @@ export const validateDNS1123SubdomainValue = (
   {
     emptyMsg,
     errorMsg,
-    uppercaseMsg,
-    startEndAlphanumbericMsg,
-    shortMsg,
     longMsg,
+    shortMsg,
+    startEndAlphanumbericMsg,
+    uppercaseMsg,
   }: DNSValidationMsgs,
-  { min, max }: { min?: number; max?: number } = {
-    min: undefined,
+  { max, min }: { max?: number; min?: number } = {
     max: DNS1123_MAX_LENGTH,
+    min: undefined,
   },
 ): ValidationObject => {
   const maxLength = max || DNS1123_MAX_LENGTH;
@@ -65,9 +65,7 @@ export const validateDNS1123SubdomainValue = (
   }
 
   const startsWithAlphaNumeric = value.charAt(0).match(alphanumericRegex);
-  const endsWithAlphaNumeric = value
-    .charAt(value.length - 1)
-    .match(alphanumericRegex);
+  const endsWithAlphaNumeric = value.charAt(value.length - 1).match(alphanumericRegex);
 
   if (!startsWithAlphaNumeric || !endsWithAlphaNumeric) {
     return asValidationObject(startEndAlphanumbericMsg);

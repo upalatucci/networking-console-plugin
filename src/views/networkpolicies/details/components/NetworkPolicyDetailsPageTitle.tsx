@@ -1,23 +1,20 @@
 import React, { FC } from 'react';
-
-import { Breadcrumb, BreadcrumbItem } from '@patternfly/react-core';
 import { Link } from 'react-router-dom-v5-compat';
-import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+
+import { modelToRef, NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
+import { Breadcrumb, BreadcrumbItem } from '@patternfly/react-core';
 import { useLastNamespacePath } from '@utils/hooks/useLastNamespacePath';
+import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { NetworkPolicyKind } from '@utils/resources/networkpolicies/types';
 import NetworkPolicyActions from '@views/networkpolicies/actions/NetworkPolicyActions';
-import {
-  NetworkPolicyModel,
-  modelToRef,
-} from '@kubevirt-ui/kubevirt-api/console';
 
 type NetworkAttachmentDefinitionPageTitleProps = {
   networkPolicy: NetworkPolicyKind;
 };
 
-const NetworkAttachmentDefinitionPageTitle: FC<
-  NetworkAttachmentDefinitionPageTitleProps
-> = ({ networkPolicy }) => {
+const NetworkAttachmentDefinitionPageTitle: FC<NetworkAttachmentDefinitionPageTitleProps> = ({
+  networkPolicy,
+}) => {
   const { t } = useNetworkingTranslation();
   const namespacePath = useLastNamespacePath();
 
@@ -26,15 +23,11 @@ const NetworkAttachmentDefinitionPageTitle: FC<
       <div>
         <Breadcrumb className="pf-c-breadcrumb co-breadcrumb">
           <BreadcrumbItem>
-            <Link
-              to={`/k8s/${namespacePath}/${modelToRef(NetworkPolicyModel)}`}
-            >
+            <Link to={`/k8s/${namespacePath}/${modelToRef(NetworkPolicyModel)}`}>
               {t('NetworkAttachmentDefinitions')}
             </Link>
           </BreadcrumbItem>
-          <BreadcrumbItem>
-            {t('NetworkAttachmentDefinition details')}
-          </BreadcrumbItem>
+          <BreadcrumbItem>{t('NetworkAttachmentDefinition details')}</BreadcrumbItem>
         </Breadcrumb>
       </div>
       <span className="co-m-pane__heading">

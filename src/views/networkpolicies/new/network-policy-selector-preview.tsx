@@ -1,13 +1,9 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import * as React from 'react';
-import {
-  Alert,
-  Label,
-  Popover,
-  TreeView,
-  TreeViewDataItem,
-} from '@patternfly/react-core';
 import * as _ from 'lodash';
+
+import { NamespaceModel, PodModel } from '@kubevirt-ui/kubevirt-api/console';
+import { IoK8sApiCoreV1Pod } from '@kubevirt-ui/kubevirt-api/kubernetes/models/IoK8sApiCoreV1Pod';
 import {
   K8sModel,
   K8sResourceCommon,
@@ -15,15 +11,14 @@ import {
   Selector,
   useK8sWatchResource,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { resourcePathFromModel } from '@utils/utils';
-import { IoK8sApiCoreV1Pod } from '@kubevirt-ui/kubevirt-api/kubernetes/models/IoK8sApiCoreV1Pod';
-import { NamespaceModel, PodModel } from '@kubevirt-ui/kubevirt-api/console';
-import { selectorToK8s } from '@utils/models';
+import { Alert, Label, Popover, TreeView, TreeViewDataItem } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { selectorToK8s } from '@utils/models';
+import { resourcePathFromModel } from '@utils/utils';
 
 enum FilterType {
-  NAME = 'Name',
   LABEL = 'Label',
+  NAME = 'Name',
 }
 
 export const filterTypeMap = Object.freeze({
@@ -31,57 +26,48 @@ export const filterTypeMap = Object.freeze({
   [FilterType.NAME]: 'name',
 });
 
-export const resourceListPathFromModel = (
-  model: K8sModel,
-  namespace?: string,
-) => resourcePathFromModel(model, null, namespace);
+export const resourceListPathFromModel = (model: K8sModel, namespace?: string) =>
+  resourcePathFromModel(model, null, namespace);
 
 const maxPreviewPods = 10;
 const labelFilterQueryParamSeparator = ',';
 
 type NetworkPolicySelectorPreviewProps = {
-  podSelector: string[][];
+  dataTest?: string;
   namespaceSelector?: string[][];
+  podSelector: string[][];
   policyNamespace: string;
   popoverRef: React.MutableRefObject<undefined>;
-  dataTest?: string;
 };
 
-export const NetworkPolicySelectorPreview: React.FC<
-  NetworkPolicySelectorPreviewProps
-> = (props) => {
+export const NetworkPolicySelectorPreview: React.FC<NetworkPolicySelectorPreviewProps> = (
+  props,
+) => {
   const allNamespaces =
-    props.namespaceSelector &&
-    props.namespaceSelector.filter((pair) => !!pair[0]).length === 0;
+    props.namespaceSelector && props.namespaceSelector.filter((pair) => !!pair[0]).length === 0;
 
   return (
-    <>
-      <Popover
-        aria-label="pods-list"
-        data-test={
-          props.dataTest ? `${props.dataTest}-popover` : `pods-preview-popover`
-        }
-        bodyContent={
-          props.namespaceSelector ? (
-            allNamespaces ? (
-              <PodsPreview podSelector={props.podSelector} />
-            ) : (
-              <PodsPreview
-                namespaceSelector={props.namespaceSelector}
-                podSelector={props.podSelector}
-              />
-            )
+    <Popover
+      aria-label="pods-list"
+      bodyContent={
+        // eslint-disable-next-line no-nested-ternary
+        props.namespaceSelector ? (
+          allNamespaces ? (
+            <PodsPreview podSelector={props.podSelector} />
           ) : (
             <PodsPreview
-              namespace={props.policyNamespace}
+              namespaceSelector={props.namespaceSelector}
               podSelector={props.podSelector}
             />
           )
-        }
-        triggerRef={props.popoverRef}
-        position={'bottom'}
-      />
-    </>
+        ) : (
+          <PodsPreview namespace={props.policyNamespace} podSelector={props.podSelector} />
+        )
+      }
+      data-test={props.dataTest ? `${props.dataTest}-popover` : `pods-preview-popover`}
+      position={'bottom'}
+      triggerRef={props.popoverRef}
+    />
   );
 };
 
@@ -107,8 +93,8 @@ function useWatch<T>(kind: string, selector: Selector, namespace?: string) {
     () => ({
       isList: true,
       kind,
-      selector,
       namespace,
+      selector,
     }),
     [kind, namespace, selector],
   );
@@ -133,10 +119,8 @@ type PodsPreviewProps = {
  * @param props see {@link PodsPreviewProps}
  * @returns a pods preview tree
  */
-export const PodsPreview: React.FunctionComponent<PodsPreviewProps> = (
-  props,
-) => {
-  const { namespace, podSelector, namespaceSelector } = props;
+export const PodsPreview: React.FunctionComponent<PodsPreviewProps> = (props) => {
+  const { namespace, namespaceSelector, podSelector } = props;
   const { t } = useNetworkingTranslation();
 
   const [safeNsSelector, offendingNsSelector] = React.useMemo(
@@ -149,8 +133,11 @@ export const PodsPreview: React.FunctionComponent<PodsPreviewProps> = (
     [podSelector],
   );
 
-  const [watchedPods, watchPodLoaded, watchPodError] =
-    useWatch<IoK8sApiCoreV1Pod>(PodModel.kind, safePodSelector, namespace);
+  const [watchedPods, watchPodLoaded, watchPodError] = useWatch<IoK8sApiCoreV1Pod>(
+    PodModel.kind,
+    safePodSelector,
+    namespace,
+  );
 
   const [watchedNs, watchNsLoaded, watchNsError] = useWatch<K8sResourceCommon>(
     NamespaceModel.kind,
@@ -187,9 +174,9 @@ export const PodsPreview: React.FunctionComponent<PodsPreviewProps> = (
 
   // takes the first 'maxPreviewPods' received pods and groups them by namespace
   const preview: {
+    error?: any;
     pods?: TreeViewDataItem[];
     total?: number;
-    error?: any;
   } = React.useMemo(() => {
     if (selectorError) {
       return { error: selectorError };
@@ -208,8 +195,7 @@ export const PodsPreview: React.FunctionComponent<PodsPreviewProps> = (
         return { error: watchNsError };
       }
       filteredPods = filteredPods.filter(
-        (pod) =>
-          pod.metadata.namespace && matchedNs.has(pod.metadata.namespace),
+        (pod) => pod.metadata.namespace && matchedNs.has(pod.metadata.namespace),
       );
     }
     // Group pod TreeViewDataItem by namespace, up to a maximum of maxPreviewedPods entries
@@ -218,18 +204,18 @@ export const PodsPreview: React.FunctionComponent<PodsPreviewProps> = (
       const ns = pod?.metadata?.namespace as string;
       podsByNs[ns] = podsByNs[ns] || [];
       podsByNs[ns].push({
-        name: pod?.metadata?.name,
         icon: <ResourceIcon kind={PodModel.kind} />,
+        name: pod?.metadata?.name,
       });
     });
     // Then convert the above groups of pod TreeViewDataItems to subchildren of
     // the namespaces' TreeViewDataItems
     const podTreeEntries = _.toPairs(podsByNs).map(
       ([ns, pods]): TreeViewDataItem => ({
-        name: ns,
         children: pods,
         defaultExpanded: true,
         icon: <ResourceIcon kind={NamespaceModel.kind} />,
+        name: ns,
       }),
     );
     return {
@@ -246,18 +232,12 @@ export const PodsPreview: React.FunctionComponent<PodsPreviewProps> = (
     watchedPods,
   ]);
 
-  const labelList = _.map(
-    safePodSelector.matchLabels || {},
-    (value, label) => `${label}=${value}`,
-  );
-  const labelBadges = _.map(
-    safePodSelector.matchLabels || {},
-    (value, label) => (
-      <Label key={label} value={value} color="green">
-        {label}={value}
-      </Label>
-    ),
-  );
+  const labelList = _.map(safePodSelector.matchLabels || {}, (value, label) => `${label}=${value}`);
+  const labelBadges = _.map(safePodSelector.matchLabels || {}, (value, label) => (
+    <Label color="green" key={label} value={value}>
+      {label}={value}
+    </Label>
+  ));
   // Filter by labels in the "View all XXX results" link, if needed
   const podsFilterQuery =
     preview.total && preview.total > maxPreviewPods && labelList.length > 0
@@ -267,12 +247,7 @@ export const PodsPreview: React.FunctionComponent<PodsPreviewProps> = (
       : '';
 
   return preview.error ? (
-    <Alert
-      data-test="pods-preview-alert"
-      variant="danger"
-      isInline
-      title={t("Can't preview pods")}
-    >
+    <Alert data-test="pods-preview-alert" isInline title={t("Can't preview pods")} variant="danger">
       <p>{String(preview.error)}</p>
     </Alert>
   ) : (
@@ -294,22 +269,19 @@ export const PodsPreview: React.FunctionComponent<PodsPreviewProps> = (
             )}
           </div>
           <TreeView
-            data-test="pods-preview-tree"
             className="co-create-networkpolicy__selector-preview"
             data={preview.pods}
+            data-test="pods-preview-tree"
             hasGuides
           />
           {preview.total && preview.total > maxPreviewPods && (
             <>
               {_.size(safeNsSelector.matchLabels) === 0 ? (
                 <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={`${resourceListPathFromModel(
-                    PodModel,
-                    namespace,
-                  )}${podsFilterQuery}`}
                   data-test="pods-preview-footer-link"
+                  href={`${resourceListPathFromModel(PodModel, namespace)}${podsFilterQuery}`}
+                  rel="noopener noreferrer"
+                  target="_blank"
                 >
                   {t('View all {{total}} results', {
                     total: preview.total,
