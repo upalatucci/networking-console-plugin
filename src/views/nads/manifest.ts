@@ -1,17 +1,18 @@
 import { EncodedExtension } from '@openshift/dynamic-plugin-sdk-webpack';
-import { ConsolePluginBuildMetadata } from '@openshift-console/dynamic-plugin-sdk-webpack/lib/build-types';
 import {
   ResourceDetailsPage,
   ResourceListPage,
   ResourceNSNavItem,
   RoutePage,
 } from '@openshift-console/dynamic-plugin-sdk';
+import { ConsolePluginBuildMetadata } from '@openshift-console/dynamic-plugin-sdk-webpack/lib/build-types';
+
 import { FLAG_KUBEVIRT, FLAG_NET_ATTACH_DEF } from '../../utils/flags/consts';
 
 const NetworkAttachmentDefinitionExtensionModel = {
-  version: 'v1',
   group: 'k8s.cni.cncf.io',
   kind: 'NetworkAttachmentDefinition',
+  version: 'v1',
 };
 
 export const NADsExtensions: EncodedExtension[] = [
@@ -23,37 +24,37 @@ export const NADsExtensions: EncodedExtension[] = [
     type: 'console.page/resource/list',
   } as EncodedExtension<ResourceListPage>,
   {
-    type: 'console.navigation/resource-ns',
+    flags: {
+      required: [FLAG_NET_ATTACH_DEF, FLAG_KUBEVIRT],
+    },
     properties: {
-      id: 'networkattachmentdefinitions',
-      section: 'networking',
-      name: 'NetworkAttachmentDefinitions',
-      model: NetworkAttachmentDefinitionExtensionModel,
       dataAttributes: {
         'data-quickstart-id': 'qs-nav-nads',
         'data-test-id': 'nads-nav-item',
       },
+      id: 'networkattachmentdefinitions',
+      model: NetworkAttachmentDefinitionExtensionModel,
+      name: 'NetworkAttachmentDefinitions',
+      section: 'networking',
     },
-    flags: {
-      required: [FLAG_NET_ATTACH_DEF, FLAG_KUBEVIRT],
-    },
+    type: 'console.navigation/resource-ns',
   } as EncodedExtension<ResourceNSNavItem>,
 
   {
-    type: 'console.page/route',
     properties: {
-      perspective: 'admin',
-      exact: true,
-      path: [
-        `/k8s/ns/:ns/${NetworkAttachmentDefinitionExtensionModel.group}~${NetworkAttachmentDefinitionExtensionModel.version}~${NetworkAttachmentDefinitionExtensionModel.kind}/~new/form`,
-      ],
       component: {
         $codeRef: 'NetworkAttachmentDefinitionsForm',
       },
+      exact: true,
       flags: {
         required: [FLAG_NET_ATTACH_DEF],
       },
+      path: [
+        `/k8s/ns/:ns/${NetworkAttachmentDefinitionExtensionModel.group}~${NetworkAttachmentDefinitionExtensionModel.version}~${NetworkAttachmentDefinitionExtensionModel.kind}/~new/form`,
+      ],
+      perspective: 'admin',
     },
+    type: 'console.page/route',
   } as EncodedExtension<RoutePage>,
   {
     properties: {
@@ -64,12 +65,8 @@ export const NADsExtensions: EncodedExtension[] = [
   } as EncodedExtension<ResourceDetailsPage>,
 ];
 
-export const NADsExposedModules: ConsolePluginBuildMetadata['exposedModules'] =
-  {
-    NetworkAttachmentDefinitionList:
-      './views/nads/list/NetworkAttachmentDefinitionList.tsx',
-    NetworkAttachmentDefinitionsForm:
-      './views/nads/new/NetworkAttachmentDefinitionsForm',
-    NetworkAttachmentDefinitionPage:
-      './views/nads/details/NetworkAttachmentDefinitionPage.tsx',
-  };
+export const NADsExposedModules: ConsolePluginBuildMetadata['exposedModules'] = {
+  NetworkAttachmentDefinitionList: './views/nads/list/NetworkAttachmentDefinitionList.tsx',
+  NetworkAttachmentDefinitionPage: './views/nads/details/NetworkAttachmentDefinitionPage.tsx',
+  NetworkAttachmentDefinitionsForm: './views/nads/new/NetworkAttachmentDefinitionsForm',
+};

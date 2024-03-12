@@ -1,7 +1,12 @@
 import * as React from 'react';
-import * as _ from 'lodash-es';
 import classnames from 'classnames';
-import { PencilAltIcon } from '@patternfly/react-icons/dist/esm/icons/pencil-alt-icon';
+import * as _ from 'lodash-es';
+
+import {
+  getGroupVersionKindForResource,
+  K8sResourceKind,
+  useK8sModel,
+} from '@openshift-console/dynamic-plugin-sdk';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -10,13 +15,9 @@ import {
   Split,
   SplitItem,
 } from '@patternfly/react-core';
-
+import { PencilAltIcon } from '@patternfly/react-icons/dist/esm/icons/pencil-alt-icon';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import {
-  K8sResourceKind,
-  getGroupVersionKindForResource,
-  useK8sModel,
-} from '@openshift-console/dynamic-plugin-sdk';
+
 import { getPropertyDescription } from './swagger';
 
 export const PropertyPath: React.FC<{
@@ -30,7 +31,7 @@ export const PropertyPath: React.FC<{
       {pathArray.map((property, i) => {
         const isLast = i === pathArray.length - 1;
         return (
-          <BreadcrumbItem key={i} isActive={isLast}>
+          <BreadcrumbItem isActive={isLast} key={i}>
             {property}
           </BreadcrumbItem>
         );
@@ -42,15 +43,13 @@ export const PropertyPath: React.FC<{
 const EditButton: React.SFC<EditButtonProps> = (props) => {
   return (
     <Button
-      type="button"
-      variant="link"
+      data-test={
+        props.testId ? `${props.testId}-details-item__edit-button` : 'details-item__edit-button'
+      }
       isInline
       onClick={props.onClick}
-      data-test={
-        props.testId
-          ? `${props.testId}-details-item__edit-button`
-          : 'details-item__edit-button'
-      }
+      type="button"
+      variant="link"
     >
       {props.children}
       <PencilAltIcon className="co-icon-space-l pf-v5-c-button-icon--plain" />
@@ -59,6 +58,7 @@ const EditButton: React.SFC<EditButtonProps> = (props) => {
 };
 
 export const DetailsItem: React.FC<DetailsItemProps> = ({
+  canEdit = true,
   children,
   defaultValue = '-',
   description,
@@ -68,7 +68,6 @@ export const DetailsItem: React.FC<DetailsItemProps> = ({
   labelClassName,
   obj,
   onEdit,
-  canEdit = true,
   path,
   valueClassName,
 }) => {
@@ -77,8 +76,7 @@ export const DetailsItem: React.FC<DetailsItemProps> = ({
   const [model] = useK8sModel(obj ? getGroupVersionKindForResource(obj) : '');
 
   const hide = hideEmpty && _.isEmpty(_.get(obj, path));
-  const popoverContent: string =
-    description ?? getPropertyDescription(model, path);
+  const popoverContent: string = description ?? getPropertyDescription(model, path);
   const value: React.ReactNode = children || _.get(obj, path, defaultValue);
   const editable = onEdit && canEdit;
   return hide ? null : (
@@ -93,22 +91,14 @@ export const DetailsItem: React.FC<DetailsItemProps> = ({
               <Popover
                 headerContent={<div>{label}</div>}
                 {...(popoverContent && {
-                  bodyContent: (
-                    <div className="co-pre-line">{popoverContent}</div>
-                  ),
+                  bodyContent: <div className="co-pre-line">{popoverContent}</div>,
                 })}
                 {...(path && {
-                  footerContent: (
-                    <PropertyPath kind={model?.kind} path={path} />
-                  ),
+                  footerContent: <PropertyPath kind={model?.kind} path={path} />,
                 })}
                 maxWidth="30rem"
               >
-                <Button
-                  data-test={label}
-                  variant="plain"
-                  className="details-item__popover-button"
-                >
+                <Button className="details-item__popover-button" data-test={label} variant="plain">
                   {label}
                 </Button>
               </Popover>
@@ -120,7 +110,7 @@ export const DetailsItem: React.FC<DetailsItemProps> = ({
             <>
               <SplitItem isFilled />
               <SplitItem>
-                <EditButton testId={label} onClick={onEdit}>
+                <EditButton onClick={onEdit} testId={label}>
                   {t('Edit')}
                 </EditButton>
               </SplitItem>
@@ -135,7 +125,7 @@ export const DetailsItem: React.FC<DetailsItemProps> = ({
         data-test-selector={`details-item-value__${label}`}
       >
         {editable && !editAsGroup ? (
-          <EditButton testId={label} onClick={onEdit}>
+          <EditButton onClick={onEdit} testId={label}>
             {value}
           </EditButton>
         ) : (

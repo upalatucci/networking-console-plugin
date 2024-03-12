@@ -1,7 +1,8 @@
+import React, { FC } from 'react';
+
 import { Button, TextInput, Tooltip } from '@patternfly/react-core';
 import { MinusCircleIcon, PlusCircleIcon } from '@patternfly/react-icons';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import React, { FC } from 'react';
 
 type LabelSelectorEditorProps = {
   labelSelectorPairs: string[][];
@@ -11,8 +12,8 @@ type LabelSelectorEditorProps = {
 
 const LabelSelectorEditor: FC<LabelSelectorEditorProps> = ({
   labelSelectorPairs,
-  updateParentData,
   onLastItemRemoved,
+  updateParentData,
 }) => {
   const { t } = useNetworkingTranslation();
 
@@ -36,16 +37,10 @@ const LabelSelectorEditor: FC<LabelSelectorEditorProps> = ({
   return (
     <>
       <div className="row pairs-list__heading">
-        <div
-          className="col-xs-5 text-secondary text-uppercase"
-          id="editor-label-header"
-        >
+        <div className="col-xs-5 text-secondary text-uppercase" id="editor-label-header">
           {t('Label')}
         </div>
-        <div
-          className="col-xs-5 text-secondary text-uppercase"
-          id="editor-selector-header"
-        >
+        <div className="col-xs-5 text-secondary text-uppercase" id="editor-selector-header">
           {t('Selector')}
         </div>
         <div className="col-xs-1 co-empty__header" />
@@ -57,9 +52,7 @@ const LabelSelectorEditor: FC<LabelSelectorEditorProps> = ({
               <TextInput
                 aria-labelledby="editor-label-header"
                 id={`${index}-serial`}
-                onChange={(_, value) =>
-                  onChange(value, labelSelectorPair[1], index)
-                }
+                onChange={(_, value) => onChange(value, labelSelectorPair[1], index)}
                 type="text"
                 value={labelSelectorPair[0]}
               />
@@ -68,9 +61,7 @@ const LabelSelectorEditor: FC<LabelSelectorEditorProps> = ({
               <TextInput
                 aria-labelledby="editor-selector-header"
                 id={`${index}-serial`}
-                onChange={(_, value) =>
-                  onChange(labelSelectorPair[0], value, index)
-                }
+                onChange={(_, value) => onChange(labelSelectorPair[0], value, index)}
                 type="text"
                 value={labelSelectorPair[1]}
               />

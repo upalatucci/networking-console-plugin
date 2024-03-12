@@ -1,15 +1,19 @@
 import * as React from 'react';
+import * as _ from 'lodash';
+
 import {
   Button,
+  Card,
   CardBody,
   CardTitle,
-  Card,
   Divider,
   FormFieldGroupExpandable,
   FormFieldGroupHeader,
 } from '@patternfly/react-core';
 import { TrashIcon } from '@patternfly/react-icons/dist/esm/icons/trash-icon';
-import * as _ from 'lodash';
+import { t, useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { NetworkPolicyPeer, NetworkPolicyRule } from '@utils/models';
+
 import {
   NetworkPolicyAddPeerDropdown,
   NetworkPolicyPeerType,
@@ -17,16 +21,8 @@ import {
 import { NetworkPolicyPeerIPBlock } from './network-policy-peer-ipblock';
 import { NetworkPolicyPeerSelectors } from './network-policy-peer-selectors';
 import { NetworkPolicyPorts } from './network-policy-ports';
-import { NetworkPolicyRule, NetworkPolicyPeer } from '@utils/models';
-import {
-  t,
-  useNetworkingTranslation,
-} from '@utils/hooks/useNetworkingTranslation';
 
-const getPeerRuleTitle = (
-  direction: 'ingress' | 'egress',
-  peer: NetworkPolicyPeer,
-) => {
+const getPeerRuleTitle = (direction: 'egress' | 'ingress', peer: NetworkPolicyPeer) => {
   if (peer.ipBlock) {
     return direction === 'ingress'
       ? t('Allow traffic from peers by IP block')
@@ -53,23 +49,22 @@ const emptyPeer = (type: NetworkPolicyPeerType): NetworkPolicyPeer => {
     case 'anyNS':
       return {
         key,
-        podSelector: [],
         namespaceSelector: [],
+        podSelector: [],
       };
     case 'ipBlock':
     default:
       return {
-        key,
         ipBlock: { cidr: '', except: [] },
+        key,
       };
   }
 };
 
-export const NetworkPolicyRuleConfigPanel: React.FunctionComponent<
-  RuleConfigProps
-> = (props) => {
+export const NetworkPolicyRuleConfigPanel: React.FunctionComponent<RuleConfigProps> = (props) => {
+  // eslint-disable-next-line @typescript-eslint/no-shadow
   const { t } = useNetworkingTranslation();
-  const { policyNamespace, direction, onChange, onRemove, rule } = props;
+  const { direction, onChange, onRemove, policyNamespace, rule } = props;
   const peersHelp =
     direction === 'ingress'
       ? t(
@@ -93,25 +88,15 @@ export const NetworkPolicyRuleConfigPanel: React.FunctionComponent<
     <Card>
       <CardTitle component="h4">
         <div className="co-create-networkpolicy__rule-header">
-          <label>
-            {direction === 'ingress' ? t('Ingress rule') : t('Egress rule')}
-          </label>
+          <label>{direction === 'ingress' ? t('Ingress rule') : t('Egress rule')}</label>
           <div className="co-create-networkpolicy__rule-header-right">
-            <Button
-              variant="link"
-              onClick={onRemove}
-              data-test={`remove-${direction}-rule`}
-            >
+            <Button data-test={`remove-${direction}-rule`} onClick={onRemove} variant="link">
               {t('Remove')}
             </Button>
           </div>
           <NetworkPolicyAddPeerDropdown
-            title={
-              direction === 'ingress'
-                ? t('Add allowed source')
-                : t('Add allowed destination')
-            }
             onSelect={addPeer}
+            title={direction === 'ingress' ? t('Add allowed source') : t('Add allowed destination')}
           />
         </div>
       </CardTitle>
@@ -133,42 +118,42 @@ export const NetworkPolicyRuleConfigPanel: React.FunctionComponent<
             />
           ) : (
             <NetworkPolicyPeerSelectors
-              policyNamespace={policyNamespace}
               direction={direction}
               namespaceSelector={peer.namespaceSelector}
-              podSelector={peer.podSelector || []}
               onChange={(podSel, nsSel) => {
                 rule.peers[idx].podSelector = podSel;
                 rule.peers[idx].namespaceSelector = nsSel;
                 onChange(rule);
               }}
+              podSelector={peer.podSelector || []}
+              policyNamespace={policyNamespace}
             />
           );
           return (
             <div className="form-group" key={peer.key}>
               <FormFieldGroupExpandable
-                toggleAriaLabel="Peer"
-                isExpanded
                 header={
                   <FormFieldGroupHeader
-                    titleText={{
-                      text: getPeerRuleTitle(direction, peer),
-                      id: `peer-header-${idx}`,
-                    }}
                     actions={
                       <Button
                         aria-label={t('Remove peer')}
                         className="co-create-networkpolicy__remove-peer"
+                        data-test="remove-peer"
                         onClick={() => removePeer(idx)}
                         type="button"
                         variant="plain"
-                        data-test="remove-peer"
                       >
                         <TrashIcon />
                       </Button>
                     }
+                    titleText={{
+                      id: `peer-header-${idx}`,
+                      text: getPeerRuleTitle(direction, peer),
+                    }}
                   />
                 }
+                isExpanded
+                toggleAriaLabel="Peer"
               >
                 {peerPanel}
               </FormFieldGroupExpandable>
@@ -177,11 +162,11 @@ export const NetworkPolicyRuleConfigPanel: React.FunctionComponent<
           );
         })}
         <NetworkPolicyPorts
-          ports={rule.ports}
           onChange={(ports) => {
             rule.ports = ports;
             onChange(rule);
           }}
+          ports={rule.ports}
         />
       </CardBody>
     </Card>
@@ -189,9 +174,9 @@ export const NetworkPolicyRuleConfigPanel: React.FunctionComponent<
 };
 
 type RuleConfigProps = {
-  policyNamespace: string;
-  direction: 'ingress' | 'egress';
-  rule: NetworkPolicyRule;
+  direction: 'egress' | 'ingress';
   onChange: (rule: NetworkPolicyRule) => void;
   onRemove: () => void;
+  policyNamespace: string;
+  rule: NetworkPolicyRule;
 };

@@ -1,29 +1,23 @@
-import {
-  BlueInfoCircleIcon,
-  Selector as K8sSelector,
-} from '@openshift-console/dynamic-plugin-sdk';
+import React, { FC } from 'react';
+import { Link } from 'react-router-dom-v5-compat';
+import * as _ from 'lodash';
+
+import { BlueInfoCircleIcon, Selector as K8sSelector } from '@openshift-console/dynamic-plugin-sdk';
 import { Tooltip } from '@patternfly/react-core';
 import { Selector } from '@utils/components/Selector/Selector';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { NetworkPolicyPort } from '@utils/resources/networkpolicies/types';
-import { Link } from 'react-router-dom-v5-compat';
+
 import { ConsolidatedRow } from './utils';
-import * as _ from 'lodash';
-import React, { FC } from 'react';
 
 type PeerRowProps = {
-  row: ConsolidatedRow;
-  ports: NetworkPolicyPort[];
-  namespace: string;
   mainPodSelector: K8sSelector;
+  namespace: string;
+  ports: NetworkPolicyPort[];
+  row: ConsolidatedRow;
 };
 
-const PeerRow: FC<PeerRowProps> = ({
-  row,
-  ports,
-  namespace,
-  mainPodSelector,
-}) => {
+const PeerRow: FC<PeerRowProps> = ({ mainPodSelector, namespace, ports, row }) => {
   const { t } = useNetworkingTranslation();
   const style = { margin: '5px 0' };
 
@@ -35,11 +29,9 @@ const PeerRow: FC<PeerRowProps> = ({
         </div>
         <div style={style}>
           {_.isEmpty(mainPodSelector) ? (
-            <Link
-              to={`/search/ns/${namespace}?kind=Pod`}
-            >{`All pods within ${namespace}`}</Link>
+            <Link to={`/search/ns/${namespace}?kind=Pod`}>{`All pods within ${namespace}`}</Link>
           ) : (
-            <Selector selector={mainPodSelector} namespace={namespace} />
+            <Selector namespace={namespace} selector={mainPodSelector} />
           )}
         </div>
       </div>
@@ -56,10 +48,7 @@ const PeerRow: FC<PeerRowProps> = ({
                     {_.isEmpty(row.namespaceSelector) ? (
                       <span>{t('Any namespace')}</span>
                     ) : (
-                      <Selector
-                        selector={row.namespaceSelector}
-                        kind="Namespace"
-                      />
+                      <Selector kind="Namespace" selector={row.namespaceSelector} />
                     )}
                   </div>
                 </div>
@@ -79,10 +68,8 @@ const PeerRow: FC<PeerRowProps> = ({
                       <span>{t('Any pod')}</span>
                     ) : (
                       <Selector
+                        namespace={row.namespaceSelector ? undefined : namespace}
                         selector={row.podSelector}
-                        namespace={
-                          row.namespaceSelector ? undefined : namespace
-                        }
                       />
                     )}
                   </div>
@@ -92,7 +79,7 @@ const PeerRow: FC<PeerRowProps> = ({
                 <div>
                   <span className="text-muted">{t('IP blocks')}:</span>
                   {row.ipBlocks.map((ipblock, idx) => (
-                    <div style={style} key={`ipblock_${idx}`}>
+                    <div key={`ipblock_${idx}`} style={style}>
                       {ipblock.cidr}
                       {ipblock.except && ipblock.except.length > 0 && (
                         <>

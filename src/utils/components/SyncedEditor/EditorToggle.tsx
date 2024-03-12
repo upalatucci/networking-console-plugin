@@ -1,17 +1,16 @@
 import * as React from 'react';
+
 import { Flex, Radio } from '@patternfly/react-core';
-import './styles.scss';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+
+import './styles.scss';
 
 export enum EditorType {
   Form = 'form',
   YAML = 'yaml',
 }
 
-export const EditorToggle: React.FC<EditorToggleProps> = ({
-  value,
-  onChange,
-}) => {
+export const EditorToggle: React.FC<EditorToggleProps> = ({ onChange, value }) => {
   const { t } = useNetworkingTranslation();
   const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
     onChange(event?.currentTarget?.value as EditorType);
@@ -20,10 +19,10 @@ export const EditorToggle: React.FC<EditorToggleProps> = ({
   return (
     <div className="co-synced-editor__editor-toggle">
       <Flex
-        spaceItems={{ default: 'spaceItemsMd' }}
         alignItems={{ default: 'alignItemsCenter' }}
-        role="radiogroup"
         aria-labelledby="radio-group-title-editor-toggle"
+        role="radiogroup"
+        spaceItems={{ default: 'spaceItemsMd' }}
       >
         <label
           className="co-synced-editor__editor-toggle-label"
@@ -32,21 +31,21 @@ export const EditorToggle: React.FC<EditorToggleProps> = ({
           {t('Configure via:')}
         </label>
         <Radio
+          id={EditorType.Form}
           isChecked={value === EditorType.Form}
+          label={t('Form view')}
           name={EditorType.Form}
           onChange={handleChange}
-          label={t('Form view')}
-          id={EditorType.Form}
           value={EditorType.Form}
         />
         <Radio
+          data-test={`${EditorType.YAML}-view-input`}
+          id={EditorType.YAML}
           isChecked={value === EditorType.YAML}
+          label={t('YAML view')}
           name={EditorType.YAML}
           onChange={handleChange}
-          label={t('YAML view')}
-          id={EditorType.YAML}
           value={EditorType.YAML}
-          data-test={`${EditorType.YAML}-view-input`}
         />
       </Flex>
     </div>
@@ -54,6 +53,6 @@ export const EditorToggle: React.FC<EditorToggleProps> = ({
 };
 
 type EditorToggleProps = {
-  value: EditorType;
   onChange?: (newValue: EditorType) => void;
+  value: EditorType;
 };

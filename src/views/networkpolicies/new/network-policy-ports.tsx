@@ -1,16 +1,16 @@
 import * as React from 'react';
+import * as _ from 'lodash';
+
 import { Button } from '@patternfly/react-core';
 import { MinusCircleIcon } from '@patternfly/react-icons/dist/esm/icons/minus-circle-icon';
 import { PlusCircleIcon } from '@patternfly/react-icons/dist/esm/icons/plus-circle-icon';
-import * as _ from 'lodash';
-import { NetworkPolicyPort } from '@utils/models';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { NetworkPolicyPort } from '@utils/models';
+
 import PortsDropdown from './PortsDropdown';
 
-export const NetworkPolicyPorts: React.FunctionComponent<
-  NetworkPolicyPortsProps
-> = (props) => {
-  const { ports, onChange } = props;
+export const NetworkPolicyPorts: React.FunctionComponent<NetworkPolicyPortsProps> = (props) => {
+  const { onChange, ports } = props;
   const { t } = useNetworkingTranslation();
 
   const onSingleChange = (port: NetworkPolicyPort, index: number) => {
@@ -37,33 +37,26 @@ export const NetworkPolicyPorts: React.FunctionComponent<
             const key = `${port}-${idx}`;
             return (
               <div className="pf-v5-c-input-group" key={key}>
-                <PortsDropdown
-                  onSingleChange={onSingleChange}
-                  port={port}
-                  index={idx}
-                />
+                <PortsDropdown index={idx} onSingleChange={onSingleChange} port={port} />
                 <input
+                  aria-describedby="ports-help"
                   className="pf-v5-c-form-control"
+                  data-test="port-input"
+                  id={`${key}-port`}
+                  name={`${key}-port`}
                   onChange={(event) =>
-                    onSingleChange(
-                      { ...port, port: event.currentTarget.value },
-                      idx,
-                    )
+                    onSingleChange({ ...port, port: event.currentTarget.value }, idx)
                   }
                   placeholder="443"
-                  aria-describedby="ports-help"
-                  name={`${key}-port`}
-                  id={`${key}-port`}
                   value={port.port}
-                  data-test="port-input"
                 />
                 <Button
                   aria-label={t('Remove port')}
                   className="co-create-networkpolicy__remove-port"
+                  data-test="remove-port"
                   onClick={() => onRemove(idx)}
                   type="button"
                   variant="plain"
-                  data-test="remove-port"
                 >
                   <MinusCircleIcon />
                 </Button>
@@ -73,15 +66,12 @@ export const NetworkPolicyPorts: React.FunctionComponent<
           <div className="co-toolbar__group co-toolbar__group--left co-create-networkpolicy__add-port">
             <Button
               className="pf-m-link--align-left"
+              data-test="add-port"
               onClick={() => {
-                onChange([
-                  ...ports,
-                  { key: _.uniqueId('port-'), port: '', protocol: 'TCP' },
-                ]);
+                onChange([...ports, { key: _.uniqueId('port-'), port: '', protocol: 'TCP' }]);
               }}
               type="button"
               variant="link"
-              data-test="add-port"
             >
               <PlusCircleIcon className="co-icon-space-r" />
               {t('Add port')}
@@ -94,6 +84,6 @@ export const NetworkPolicyPorts: React.FunctionComponent<
 };
 
 type NetworkPolicyPortsProps = {
-  ports: NetworkPolicyPort[];
   onChange: (ports: NetworkPolicyPort[]) => void;
+  ports: NetworkPolicyPort[];
 };

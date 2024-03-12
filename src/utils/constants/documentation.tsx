@@ -1,13 +1,10 @@
 const UPSTREAM_LATEST = 'https://docs.okd.io/latest/';
 
 // Prefer the documentation base URL passed as a flag, but fall back to the latest upstream docs if none was specified.
-export const openshiftHelpBase =
-  window.SERVER_FLAGS.documentationBaseURL || UPSTREAM_LATEST;
+export const openshiftHelpBase = window.SERVER_FLAGS.documentationBaseURL || UPSTREAM_LATEST;
 
-export const DOC_URL_OPENSHIFT_WHATS_NEW =
-  'https://www.openshift.com/learn/whats-new';
-export const DOC_URL_OPERATORFRAMEWORK_SDK =
-  'https://sdk.operatorframework.io/';
+export const DOC_URL_OPENSHIFT_WHATS_NEW = 'https://www.openshift.com/learn/whats-new';
+export const DOC_URL_OPERATORFRAMEWORK_SDK = 'https://sdk.operatorframework.io/';
 export const DOC_URL_PODDISRUPTIONBUDGET_POLICY = `${UPSTREAM_LATEST}rest_api/policy_apis/poddisruptionbudget-policy-v1.html#poddisruptionbudget-policy-v1`;
 export const DOC_URL_PODMAN = 'https://podman.io/';
 export const DOC_URL_RED_HAT_MARKETPLACE =
@@ -38,6 +35,10 @@ export const documentationURLs: documentationURLsType = {
     upstream:
       'monitoring/configuring-the-monitoring-stack.html#maintenance-and-support_configuring-monitoring',
   },
+  deprecatedDeploymentConfig: {
+    downstream: 'html/building_applications/deployments',
+    upstream: 'applications/deployments/what-deployments-are.html',
+  },
   networkPolicy: {
     downstream: 'html/networking/network-policy#about-network-policy',
     kube: `${KUBE_DOCS}/concepts/services-networking/network-policies/`,
@@ -53,8 +54,7 @@ export const documentationURLs: documentationURLsType = {
   },
   postInstallationMachineConfigurationTasks: {
     downstream: 'html/post-installation_configuration/index',
-    upstream:
-      'post_installation_configuration/machine-configuration-tasks.html',
+    upstream: 'post_installation_configuration/machine-configuration-tasks.html',
   },
   understandingUpgradeChannels: {
     downstream:
@@ -69,8 +69,7 @@ export const documentationURLs: documentationURLsType = {
   updateUsingCustomMachineConfigPools: {
     downstream:
       'html/updating_clusters/performing-a-cluster-update#update-using-custom-machine-config-pools',
-    upstream:
-      'updating/updating_a_cluster/update-using-custom-machine-config-pools.html',
+    upstream: 'updating/updating_a_cluster/update-using-custom-machine-config-pools.html',
   },
   usingInsights: {
     downstream:
@@ -86,17 +85,12 @@ export const documentationURLs: documentationURLsType = {
     downstream: 'html/building_applications/projects#working-with-projects',
     upstream: 'applications/projects/working-with-projects.html',
   },
-  deprecatedDeploymentConfig: {
-    downstream: 'html/building_applications/deployments',
-    upstream: 'applications/deployments/what-deployments-are.html',
-  },
 };
 
 export const isUpstream = () => window.SERVER_FLAGS.branding === 'okd';
 
 export const isManaged = () =>
-  window.SERVER_FLAGS.branding === 'rosa' ||
-  window.SERVER_FLAGS.branding === 'dedicated';
+  window.SERVER_FLAGS.branding === 'rosa' || window.SERVER_FLAGS.branding === 'dedicated';
 
 export const getDocumentationURL = (docURLs: docURLs) =>
   isUpstream()

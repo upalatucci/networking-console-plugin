@@ -10,18 +10,16 @@ import {
  * @param resource k8s resource
  * @returns resource's name
  */
-export const getName = <A extends K8sResourceCommon = K8sResourceCommon>(
-  resource: A,
-) => resource?.metadata?.name;
+export const getName = <A extends K8sResourceCommon = K8sResourceCommon>(resource: A) =>
+  resource?.metadata?.name;
 
 /**
  *
  * @param resource k8s resource
  * @returns resource's namespace
  */
-export const getNamespace = <A extends K8sResourceCommon = K8sResourceCommon>(
-  resource: A,
-) => resource?.metadata?.namespace;
+export const getNamespace = <A extends K8sResourceCommon = K8sResourceCommon>(resource: A) =>
+  resource?.metadata?.namespace;
 
 /**
  * function to build AccessReviewResourceAttributes from a resource

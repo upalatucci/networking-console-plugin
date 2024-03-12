@@ -1,4 +1,5 @@
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+
 import NetworkPolicyDetails from '../tabs/details/NetworkPolicyDetails';
 import NetworkPolicyYAML from '../tabs/yaml/NetworkPolicyYAML';
 

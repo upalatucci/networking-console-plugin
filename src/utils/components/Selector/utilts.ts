@@ -1,8 +1,4 @@
-import {
-  MatchExpression,
-  Operator,
-  Selector,
-} from '@openshift-console/dynamic-plugin-sdk';
+import { MatchExpression, Operator, Selector } from '@openshift-console/dynamic-plugin-sdk';
 
 const toArray = (value) => (Array.isArray(value) ? value : [value]);
 
@@ -12,14 +8,10 @@ export const requirementToString = (requirement: MatchExpression): string => {
     [Operator.Equals]: `${requirement.key}=${requirement.values[0]}`,
     [Operator.Exists]: requirement.key,
     [Operator.GreaterThan]: `${requirement.key} > ${requirement.values[0]}`,
-    [Operator.In]: `${requirement.key} in (${toArray(requirement.values).join(
-      ',',
-    )})`,
+    [Operator.In]: `${requirement.key} in (${toArray(requirement.values).join(',')})`,
     [Operator.LessThan]: `${requirement.key} < ${requirement.values[0]}`,
     [Operator.NotEquals]: `${requirement.key}!=${requirement.values[0]}`,
-    [Operator.NotIn]: `${requirement.key} notin (${toArray(
-      requirement.values,
-    ).join(',')})`,
+    [Operator.NotIn]: `${requirement.key} notin (${toArray(requirement.values).join(',')})`,
   };
 
   return requirementStrings[requirement.operator] || '';
@@ -31,8 +23,7 @@ export const createEquals = (key: string, value: string): MatchExpression => ({
   values: [value],
 });
 
-const isOldFormat = (selector: Selector) =>
-  !selector.matchLabels && !selector.matchExpressions;
+const isOldFormat = (selector: Selector) => !selector.matchLabels && !selector.matchExpressions;
 
 export const toRequirements = (selector: Selector = {}) => {
   const matchLabels = isOldFormat(selector) ? selector : selector.matchLabels;

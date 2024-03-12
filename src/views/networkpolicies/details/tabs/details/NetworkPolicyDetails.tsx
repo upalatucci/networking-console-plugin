@@ -1,3 +1,8 @@
+import React from 'react';
+import { Trans } from 'react-i18next';
+import * as _ from 'lodash';
+
+import { modelToGroupVersionKind, NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
 import {
   ResourceLink,
   Timestamp,
@@ -6,39 +11,28 @@ import {
   useFlag,
   useLabelsModal,
 } from '@openshift-console/dynamic-plugin-sdk';
+import { Button, PageSection } from '@patternfly/react-core';
+import { PencilAltIcon } from '@patternfly/react-icons';
+import { DetailsItem } from '@utils/components/DetailsItem/DetailsItem';
+import { LabelList } from '@utils/components/DetailsItem/LabelList';
 import ExternalLink from '@utils/components/ExternalLink/ExternalLink';
+import Loading from '@utils/components/Loading/Loading';
+import { OwnerReferences } from '@utils/components/OwnerReference/owner-references';
+import SectionHeading from '@utils/components/SectionHeading/SectionHeading';
 import { FLAGS } from '@utils/constants';
-import {
-  getNetworkPolicyDocURL,
-  isManaged,
-} from '@utils/constants/documentation';
+import { getNetworkPolicyDocURL, isManaged } from '@utils/constants/documentation';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { NetworkPolicyKind } from '@utils/resources/networkpolicies/types';
-import React from 'react';
-import { Trans } from 'react-i18next';
+
 import { EgressHeader, IngressHeader } from './Headers';
-import { consolidatePeers } from './utils';
 import PeerRow from './PeerRow';
-import * as _ from 'lodash';
-import SectionHeading from '@utils/components/SectionHeading/SectionHeading';
-import { Button, PageSection } from '@patternfly/react-core';
-import { DetailsItem } from '@utils/components/DetailsItem/DetailsItem';
-import { OwnerReferences } from '@utils/components/OwnerReference/owner-references';
-import { PencilAltIcon } from '@patternfly/react-icons';
-import Loading from '@utils/components/Loading/Loading';
-import {
-  NetworkPolicyModel,
-  modelToGroupVersionKind,
-} from '@kubevirt-ui/kubevirt-api/console';
-import { LabelList } from '@utils/components/DetailsItem/LabelList';
+import { consolidatePeers } from './utils';
 
 type DetailsProps = {
   obj: NetworkPolicyKind;
 };
 
-const NetworkPolicyDetails: React.FunctionComponent<DetailsProps> = ({
-  obj: networkPolicy,
-}) => {
+const NetworkPolicyDetails: React.FunctionComponent<DetailsProps> = ({ obj: networkPolicy }) => {
   const hasOpenshiftFlag = useFlag(FLAGS.OPENSHIFT);
   const { t } = useNetworkingTranslation();
   const metadata = networkPolicy?.metadata;
@@ -47,10 +41,10 @@ const NetworkPolicyDetails: React.FunctionComponent<DetailsProps> = ({
 
   const [canUpdate] = useAccessReview({
     group: NetworkPolicyModel?.apiGroup,
-    resource: NetworkPolicyModel?.plural,
-    verb: 'patch',
     name: metadata?.name,
     namespace: metadata?.namespace,
+    resource: NetworkPolicyModel?.plural,
+    verb: 'patch',
   });
 
   if (!networkPolicy)
@@ -71,11 +65,9 @@ const NetworkPolicyDetails: React.FunctionComponent<DetailsProps> = ({
     ? networkPolicy.spec.policyTypes.includes('Ingress')
     : true;
   const egressDenied =
-    affectsEgress &&
-    (!networkPolicy.spec.egress || networkPolicy.spec.egress.length === 0);
+    affectsEgress && (!networkPolicy.spec.egress || networkPolicy.spec.egress.length === 0);
   const ingressDenied =
-    affectsIngress &&
-    (!networkPolicy.spec.ingress || networkPolicy.spec.ingress.length === 0);
+    affectsIngress && (!networkPolicy.spec.ingress || networkPolicy.spec.ingress.length === 0);
 
   return (
     <>
@@ -83,51 +75,39 @@ const NetworkPolicyDetails: React.FunctionComponent<DetailsProps> = ({
         <SectionHeading text={t('NetworkPolicy details')} />
         <div className="row">
           <div className="col-md-6">
-            <dl data-test-id="resource-summary" className="co-m-pane__details">
-              <DetailsItem
-                label={t('Name')}
-                obj={networkPolicy}
-                path={'metadata.name'}
-              />
+            <dl className="co-m-pane__details" data-test-id="resource-summary">
+              <DetailsItem label={t('Name')} obj={networkPolicy} path={'metadata.name'} />
               {metadata?.namespace && (
-                <DetailsItem
-                  label={t('Namespace')}
-                  obj={networkPolicy}
-                  path="metadata.namespace"
-                >
+                <DetailsItem label={t('Namespace')} obj={networkPolicy} path="metadata.namespace">
                   <ResourceLink
                     kind="Namespace"
                     name={metadata.namespace}
-                    title={metadata.uid}
                     namespace={null}
+                    title={metadata.uid}
                   />
                 </DetailsItem>
               )}
               <DetailsItem
-                label={t('Labels')}
-                obj={networkPolicy}
-                path="metadata.labels"
-                valueClassName="details-item__value--labels"
-                onEdit={labelsModalLauncher}
                 canEdit={canUpdate}
                 editAsGroup
+                label={t('Labels')}
+                obj={networkPolicy}
+                onEdit={labelsModalLauncher}
+                path="metadata.labels"
+                valueClassName="details-item__value--labels"
               >
                 <LabelList
                   groupVersionKind={modelToGroupVersionKind(NetworkPolicyModel)}
                   labels={metadata?.labels}
                 />
               </DetailsItem>
-              <DetailsItem
-                label={t('Annotations')}
-                obj={networkPolicy}
-                path="metadata.annotations"
-              >
+              <DetailsItem label={t('Annotations')} obj={networkPolicy} path="metadata.annotations">
                 {canUpdate ? (
                   <Button
                     data-test="edit-annotations"
-                    type="button"
                     isInline
                     onClick={annotationsModalLauncher}
+                    type="button"
                     variant="link"
                   >
                     {t('{{count}} annotation', {
@@ -148,11 +128,7 @@ const NetworkPolicyDetails: React.FunctionComponent<DetailsProps> = ({
               >
                 <Timestamp timestamp={metadata?.creationTimestamp} />
               </DetailsItem>
-              <DetailsItem
-                label={t('Owner')}
-                obj={networkPolicy}
-                path="metadata.ownerReferences"
-              >
+              <DetailsItem label={t('Owner')} obj={networkPolicy} path="metadata.ownerReferences">
                 <OwnerReferences resource={networkPolicy} />
               </DetailsItem>
             </dl>
@@ -190,10 +166,10 @@ const NetworkPolicyDetails: React.FunctionComponent<DetailsProps> = ({
                   consolidatePeers(rule.from).map((row, j) => (
                     <PeerRow
                       key={`${i}_${j}`}
-                      row={row}
-                      ports={rule.ports}
                       mainPodSelector={networkPolicy.spec.podSelector}
                       namespace={networkPolicy.metadata.namespace}
+                      ports={rule.ports}
+                      row={row}
                     />
                   )),
                 )}
@@ -233,10 +209,10 @@ const NetworkPolicyDetails: React.FunctionComponent<DetailsProps> = ({
                   consolidatePeers(rule.to).map((row, j) => (
                     <PeerRow
                       key={`${i}_${j}`}
-                      row={row}
-                      ports={rule.ports}
                       mainPodSelector={networkPolicy.spec.podSelector}
                       namespace={networkPolicy.metadata.namespace}
+                      ports={rule.ports}
+                      row={row}
                     />
                   )),
                 )}

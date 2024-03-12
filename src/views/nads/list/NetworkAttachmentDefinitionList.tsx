@@ -1,5 +1,10 @@
 import React, { FC } from 'react';
+import { useHistory } from 'react-router';
 
+import {
+  NetworkAttachmentDefinitionModelGroupVersionKind,
+  NetworkAttachmentDefinitionModelRef,
+} from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
 import {
   ListPageBody,
   ListPageCreateButton,
@@ -10,31 +15,25 @@ import {
   VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import {
-  NetworkAttachmentDefinitionModelGroupVersionKind,
-  NetworkAttachmentDefinitionModelRef,
-} from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
-import useNADsColumns from './hooks/useNADsColumns';
-import NADsRow from './components/NADsRow';
-import { useHistory } from 'react-router';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
+
+import NADsRow from './components/NADsRow';
+import useNADsColumns from './hooks/useNADsColumns';
 
 type NetworkAttachmentDefinitionListProps = {
   kind: string;
   namespace: string;
 };
 
-const NetworkAttachmentDefinitionList: FC<
-  NetworkAttachmentDefinitionListProps
-> = ({ namespace }) => {
+const NetworkAttachmentDefinitionList: FC<NetworkAttachmentDefinitionListProps> = ({
+  namespace,
+}) => {
   const { t } = useNetworkingTranslation();
   const history = useHistory();
 
-  const [nads, loaded, loadError] = useK8sWatchResource<
-    NetworkAttachmentDefinitionKind[]
-  >({
-    isList: true,
+  const [nads, loaded, loadError] = useK8sWatchResource<NetworkAttachmentDefinitionKind[]>({
     groupVersionKind: NetworkAttachmentDefinitionModelGroupVersionKind,
+    isList: true,
     namespace,
   });
   const [data, filteredData, onFilterChange] = useListPageFilter(nads);
@@ -44,28 +43,22 @@ const NetworkAttachmentDefinitionList: FC<
     <>
       <ListPageHeader title={t('NetworkAttachmentDefinition')}>
         <ListPageCreateButton
+          className="list-page-create-button-margin"
           createAccessReview={{
             groupVersionKind: NetworkAttachmentDefinitionModelGroupVersionKind,
             namespace,
           }}
           onClick={() =>
             history.push(
-              `/k8s/ns/${
-                namespace || 'default'
-              }/${NetworkAttachmentDefinitionModelRef}/~new/form`,
+              `/k8s/ns/${namespace || 'default'}/${NetworkAttachmentDefinitionModelRef}/~new/form`,
             )
           }
-          className="list-page-create-button-margin"
         >
           {t('Create NetworkAttachmentDefinition')}
         </ListPageCreateButton>
       </ListPageHeader>
       <ListPageBody>
-        <ListPageFilter
-          data={data}
-          loaded={loaded}
-          onFilterChange={onFilterChange}
-        />
+        <ListPageFilter data={data} loaded={loaded} onFilterChange={onFilterChange} />
         <VirtualizedTable<NetworkAttachmentDefinitionKind>
           columns={columns}
           data={filteredData}

@@ -3,19 +3,16 @@ import classNames from 'classnames';
 
 import { Action, useAccessReview } from '@openshift-console/dynamic-plugin-sdk';
 import { DropdownItem, TooltipPosition } from '@patternfly/react-core';
+import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 import './action-dropdown-item.scss';
-import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 type ActionDropdownItemProps = {
   action: Action;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 };
 
-const ActionDropdownItem: FC<ActionDropdownItemProps> = ({
-  action,
-  setIsOpen,
-}) => {
+const ActionDropdownItem: FC<ActionDropdownItemProps> = ({ action, setIsOpen }) => {
   const { t } = useNetworkingTranslation();
   const [actionAllowed] = useAccessReview(action?.accessReview);
   const isCloneDisabled = !actionAllowed && action?.id === 'vm-action-clone';

@@ -7,9 +7,7 @@ export type ConsolidatedRow = Omit<NetworkPolicyPeer, 'ipBlock'> & {
   }[];
 };
 
-export const consolidatePeers = (
-  peers?: NetworkPolicyPeer[],
-): ConsolidatedRow[] => {
+export const consolidatePeers = (peers?: NetworkPolicyPeer[]): ConsolidatedRow[] => {
   // Consolidate peers as one row per peer, except ipblock peers which are merged into a single row
   if (!peers) {
     return [{}]; // stands for "any peer"

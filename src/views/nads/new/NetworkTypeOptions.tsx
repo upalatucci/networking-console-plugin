@@ -1,5 +1,8 @@
 /* eslint-disable react/prop-types */
 import * as React from 'react';
+import classNames from 'classnames';
+
+import { RedExclamationCircleIcon } from '@openshift-console/dynamic-plugin-sdk';
 import {
   Dropdown,
   DropdownItem,
@@ -15,13 +18,7 @@ import {
   TextInput,
 } from '@patternfly/react-core';
 import { HelpIcon } from '@patternfly/react-icons';
-import classNames from 'classnames';
-import {
-  ELEMENT_TYPES,
-  NetworkTypeParams,
-  networkTypeParams,
-} from '@utils/constants';
-import { RedExclamationCircleIcon } from '@openshift-console/dynamic-plugin-sdk';
+import { ELEMENT_TYPES, NetworkTypeParams, networkTypeParams } from '@utils/constants';
 import { isEmpty } from '@utils/utils';
 
 const handleTypeParamChange = (
@@ -43,9 +40,7 @@ const handleTypeParamChange = (
   }
 
   const validation = networkTypeParams?.[networkType]?.[paramKey]?.validation;
-  paramsUpdate[paramKey].validationMsg = validation
-    ? validation(paramsUpdate)
-    : null;
+  paramsUpdate[paramKey].validationMsg = validation ? validation(paramsUpdate) : null;
   setTypeParamsData(paramsUpdate);
 };
 
@@ -63,31 +58,23 @@ const getSriovNetNodePolicyResourceNames = (sriovNetNodePoliciesData) => {
 };
 
 const NetworkTypeOptions = (props) => {
-  const {
-    networkType,
-    setTypeParamsData,
-    sriovNetNodePoliciesData,
-    typeParamsData,
-  } = props;
+  const { networkType, setTypeParamsData, sriovNetNodePoliciesData, typeParamsData } = props;
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
 
-  const params: NetworkTypeParams =
-    networkType && networkTypeParams[networkType];
+  const params: NetworkTypeParams = networkType && networkTypeParams[networkType];
 
   if (isEmpty(params)) {
     return null;
   }
 
   if (networkType === 'sriov') {
-    params.resourceName.values = getSriovNetNodePolicyResourceNames(
-      sriovNetNodePoliciesData,
-    );
+    params.resourceName.values = getSriovNetNodePolicyResourceNames(sriovNetNodePoliciesData);
   }
 
   const dynamicContent = Object.entries(params).map(([key, parameter]) => {
     const typeParamsDataValue = typeParamsData?.[key]?.value;
     const typeParamsDataValidationMsg = typeParamsData?.[key]?.validationMsg;
-    const { type, name } = parameter;
+    const { name, type } = parameter;
     const value = typeParamsDataValue ?? parameter?.initValue;
 
     let children;
@@ -104,7 +91,7 @@ const NetworkTypeOptions = (props) => {
               {name}
             </label>
             <TextArea
-              value={value}
+              id={`network-type-params-${key}-textarea`}
               onChange={(event) =>
                 handleTypeParamChange(
                   key,
@@ -115,12 +102,10 @@ const NetworkTypeOptions = (props) => {
                   typeParamsData,
                 )
               }
-              id={`network-type-params-${key}-textarea`}
+              value={value}
             />
             {typeParamsDataValidationMsg && (
-              <div className="text-secondary">
-                {typeParamsDataValidationMsg}
-              </div>
+              <div className="text-secondary">{typeParamsDataValidationMsg}</div>
             )}
           </div>
         );
@@ -131,8 +116,9 @@ const NetworkTypeOptions = (props) => {
             <div className="checkbox">
               <label id={`network-type-params-${key}-label`}>
                 <input
-                  type="checkbox"
+                  checked={value}
                   className="create-storage-class-form__checkbox kv-nad-form-checkbox--alignment"
+                  id={`network-type-params-${key}-checkbox`}
                   onChange={(event) =>
                     handleTypeParamChange(
                       key,
@@ -143,16 +129,13 @@ const NetworkTypeOptions = (props) => {
                       typeParamsData,
                     )
                   }
-                  checked={value}
-                  id={`network-type-params-${key}-checkbox`}
+                  type="checkbox"
                 />
                 {name}
               </label>
             </div>
             {typeParamsDataValidationMsg && (
-              <div className="text-secondary">
-                {typeParamsDataValidationMsg}
-              </div>
+              <div className="text-secondary">{typeParamsDataValidationMsg}</div>
             )}
           </div>
         );
@@ -169,8 +152,8 @@ const NetworkTypeOptions = (props) => {
               {name}
             </label>
             <Dropdown
-              title={parameter.hintText}
-              selected={value}
+              id={`network-type-params-${key}-dropdown`}
+              isOpen={isDropdownOpen}
               onChange={(event) =>
                 handleTypeParamChange(
                   key,
@@ -182,29 +165,27 @@ const NetworkTypeOptions = (props) => {
                 )
               }
               onSelect={() => setIsDropdownOpen(false)}
+              selected={value}
+              title={parameter.hintText}
               toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
                 <MenuToggle
                   id="toggle-networktype"
-                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   isExpanded={isDropdownOpen}
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   ref={toggleRef}
                 >
                   {parameter?.values[value] || parameter.hintText}
                 </MenuToggle>
               )}
-              isOpen={isDropdownOpen}
-              id={`network-type-params-${key}-dropdown`}
             >
               {Object.keys(parameter?.values).map((valueKey) => (
-                <DropdownItem value={valueKey} key={valueKey}>
+                <DropdownItem key={valueKey} value={valueKey}>
                   {parameter.values[valueKey]}
                 </DropdownItem>
               ))}
             </Dropdown>
             {typeParamsDataValidationMsg && (
-              <div className="text-secondary">
-                {typeParamsDataValidationMsg}
-              </div>
+              <div className="text-secondary">{typeParamsDataValidationMsg}</div>
             )}
           </div>
         );
@@ -221,17 +202,13 @@ const NetworkTypeOptions = (props) => {
             >
               {name}{' '}
               {parameter?.hintText && (
-                <Popover
-                  bodyContent={parameter.hintText}
-                  position={PopoverPosition.right}
-                >
+                <Popover bodyContent={parameter.hintText} position={PopoverPosition.right}>
                   <HelpIcon className="network-type-options--help-icon" />
                 </Popover>
               )}
             </label>
             <TextInput
-              type="text"
-              value={value}
+              id={`network-type-params-${key}-text`}
               onChange={(event) =>
                 handleTypeParamChange(
                   key,
@@ -242,28 +219,24 @@ const NetworkTypeOptions = (props) => {
                   typeParamsData,
                 )
               }
-              id={`network-type-params-${key}-text`}
+              type="text"
+              value={value}
             />
             {typeParamsDataValidationMsg && (
-              <div className="text-secondary">
-                {typeParamsDataValidationMsg}
-              </div>
+              <div className="text-secondary">{typeParamsDataValidationMsg}</div>
             )}
           </div>
         );
     }
 
     return (
-      <FormGroup key={key} fieldId={`network-type-parameters-${key}`}>
+      <FormGroup fieldId={`network-type-parameters-${key}`} key={key}>
         {children}
 
         {typeParamsData?.[key]?.validationMsg && (
           <FormHelperText>
             <HelperText>
-              <HelperTextItem
-                variant="error"
-                icon={<RedExclamationCircleIcon />}
-              >
+              <HelperTextItem icon={<RedExclamationCircleIcon />} variant="error">
                 {typeParamsData?.[key]?.validationMsg}
               </HelperTextItem>
             </HelperText>

@@ -4,8 +4,7 @@ import { TOptions } from 'i18next';
 /**
  * A Hook for using the i18n translation.
  */
-export const useNetworkingTranslation = () =>
-  useTranslation('plugin__networking-console-plugin');
+export const useNetworkingTranslation = () => useTranslation('plugin__networking-console-plugin');
 
 /**
  * a function to perform translation to 'plugin__networking-console-plugin' namespace

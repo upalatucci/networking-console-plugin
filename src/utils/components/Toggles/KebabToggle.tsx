@@ -1,10 +1,6 @@
 import React, { Ref } from 'react';
 
-import {
-  MenuToggle,
-  MenuToggleElement,
-  MenuToggleProps,
-} from '@patternfly/react-core';
+import { MenuToggle, MenuToggleElement, MenuToggleProps } from '@patternfly/react-core';
 import { EllipsisVIcon } from '@patternfly/react-icons';
 
 const KebabToggle = (props: MenuToggleProps) =>

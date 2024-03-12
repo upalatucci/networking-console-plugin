@@ -1,12 +1,7 @@
-import { useState, useEffect } from 'react';
-import {
-  K8sResourceKind,
-  useK8sWatchResource,
-} from '@openshift-console/dynamic-plugin-sdk';
-import {
-  ConfigMapModel,
-  modelToGroupVersionKind,
-} from '@kubevirt-ui/kubevirt-api/console';
+import { useEffect, useState } from 'react';
+
+import { ConfigMapModel, modelToGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console';
+import { K8sResourceKind, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 
 const networkConfigMapName = 'openshift-network-features';
 const networkConfigMapNamespace = 'openshift-config-managed';
@@ -22,10 +17,7 @@ export type ClusterNetworkFeatures = {
   [key in ClusterNetworkFeature]?: boolean;
 };
 
-const getFeatureState = (
-  data: { [key: string]: string },
-  key: string,
-): boolean | undefined => {
+const getFeatureState = (data: { [key: string]: string }, key: string): boolean | undefined => {
   // Note: config map data comes as string, not bool
   return key in data ? data[key] === 'true' : undefined;
 };
@@ -40,10 +32,7 @@ const getFeatureState = (
  *  features, plus a boolean that is 'false' until the first value is loaded (or an error is
  *  returned)
  */
-export const useClusterNetworkFeatures = (): [
-  ClusterNetworkFeatures,
-  boolean,
-] => {
+export const useClusterNetworkFeatures = (): [ClusterNetworkFeatures, boolean] => {
   const [features, setFeatures] = useState<ClusterNetworkFeatures>({});
   const [featuresLoaded, setFeaturesLoaded] = useState(false);
 

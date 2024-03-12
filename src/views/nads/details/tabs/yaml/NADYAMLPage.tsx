@@ -2,8 +2,8 @@ import React, { FC } from 'react';
 
 import { ResourceYAMLEditor } from '@openshift-console/dynamic-plugin-sdk';
 import { Bullseye } from '@patternfly/react-core';
-import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
 import Loading from '@utils/components/Loading/Loading';
+import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
 
 type NADYAMLPageProps = {
   obj?: NetworkAttachmentDefinitionKind;

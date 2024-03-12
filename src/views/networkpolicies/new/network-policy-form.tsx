@@ -1,51 +1,44 @@
 import * as React from 'react';
+import { Trans } from 'react-i18next';
+import { useHistory } from 'react-router';
+import * as _ from 'lodash';
+
+import { NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
+import { k8sCreate, useFlag, useModal } from '@openshift-console/dynamic-plugin-sdk';
 import {
   ActionGroup,
   Alert,
+  AlertActionCloseButton,
+  AlertVariant,
   Button,
   Checkbox,
-  Title,
   Form,
   FormFieldGroupExpandable,
   FormFieldGroupHeader,
   FormGroup,
-  AlertActionCloseButton,
-  AlertVariant,
+  Title,
 } from '@patternfly/react-core';
-import * as _ from 'lodash';
-import { Trans } from 'react-i18next';
-import { NetworkPolicyConditionalSelector } from './network-policy-conditional-selector';
+import ConfirmModal, { ConfirmModalProps } from '@utils/components/ConfirmModal/ConfirmModal';
+import ExternalLink from '@utils/components/ExternalLink/ExternalLink';
+import { FLAGS } from '@utils/constants';
+import { getNetworkPolicyDocURL, isManaged } from '@utils/constants/documentation';
+import { useClusterNetworkFeatures } from '@utils/hooks/useClusterNetworkFeatures';
+import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import {
+  checkNetworkPolicyValidity,
   isNetworkPolicyConversionError,
   NetworkPolicy,
   networkPolicyFromK8sResource,
   networkPolicyNormalizeK8sResource,
   NetworkPolicyRule,
   networkPolicyToK8sResource,
-  checkNetworkPolicyValidity,
 } from '@utils/models/index';
+import { NetworkPolicyKind } from '@utils/resources/networkpolicies/types';
+import { resourcePathFromModel } from '@utils/utils';
+
+import { NetworkPolicyConditionalSelector } from './network-policy-conditional-selector';
 import { NetworkPolicyRuleConfigPanel } from './network-policy-rule-config';
 import { NetworkPolicySelectorPreview } from './network-policy-selector-preview';
-import { NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
-import {
-  k8sCreate,
-  useFlag,
-  useModal,
-} from '@openshift-console/dynamic-plugin-sdk';
-import { NetworkPolicyKind } from '@utils/resources/networkpolicies/types';
-import { FLAGS } from '@utils/constants';
-import { useClusterNetworkFeatures } from '@utils/hooks/useClusterNetworkFeatures';
-import { resourcePathFromModel } from '@utils/utils';
-import { useHistory } from 'react-router';
-import {
-  getNetworkPolicyDocURL,
-  isManaged,
-} from '@utils/constants/documentation';
-import ExternalLink from '@utils/components/ExternalLink/ExternalLink';
-import ConfirmModal, {
-  ConfirmModalProps,
-} from '@utils/components/ConfirmModal/ConfirmModal';
-import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 const emptyRule = (): NetworkPolicyRule => {
   return {
@@ -60,10 +53,7 @@ type NetworkPolicyFormProps = {
   onChange: (newFormData: NetworkPolicyKind) => void;
 };
 
-export const NetworkPolicyForm: React.FC<NetworkPolicyFormProps> = ({
-  formData,
-  onChange,
-}) => {
+export const NetworkPolicyForm: React.FC<NetworkPolicyFormProps> = ({ formData, onChange }) => {
   const history = useHistory();
   const { t } = useNetworkingTranslation();
   const isOpenShift = useFlag(FLAGS.OPENSHIFT);
@@ -86,10 +76,10 @@ export const NetworkPolicyForm: React.FC<NetworkPolicyFormProps> = ({
     return (
       <div className="co-m-pane__body">
         <Alert
-          variant={AlertVariant.danger}
           title={t(
             'This NetworkPolicy cannot be displayed in form. Please switch to the YAML editor.',
           )}
+          variant={AlertVariant.danger}
         >
           {networkPolicy.error}
         </Alert>
@@ -109,9 +99,7 @@ export const NetworkPolicyForm: React.FC<NetworkPolicyFormProps> = ({
     onPolicyChange({ ...networkPolicy, podSelector: updated });
   };
 
-  const handleDenyAllIngress: React.ReactEventHandler<HTMLInputElement> = (
-    event,
-  ) =>
+  const handleDenyAllIngress: React.ReactEventHandler<HTMLInputElement> = (event) =>
     onPolicyChange({
       ...networkPolicy,
       ingress: {
@@ -120,9 +108,7 @@ export const NetworkPolicyForm: React.FC<NetworkPolicyFormProps> = ({
       },
     });
 
-  const handleDenyAllEgress: React.ReactEventHandler<HTMLInputElement> = (
-    event,
-  ) =>
+  const handleDenyAllEgress: React.ReactEventHandler<HTMLInputElement> = (event) =>
     onPolicyChange({
       ...networkPolicy,
       egress: { ...networkPolicy.egress, denyAll: event.currentTarget.checked },
@@ -150,30 +136,26 @@ export const NetworkPolicyForm: React.FC<NetworkPolicyFormProps> = ({
 
   const removeAll = (msg: string, execute: () => void) => {
     createModal<ConfirmModalProps>(ConfirmModal, {
-      title: t('Are you sure?'),
-      message: msg,
       btnText: t('Remove all'),
       executeFn: () => {
         execute();
         return Promise.resolve();
       },
+      message: msg,
+      title: t('Are you sure?'),
     });
   };
 
   const removeAllIngress = () => {
     removeAll(
-      t(
-        'This action will remove all rules within the Ingress section and cannot be undone.',
-      ),
+      t('This action will remove all rules within the Ingress section and cannot be undone.'),
       () => updateIngressRules([]),
     );
   };
 
   const removeAllEgress = () => {
     removeAll(
-      t(
-        'This action will remove all rules within the Egress section and cannot be undone.',
-      ),
+      t('This action will remove all rules within the Egress section and cannot be undone.'),
       () => updateEgressRules([]),
     );
   };
@@ -203,15 +185,11 @@ export const NetworkPolicyForm: React.FC<NetworkPolicyFormProps> = ({
 
     const policy = networkPolicyToK8sResource(networkPolicy);
     setInProgress(true);
-    k8sCreate({ model: NetworkPolicyModel, data: policy })
+    k8sCreate({ data: policy, model: NetworkPolicyModel })
       .then(() => {
         setInProgress(false);
         history.push(
-          resourcePathFromModel(
-            NetworkPolicyModel,
-            networkPolicy.name,
-            networkPolicy.namespace,
-          ),
+          resourcePathFromModel(NetworkPolicyModel, networkPolicy.name, networkPolicy.namespace),
         );
       })
       .catch((err) => {
@@ -222,21 +200,15 @@ export const NetworkPolicyForm: React.FC<NetworkPolicyFormProps> = ({
 
   return (
     <div className="co-m-pane__body co-m-pane__form">
-      <Form onSubmit={save} className="co-create-networkpolicy">
+      <Form className="co-create-networkpolicy" onSubmit={save}>
         {showSDNAlert &&
           networkFeaturesLoaded &&
           networkFeatures?.PolicyEgress === undefined &&
           networkFeatures?.PolicyPeerIPBlockExceptions === undefined && (
             <Alert
+              actionClose={<AlertActionCloseButton onClose={() => setShowSDNAlert(false)} />}
+              title={t('When using the OpenShift SDN cluster network provider:')}
               variant="info"
-              title={t(
-                'When using the OpenShift SDN cluster network provider:',
-              )}
-              actionClose={
-                <AlertActionCloseButton
-                  onClose={() => setShowSDNAlert(false)}
-                />
-              }
             >
               <ul>
                 <li>{t('Egress network policy is not supported.')}</li>
@@ -247,9 +219,7 @@ export const NetworkPolicyForm: React.FC<NetworkPolicyFormProps> = ({
                 </li>
               </ul>
               <p>
-                {t(
-                  'Refer to your cluster administrator to know which network provider is used.',
-                )}
+                {t('Refer to your cluster administrator to know which network provider is used.')}
               </p>
               {!isManaged() && (
                 <p>
@@ -268,33 +238,33 @@ export const NetworkPolicyForm: React.FC<NetworkPolicyFormProps> = ({
           </label>
           <input
             className="pf-v5-c-form-control"
-            type="text"
-            onChange={handleNameChange}
-            value={networkPolicy.name}
-            placeholder="my-policy"
             id="name"
             name="name"
+            onChange={handleNameChange}
+            placeholder="my-policy"
             required
+            type="text"
+            value={networkPolicy.name}
           />
         </div>
         <div className="form-group co-create-networkpolicy__podselector">
           <NetworkPolicyConditionalSelector
-            selectorType="pod"
+            dataTest="main-pod-selector"
             helpText={t(
               'If no pod selector is provided, the policy will apply to all pods in the namespace.',
             )}
-            values={networkPolicy.podSelector}
             onChange={handleMainPodSelectorChange}
-            dataTest="main-pod-selector"
+            selectorType="pod"
+            values={networkPolicy.podSelector}
           />
           <p>
             <Trans t={t}>
               Show a preview of the{' '}
               <Button
                 data-test="show-affected-pods"
+                isInline
                 ref={podsPreviewPopoverRef}
                 variant="link"
-                isInline
               >
                 affected pods
               </Button>{' '}
@@ -302,83 +272,75 @@ export const NetworkPolicyForm: React.FC<NetworkPolicyFormProps> = ({
             </Trans>
           </p>
           <NetworkPolicySelectorPreview
-            policyNamespace={networkPolicy.namespace}
-            podSelector={networkPolicy.podSelector}
-            popoverRef={podsPreviewPopoverRef}
             dataTest="policy-pods-preview"
+            podSelector={networkPolicy.podSelector}
+            policyNamespace={networkPolicy.namespace}
+            popoverRef={podsPreviewPopoverRef}
           />
         </div>
         <Title headingLevel="h2">{t('Policy type')}</Title>
-        <FormGroup
-          role="group"
-          isInline
-          label={t('Select default ingress and egress deny rules')}
-        >
+        <FormGroup isInline label={t('Select default ingress and egress deny rules')} role="group">
           <Checkbox
-            label={t('Deny all ingress traffic')}
-            onChange={handleDenyAllIngress}
-            isChecked={networkPolicy.ingress.denyAll}
-            name="denyAllIngress"
             id="denyAllIngress"
+            isChecked={networkPolicy.ingress.denyAll}
+            label={t('Deny all ingress traffic')}
+            name="denyAllIngress"
+            onChange={handleDenyAllIngress}
           />
           {networkFeaturesLoaded && networkFeatures.PolicyEgress !== false && (
             <Checkbox
-              label={t('Deny all egress traffic')}
-              onChange={handleDenyAllEgress}
-              isChecked={networkPolicy.egress.denyAll}
-              name="denyAllEgress"
               id="denyAllEgress"
+              isChecked={networkPolicy.egress.denyAll}
+              label={t('Deny all egress traffic')}
+              name="denyAllEgress"
+              onChange={handleDenyAllEgress}
             />
           )}
         </FormGroup>
         {!networkPolicy.ingress.denyAll && (
           <FormFieldGroupExpandable
-            toggleAriaLabel="Ingress"
             className="co-create-networkpolicy__expandable-xl"
-            isExpanded
             header={
               <FormFieldGroupHeader
-                titleText={{
-                  text: t('Ingress'),
-                  id: 'ingress-header',
-                }}
-                titleDescription={t(
-                  'Add ingress rules to be applied to your selected pods. Traffic is allowed from pods if it matches at least one rule.',
-                )}
                 actions={
                   <>
                     <Button
-                      variant="link"
+                      data-test="remove-all-ingress"
                       isDisabled={networkPolicy.ingress.rules.length === 0}
                       onClick={removeAllIngress}
-                      data-test="remove-all-ingress"
+                      variant="link"
                     >
                       {t('Remove all')}
                     </Button>
-                    <Button
-                      data-test="add-ingress"
-                      variant="secondary"
-                      onClick={addIngressRule}
-                    >
+                    <Button data-test="add-ingress" onClick={addIngressRule} variant="secondary">
                       {t('Add ingress rule')}
                     </Button>
                   </>
                 }
+                titleDescription={t(
+                  'Add ingress rules to be applied to your selected pods. Traffic is allowed from pods if it matches at least one rule.',
+                )}
+                titleText={{
+                  id: 'ingress-header',
+                  text: t('Ingress'),
+                }}
               />
             }
+            isExpanded
+            toggleAriaLabel="Ingress"
           >
             {networkPolicy.ingress.rules.map((rule, idx) => (
               <NetworkPolicyRuleConfigPanel
-                key={rule.key}
-                policyNamespace={networkPolicy.namespace}
                 direction="ingress"
-                rule={rule}
+                key={rule.key}
                 onChange={(r) => {
                   const newRules = [...networkPolicy.ingress.rules];
                   newRules[idx] = r;
                   updateIngressRules(newRules);
                 }}
                 onRemove={() => removeIngressRule(idx)}
+                policyNamespace={networkPolicy.namespace}
+                rule={rule}
               />
             ))}
           </FormFieldGroupExpandable>
@@ -387,52 +349,48 @@ export const NetworkPolicyForm: React.FC<NetworkPolicyFormProps> = ({
           networkFeaturesLoaded &&
           networkFeatures.PolicyEgress !== false && (
             <FormFieldGroupExpandable
-              toggleAriaLabel="Egress"
               className="co-create-networkpolicy__expandable-xl"
-              isExpanded
               header={
                 <FormFieldGroupHeader
-                  titleText={{
-                    text: t('Egress'),
-                    id: 'egress-header',
-                  }}
-                  titleDescription={t(
-                    'Add egress rules to be applied to your selected pods. Traffic is allowed to pods if it matches at least one rule.',
-                  )}
                   actions={
                     <>
                       <Button
-                        variant="link"
+                        data-test="remove-all-egress"
                         isDisabled={networkPolicy.egress.rules.length === 0}
                         onClick={removeAllEgress}
-                        data-test="remove-all-egress"
+                        variant="link"
                       >
                         {t('Remove all')}
                       </Button>
-                      <Button
-                        data-test="add-egress"
-                        variant="secondary"
-                        onClick={addEgressRule}
-                      >
+                      <Button data-test="add-egress" onClick={addEgressRule} variant="secondary">
                         {t('Add egress rule')}
                       </Button>
                     </>
                   }
+                  titleDescription={t(
+                    'Add egress rules to be applied to your selected pods. Traffic is allowed to pods if it matches at least one rule.',
+                  )}
+                  titleText={{
+                    id: 'egress-header',
+                    text: t('Egress'),
+                  }}
                 />
               }
+              isExpanded
+              toggleAriaLabel="Egress"
             >
               {networkPolicy.egress.rules.map((rule, idx) => (
                 <NetworkPolicyRuleConfigPanel
-                  key={rule.key}
-                  policyNamespace={networkPolicy.namespace}
                   direction="egress"
-                  rule={rule}
+                  key={rule.key}
                   onChange={(r) => {
                     const newRules = [...networkPolicy.egress.rules];
                     newRules[idx] = r;
                     updateEgressRules(newRules);
                   }}
                   onRemove={() => removeEgressRule(idx)}
+                  policyNamespace={networkPolicy.namespace}
+                  rule={rule}
                 />
               ))}
             </FormFieldGroupExpandable>
@@ -446,15 +404,15 @@ export const NetworkPolicyForm: React.FC<NetworkPolicyFormProps> = ({
 
         <ActionGroup className="pf-v5-c-form">
           <Button
-            type="submit"
             id="save-changes"
-            variant="primary"
-            isLoading={inProgress}
             isDisabled={inProgress}
+            isLoading={inProgress}
+            type="submit"
+            variant="primary"
           >
             {t('Create')}
           </Button>
-          <Button onClick={history.goBack} id="cancel" variant="secondary">
+          <Button id="cancel" onClick={history.goBack} variant="secondary">
             {t('Cancel')}
           </Button>
         </ActionGroup>

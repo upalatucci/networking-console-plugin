@@ -1,25 +1,26 @@
+import { TFunction } from 'i18next';
+import * as _ from 'lodash';
+
 import { Selector } from '@openshift-console/dynamic-plugin-sdk';
 import {
   NetworkPolicyKind,
-  NetworkPolicyPort as K8SPort,
   NetworkPolicyPeer as K8SPeer,
+  NetworkPolicyPort as K8SPort,
 } from '@utils/resources/networkpolicies/types';
-import { TFunction } from 'i18next';
-import * as _ from 'lodash';
 
 // Reference: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#networkpolicyspec-v1-networking-k8s-io
 
 export interface NetworkPolicy {
+  egress: NetworkPolicyRules;
+  ingress: NetworkPolicyRules;
   name: string;
   namespace: string;
   podSelector: string[][];
-  ingress: NetworkPolicyRules;
-  egress: NetworkPolicyRules;
 }
 
 export interface NetworkPolicyRules {
-  rules: NetworkPolicyRule[];
   denyAll: boolean;
+  rules: NetworkPolicyRule[];
 }
 
 export interface NetworkPolicyRule {
@@ -29,10 +30,10 @@ export interface NetworkPolicyRule {
 }
 
 export interface NetworkPolicyPeer {
-  key: string;
-  podSelector?: string[][];
-  namespaceSelector?: string[][];
   ipBlock?: NetworkPolicyIPBlock;
+  key: string;
+  namespaceSelector?: string[][];
+  podSelector?: string[][];
 }
 
 export interface NetworkPolicyIPBlock {
@@ -42,26 +43,24 @@ export interface NetworkPolicyIPBlock {
 
 export type NetworkPolicyPort = {
   key: string;
-  protocol: string;
   port: string;
+  protocol: string;
 };
 
 const networkPolicyTypeIngress = 'Ingress';
 const networkPolicyTypeEgress = 'Egress';
 
 interface ConversionError {
-  kind: 'invalid' | 'unsupported';
   error: string;
+  kind: 'invalid' | 'unsupported';
 }
 
-const isError = <T>(result: T | ConversionError): result is ConversionError => {
+const isError = <T>(result: ConversionError | T): result is ConversionError => {
   return result && (result as ConversionError).error !== undefined;
 };
 export const isNetworkPolicyConversionError = isError;
 
-const factorOutError = <T>(
-  list: (T | ConversionError)[],
-): T[] | ConversionError => {
+const factorOutError = <T>(list: (ConversionError | T)[]): ConversionError | T[] => {
   const err = list.find((r) => isError(r)) as ConversionError | undefined;
   if (err) {
     return err;
@@ -71,29 +70,27 @@ const factorOutError = <T>(
 
 const errors = {
   isMissing: (t: TFunction, path: string): ConversionError => ({
-    kind: 'invalid',
     error: t('{{path}} is missing.', { path }),
-  }),
-  shouldBeAnArray: (t: TFunction, path: string): ConversionError => ({
     kind: 'invalid',
-    error: t('{{path}} should be an Array.', { path }),
-  }),
-  shouldNotBeEmpty: (t: TFunction, path: string): ConversionError => ({
-    kind: 'invalid',
-    error: t('{{path}} should not be empty.', { path }),
   }),
   notSupported: (t: TFunction, path: string): ConversionError => ({
-    kind: 'unsupported',
     error: t('{{path}} found in resource, but is not supported in form.', {
       path,
     }),
+    kind: 'unsupported',
+  }),
+  shouldBeAnArray: (t: TFunction, path: string): ConversionError => ({
+    error: t('{{path}} should be an Array.', { path }),
+    kind: 'invalid',
+  }),
+  shouldNotBeEmpty: (t: TFunction, path: string): ConversionError => ({
+    error: t('{{path}} should not be empty.', { path }),
+    kind: 'invalid',
   }),
 };
 
 export const selectorToK8s = (selector: string[][]): Selector => {
-  const filtered = selector.filter(
-    (pair) => pair.length >= 2 && pair[0] !== '',
-  );
+  const filtered = selector.filter((pair) => pair.length >= 2 && pair[0] !== '');
   if (filtered.length > 0) {
     return { matchLabels: _.fromPairs(filtered) };
   }
@@ -101,9 +98,7 @@ export const selectorToK8s = (selector: string[][]): Selector => {
 };
 
 const isValidSelector = (selector: string[][]): boolean => {
-  const filtered = selector.filter(
-    (pair) => pair.length >= 2 && pair[0] !== '',
-  );
+  const filtered = selector.filter((pair) => pair.length >= 2 && pair[0] !== '');
   if (filtered.length > 0) {
     const obj = _.fromPairs(filtered);
     return Object.keys(obj).length === filtered.length;
@@ -111,12 +106,9 @@ const isValidSelector = (selector: string[][]): boolean => {
   return true;
 };
 
-type Rule = { from?: K8SPeer[]; to?: K8SPeer[]; ports?: K8SPort[] };
+type Rule = { from?: K8SPeer[]; ports?: K8SPort[]; to?: K8SPeer[] };
 
-const ruleToK8s = (
-  rule: NetworkPolicyRule,
-  direction: 'ingress' | 'egress',
-): Rule => {
+const ruleToK8s = (rule: NetworkPolicyRule, direction: 'egress' | 'ingress'): Rule => {
   const res: Rule = {};
   if (rule.peers.length > 0) {
     const peers = rule.peers.map((p) => {
@@ -146,21 +138,19 @@ const ruleToK8s = (
   }
   if (rule.ports.length > 0) {
     res.ports = rule.ports.map((p) => ({
-      protocol: p.protocol,
       port: Number.isNaN(Number(p.port)) ? p.port : Number(p.port),
+      protocol: p.protocol,
     }));
   }
   return res;
 };
 
-export const networkPolicyToK8sResource = (
-  from: NetworkPolicy,
-): NetworkPolicyKind => {
+export const networkPolicyToK8sResource = (from: NetworkPolicy): NetworkPolicyKind => {
   const podSelector = selectorToK8s(from.podSelector);
   const policyTypes: string[] = [];
   const res: NetworkPolicyKind = {
-    kind: 'NetworkPolicy',
     apiVersion: 'networking.k8s.io/v1',
+    kind: 'NetworkPolicy',
     metadata: {
       name: from.name,
       namespace: from.namespace,
@@ -195,14 +185,14 @@ const checkRulesValidity = (
     for (const peer of rule.peers) {
       if (peer.podSelector && !isValidSelector(peer.podSelector)) {
         return {
-          kind: 'invalid',
           error: t('Duplicate keys found in peer pod selector'),
+          kind: 'invalid',
         };
       }
       if (peer.namespaceSelector && !isValidSelector(peer.namespaceSelector)) {
         return {
-          kind: 'invalid',
           error: t('Duplicate keys found in peer namespace selector'),
+          kind: 'invalid',
         };
       }
     }
@@ -216,8 +206,8 @@ export const checkNetworkPolicyValidity = (
 ): ConversionError | undefined => {
   if (!isValidSelector(from.podSelector)) {
     return {
-      kind: 'invalid',
       error: t('Duplicate keys found in main pod selector'),
+      kind: 'invalid',
     };
   }
   const errIn = checkRulesValidity(from.ingress.rules, t);
@@ -231,9 +221,7 @@ export const checkNetworkPolicyValidity = (
   return undefined;
 };
 
-export const networkPolicyNormalizeK8sResource = (
-  from: NetworkPolicyKind,
-): NetworkPolicyKind => {
+export const networkPolicyNormalizeK8sResource = (from: NetworkPolicyKind): NetworkPolicyKind => {
   // This normalization is performed in order to make sure that converting from and to k8s back and forth remains consistent
   const clone = _.cloneDeep(from);
   if (clone.spec) {
@@ -252,10 +240,7 @@ export const networkPolicyNormalizeK8sResource = (
     ) {
       clone.spec.ingress = [];
     }
-    if (
-      !_.has(clone.spec, 'egress') &&
-      clone.spec.policyTypes.includes(networkPolicyTypeEgress)
-    ) {
+    if (!_.has(clone.spec, 'egress') && clone.spec.policyTypes.includes(networkPolicyTypeEgress)) {
       clone.spec.egress = [];
     }
     [clone.spec.ingress, clone.spec.egress].forEach(
@@ -277,7 +262,7 @@ const selectorFromK8s = (
   selector: Selector | undefined,
   path: string,
   t: TFunction,
-): string[][] | ConversionError => {
+): ConversionError | string[][] => {
   if (!selector) {
     return [];
   }
@@ -285,16 +270,14 @@ const selectorFromK8s = (
     return errors.notSupported(t, `${path}.matchExpressions`);
   }
   const matchLabels = selector.matchLabels || {};
-  return _.isEmpty(matchLabels)
-    ? []
-    : _.map(matchLabels, (key: string, val: string) => [val, key]);
+  return _.isEmpty(matchLabels) ? [] : _.map(matchLabels, (key: string, val: string) => [val, key]);
 };
 
-const portFromK8s = (port: K8SPort): NetworkPolicyPort | ConversionError => {
+const portFromK8s = (port: K8SPort): ConversionError | NetworkPolicyPort => {
   return {
     key: _.uniqueId('port-'),
-    protocol: port.protocol || 'TCP',
     port: port.port ? String(port.port) : '',
+    protocol: port.protocol || 'TCP',
   };
 };
 
@@ -302,7 +285,7 @@ const ipblockFromK8s = (
   ipblock: { cidr: string; except?: string[] },
   path: string,
   t: TFunction,
-): NetworkPolicyIPBlock | ConversionError => {
+): ConversionError | NetworkPolicyIPBlock => {
   const res: NetworkPolicyIPBlock = {
     cidr: ipblock.cidr || '',
     except: [],
@@ -322,7 +305,7 @@ const peerFromK8s = (
   peer: K8SPeer,
   path: string,
   t: TFunction,
-): NetworkPolicyPeer | ConversionError => {
+): ConversionError | NetworkPolicyPeer => {
   const out: NetworkPolicyPeer = { key: _.uniqueId() };
   if (peer.ipBlock) {
     const ipblock = ipblockFromK8s(peer.ipBlock, `${path}.ipBlock`, t);
@@ -332,22 +315,14 @@ const peerFromK8s = (
     out.ipBlock = ipblock;
   } else {
     if (peer.podSelector) {
-      const podSel = selectorFromK8s(
-        peer.podSelector,
-        `${path}.podSelector`,
-        t,
-      );
+      const podSel = selectorFromK8s(peer.podSelector, `${path}.podSelector`, t);
       if (isError(podSel)) {
         return podSel;
       }
       out.podSelector = podSel;
     }
     if (peer.namespaceSelector) {
-      const nsSel = selectorFromK8s(
-        peer.namespaceSelector,
-        `${path}.namespaceSelector`,
-        t,
-      );
+      const nsSel = selectorFromK8s(peer.namespaceSelector, `${path}.namespaceSelector`, t);
       if (isError(nsSel)) {
         return nsSel;
       }
@@ -365,11 +340,11 @@ const ruleFromK8s = (
   path: string,
   peersKey: 'from' | 'to',
   t: TFunction,
-): NetworkPolicyRule | ConversionError => {
+): ConversionError | NetworkPolicyRule => {
   const converted: NetworkPolicyRule = {
     key: _.uniqueId(),
-    ports: [],
     peers: [],
+    ports: [],
   };
   if (rule.ports) {
     if (!_.isArray(rule.ports)) {
@@ -387,9 +362,7 @@ const ruleFromK8s = (
       return errors.shouldBeAnArray(t, `${path}.${peersKey}`);
     }
     const peers = factorOutError(
-      rulePeers.map((p, idx) =>
-        peerFromK8s(p, `${path}.${peersKey}[${idx}]`, t),
-      ),
+      rulePeers.map((p, idx) => peerFromK8s(p, `${path}.${peersKey}[${idx}]`, t)),
     );
     if (isError(peers)) {
       return peers;
@@ -405,19 +378,19 @@ const rulesFromK8s = (
   peersKey: 'from' | 'to',
   isAffected: boolean,
   t: TFunction,
-): NetworkPolicyRules | ConversionError => {
+): ConversionError | NetworkPolicyRules => {
   if (!isAffected) {
-    return { rules: [], denyAll: false };
+    return { denyAll: false, rules: [] };
   }
   // Quoted from doc reference: "If this field is empty then this NetworkPolicy does not allow any traffic"
   if (!rules) {
-    return { rules: [], denyAll: true };
+    return { denyAll: true, rules: [] };
   }
   if (!_.isArray(rules)) {
     return errors.shouldBeAnArray(t, path);
   }
   if (rules.length === 0) {
-    return { rules: [], denyAll: true };
+    return { denyAll: true, rules: [] };
   }
   const converted = factorOutError(
     rules.map((r, idx) => ruleFromK8s(r, `${path}[${idx}]`, peersKey, t)),
@@ -425,13 +398,13 @@ const rulesFromK8s = (
   if (isError(converted)) {
     return converted;
   }
-  return { rules: converted, denyAll: false };
+  return { denyAll: false, rules: converted };
 };
 
 export const networkPolicyFromK8sResource = (
   from: NetworkPolicyKind,
   t: TFunction,
-): NetworkPolicy | ConversionError => {
+): ConversionError | NetworkPolicy => {
   if (!from.metadata) {
     return errors.isMissing(t, 'metadata');
   }
@@ -442,11 +415,7 @@ export const networkPolicyFromK8sResource = (
   if (!_.has(from.spec, 'podSelector')) {
     return errors.isMissing(t, 'spec.podSelector');
   }
-  const podSelector = selectorFromK8s(
-    from.spec.podSelector,
-    'spec.podSelector',
-    t,
-  );
+  const podSelector = selectorFromK8s(from.spec.podSelector, 'spec.podSelector', t);
   if (isError(podSelector)) {
     return podSelector;
   }
@@ -464,33 +433,21 @@ export const networkPolicyFromK8sResource = (
     ? from.spec.policyTypes.includes(networkPolicyTypeIngress)
     : true;
 
-  const ingressRules = rulesFromK8s(
-    from.spec.ingress,
-    'spec.ingress',
-    'from',
-    affectsIngress,
-    t,
-  );
+  const ingressRules = rulesFromK8s(from.spec.ingress, 'spec.ingress', 'from', affectsIngress, t);
   if (isError(ingressRules)) {
     return ingressRules;
   }
 
-  const egressRules = rulesFromK8s(
-    from.spec.egress,
-    'spec.egress',
-    'to',
-    affectsEgress,
-    t,
-  );
+  const egressRules = rulesFromK8s(from.spec.egress, 'spec.egress', 'to', affectsEgress, t);
   if (isError(egressRules)) {
     return egressRules;
   }
 
   return {
+    egress: egressRules,
+    ingress: ingressRules,
     name: from.metadata.name || '',
     namespace: from.metadata.namespace || '',
     podSelector,
-    ingress: ingressRules,
-    egress: egressRules,
   };
 };

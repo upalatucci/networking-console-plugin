@@ -27,10 +27,10 @@ const useNetworkPolicyColumn = (): { id: string; title: string }[] => {
       },
       {
         id: 'pod-selector',
+        props: { className: 'pf-m-hidden pf-m-visible-on-md' },
         sortField: 'spec.podSelector',
         title: t('Pod selector'),
         transforms: [sortable],
-        props: { className: 'pf-m-hidden pf-m-visible-on-md' },
       },
       {
         id: '',
