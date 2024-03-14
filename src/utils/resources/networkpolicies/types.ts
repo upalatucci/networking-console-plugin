@@ -1,19 +1,4 @@
-import { K8sResourceCommon, Selector } from '@openshift-console/dynamic-plugin-sdk';
-
-export type NetworkPolicyKind = K8sResourceCommon & {
-  spec: {
-    egress?: {
-      ports?: NetworkPolicyPort[];
-      to?: NetworkPolicyPeer[];
-    }[];
-    ingress?: {
-      from?: NetworkPolicyPeer[];
-      ports?: NetworkPolicyPort[];
-    }[];
-    podSelector?: Selector;
-    policyTypes?: string[];
-  };
-};
+import { Selector } from '@openshift-console/dynamic-plugin-sdk';
 
 export type NetworkPolicyPeer = {
   ipBlock?: {

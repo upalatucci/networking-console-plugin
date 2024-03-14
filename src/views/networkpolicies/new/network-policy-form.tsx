@@ -33,12 +33,12 @@ import {
   NetworkPolicyRule,
   networkPolicyToK8sResource,
 } from '@utils/models/index';
-import { NetworkPolicyKind } from '@utils/resources/networkpolicies/types';
 import { resourcePathFromModel } from '@utils/utils';
 
 import { NetworkPolicyConditionalSelector } from './network-policy-conditional-selector';
 import { NetworkPolicyRuleConfigPanel } from './network-policy-rule-config';
 import { NetworkPolicySelectorPreview } from './network-policy-selector-preview';
+import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 
 const emptyRule = (): NetworkPolicyRule => {
   return {
@@ -49,8 +49,8 @@ const emptyRule = (): NetworkPolicyRule => {
 };
 
 type NetworkPolicyFormProps = {
-  formData: NetworkPolicyKind;
-  onChange: (newFormData: NetworkPolicyKind) => void;
+  formData: IoK8sApiNetworkingV1NetworkPolicy;
+  onChange: (newFormData: IoK8sApiNetworkingV1NetworkPolicy) => void;
 };
 
 export const NetworkPolicyForm: React.FC<NetworkPolicyFormProps> = ({ formData, onChange }) => {

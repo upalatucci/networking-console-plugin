@@ -15,11 +15,11 @@ import {
   networkPolicyNormalizeK8sResource,
   networkPolicyToK8sResource,
 } from '@utils/models';
-import { NetworkPolicyKind } from '@utils/resources/networkpolicies/types';
 
 import { NetworkPolicyForm } from './network-policy-form';
 
 import './_create-network-policy.scss';
+import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 
 const LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY = 'console.createNetworkPolicy.editor.lastView';
 
@@ -55,7 +55,7 @@ const CreateNetworkPolicy: FC = () => {
     return <CodeEditor onChange={onChange} value={initialYAML} />;
   };
 
-  const checkPolicyValidForForm = (obj: NetworkPolicyKind) => {
+  const checkPolicyValidForForm = (obj: IoK8sApiNetworkingV1NetworkPolicy) => {
     const normalizedK8S = networkPolicyNormalizeK8sResource(obj);
     const converted = networkPolicyFromK8sResource(normalizedK8S, t);
     if (isNetworkPolicyConversionError(converted)) {

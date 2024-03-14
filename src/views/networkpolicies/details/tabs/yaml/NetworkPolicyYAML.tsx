@@ -1,24 +1,20 @@
 import React, { FC } from 'react';
 
+import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { ResourceYAMLEditor } from '@openshift-console/dynamic-plugin-sdk';
-import { Bullseye } from '@patternfly/react-core';
 import Loading from '@utils/components/Loading/Loading';
-import { NetworkPolicyKind } from '@utils/resources/networkpolicies/types';
 
 type NetworkPolicyYAMLPageProps = {
-  obj?: NetworkPolicyKind;
+  obj?: IoK8sApiNetworkingV1NetworkPolicy;
 };
 
-const NetworkPolicyYAMLPage: FC<NetworkPolicyYAMLPageProps> = ({ obj: networkPolicy }) => {
-  const loading = (
-    <Bullseye>
-      <Loading />
-    </Bullseye>
-  );
+const NetworkPolicyYAMLPage: FC<NetworkPolicyYAMLPageProps> = ({
+  obj: networkPolicy,
+}) => {
   return !networkPolicy ? (
-    loading
+    <Loading />
   ) : (
-    <React.Suspense fallback={loading}>
+    <React.Suspense fallback={<Loading />}>
       <ResourceYAMLEditor initialResource={networkPolicy} />
     </React.Suspense>
   );
