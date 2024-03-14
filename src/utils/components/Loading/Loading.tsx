@@ -1,11 +1,18 @@
-import * as React from 'react';
+import React, { FC } from 'react';
 
-const Loading: React.FC = () => (
-  <div className="co-m-loader co-an-fade-in-out" data-test="loading-indicator">
-    <div className="co-m-loader-dot__one" />
-    <div className="co-m-loader-dot__two" />
-    <div className="co-m-loader-dot__three" />
-  </div>
+import { Bullseye } from '@patternfly/react-core';
+
+const Loading: FC = () => (
+  <Bullseye>
+    <div
+      className="co-m-loader co-an-fade-in-out"
+      data-test="loading-indicator"
+    >
+      <div className="co-m-loader-dot__one" />
+      <div className="co-m-loader-dot__two" />
+      <div className="co-m-loader-dot__three" />
+    </div>
+  </Bullseye>
 );
 
-export default React.memo(Loading);
+export default Loading;

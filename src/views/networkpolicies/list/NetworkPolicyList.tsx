@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom-v5-compat';
 
 import {
   modelToGroupVersionKind,
@@ -16,27 +16,35 @@ import {
   VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { NetworkPolicyKind } from '@utils/resources/networkpolicies/types';
 
 import NetworkPolicyRow from './components/NetworkPolicyRow';
 import useNetworkPolicyColumn from './hooks/useNetworkPolicyColumn';
+import { Pagination } from '@patternfly/react-core';
+import usePagination from '@utils/hooks/usePagination/usePagination';
+import { paginationDefaultValues } from '@utils/hooks/usePagination/utils/constants';
+import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+
+import '@styles/list-management-group.scss';
 
 type NetworkPolicyListProps = {
-  kind: string;
   namespace: string;
 };
 
 const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
   const { t } = useNetworkingTranslation();
-  const history = useHistory();
+  const navigate = useNavigate();
 
-  const [nads, loaded, loadError] = useK8sWatchResource<NetworkPolicyKind[]>({
+  const [netwrkPolicies, loaded, loadError] = useK8sWatchResource<
+    IoK8sApiNetworkingV1NetworkPolicy[]
+  >({
     groupVersionKind: modelToGroupVersionKind(NetworkPolicyModel),
     isList: true,
     namespace,
   });
-  const [data, filteredData, onFilterChange] = useListPageFilter(nads);
-  const columns = useNetworkPolicyColumn();
+
+  const { onPaginationChange, pagination } = usePagination();
+  const [data, filteredData, onFilterChange] = useListPageFilter(netwrkPolicies);
+  const [columns, activeColumns] = useNetworkPolicyColumn(pagination, data);
 
   return (
     <>
@@ -48,7 +56,7 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
             namespace,
           }}
           onClick={() =>
-            history.push(
+            navigate(
               `/k8s/ns/${namespace || 'default'}/${modelToRef(NetworkPolicyModel)}/~new/form`,
             )
           }
@@ -57,9 +65,46 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
         </ListPageCreateButton>
       </ListPageHeader>
       <ListPageBody>
-        <ListPageFilter data={data} loaded={loaded} onFilterChange={onFilterChange} />
-        <VirtualizedTable<NetworkPolicyKind>
-          columns={columns}
+        <div className="list-management-group">
+          <ListPageFilter
+            columnLayout={{
+              columns: columns?.map(({ additional, id, title }) => ({
+                additional,
+                id,
+                title,
+              })),
+              id: NetworkPolicyModel.kind,
+              selectedColumns: new Set(activeColumns?.map((col) => col?.id)),
+              type: '',
+            }}
+            onFilterChange={(...args) => {
+              onFilterChange(...args);
+              onPaginationChange({
+                endIndex: pagination?.perPage,
+                page: 1,
+                perPage: pagination?.perPage,
+                startIndex: 0,
+              });
+            }}
+            data={data}
+            loaded={loaded}
+          />
+          <Pagination
+            onPerPageSelect={(_e, perPage, page, startIndex, endIndex) =>
+              onPaginationChange({ endIndex, page, perPage, startIndex })
+            }
+            onSetPage={(_e, page, perPage, startIndex, endIndex) =>
+              onPaginationChange({ endIndex, page, perPage, startIndex })
+            }
+            isLastFullPageShown
+            itemCount={data?.length}
+            page={pagination?.page}
+            perPage={pagination?.perPage}
+            perPageOptions={paginationDefaultValues}
+          />
+        </div>
+        <VirtualizedTable<IoK8sApiNetworkingV1NetworkPolicy>
+          columns={activeColumns}
           data={filteredData}
           loaded={loaded}
           loadError={loadError}

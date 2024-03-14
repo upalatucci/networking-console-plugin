@@ -5,11 +5,11 @@ import { modelToRef, NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/consol
 import { Breadcrumb, BreadcrumbItem } from '@patternfly/react-core';
 import { useLastNamespacePath } from '@utils/hooks/useLastNamespacePath';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { NetworkPolicyKind } from '@utils/resources/networkpolicies/types';
 import NetworkPolicyActions from '@views/networkpolicies/actions/NetworkPolicyActions';
+import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 
 type NetworkAttachmentDefinitionPageTitleProps = {
-  networkPolicy: NetworkPolicyKind;
+  networkPolicy: IoK8sApiNetworkingV1NetworkPolicy;
 };
 
 const NetworkAttachmentDefinitionPageTitle: FC<NetworkAttachmentDefinitionPageTitleProps> = ({

@@ -2,7 +2,11 @@ import React from 'react';
 import { Trans } from 'react-i18next';
 import * as _ from 'lodash';
 
-import { modelToGroupVersionKind, NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
+import {
+  modelToGroupVersionKind,
+  NetworkPolicyModel,
+} from '@kubevirt-ui/kubevirt-api/console';
+import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
   ResourceLink,
   Timestamp,
@@ -20,19 +24,23 @@ import Loading from '@utils/components/Loading/Loading';
 import { OwnerReferences } from '@utils/components/OwnerReference/owner-references';
 import SectionHeading from '@utils/components/SectionHeading/SectionHeading';
 import { FLAGS } from '@utils/constants';
-import { getNetworkPolicyDocURL, isManaged } from '@utils/constants/documentation';
+import {
+  getNetworkPolicyDocURL,
+  isManaged,
+} from '@utils/constants/documentation';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { NetworkPolicyKind } from '@utils/resources/networkpolicies/types';
 
 import { EgressHeader, IngressHeader } from './Headers';
 import PeerRow from './PeerRow';
 import { consolidatePeers } from './utils';
 
 type DetailsProps = {
-  obj: NetworkPolicyKind;
+  obj: IoK8sApiNetworkingV1NetworkPolicy;
 };
 
-const NetworkPolicyDetails: React.FunctionComponent<DetailsProps> = ({ obj: networkPolicy }) => {
+const NetworkPolicyDetails: React.FunctionComponent<DetailsProps> = ({
+  obj: networkPolicy,
+}) => {
   const hasOpenshiftFlag = useFlag(FLAGS.OPENSHIFT);
   const { t } = useNetworkingTranslation();
   const metadata = networkPolicy?.metadata;
@@ -65,9 +73,11 @@ const NetworkPolicyDetails: React.FunctionComponent<DetailsProps> = ({ obj: netw
     ? networkPolicy.spec.policyTypes.includes('Ingress')
     : true;
   const egressDenied =
-    affectsEgress && (!networkPolicy.spec.egress || networkPolicy.spec.egress.length === 0);
+    affectsEgress &&
+    (!networkPolicy.spec.egress || networkPolicy.spec.egress.length === 0);
   const ingressDenied =
-    affectsIngress && (!networkPolicy.spec.ingress || networkPolicy.spec.ingress.length === 0);
+    affectsIngress &&
+    (!networkPolicy.spec.ingress || networkPolicy.spec.ingress.length === 0);
 
   return (
     <>
@@ -76,9 +86,17 @@ const NetworkPolicyDetails: React.FunctionComponent<DetailsProps> = ({ obj: netw
         <div className="row">
           <div className="col-md-6">
             <dl className="co-m-pane__details" data-test-id="resource-summary">
-              <DetailsItem label={t('Name')} obj={networkPolicy} path={'metadata.name'} />
+              <DetailsItem
+                label={t('Name')}
+                obj={networkPolicy}
+                path={'metadata.name'}
+              />
               {metadata?.namespace && (
-                <DetailsItem label={t('Namespace')} obj={networkPolicy} path="metadata.namespace">
+                <DetailsItem
+                  label={t('Namespace')}
+                  obj={networkPolicy}
+                  path="metadata.namespace"
+                >
                   <ResourceLink
                     kind="Namespace"
                     name={metadata.namespace}
@@ -101,7 +119,11 @@ const NetworkPolicyDetails: React.FunctionComponent<DetailsProps> = ({ obj: netw
                   labels={metadata?.labels}
                 />
               </DetailsItem>
-              <DetailsItem label={t('Annotations')} obj={networkPolicy} path="metadata.annotations">
+              <DetailsItem
+                label={t('Annotations')}
+                obj={networkPolicy}
+                path="metadata.annotations"
+              >
                 {canUpdate ? (
                   <Button
                     data-test="edit-annotations"
@@ -128,7 +150,11 @@ const NetworkPolicyDetails: React.FunctionComponent<DetailsProps> = ({ obj: netw
               >
                 <Timestamp timestamp={metadata?.creationTimestamp} />
               </DetailsItem>
-              <DetailsItem label={t('Owner')} obj={networkPolicy} path="metadata.ownerReferences">
+              <DetailsItem
+                label={t('Owner')}
+                obj={networkPolicy}
+                path="metadata.ownerReferences"
+              >
                 <OwnerReferences resource={networkPolicy} />
               </DetailsItem>
             </dl>

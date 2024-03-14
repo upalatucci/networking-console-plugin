@@ -12,7 +12,8 @@
     "outDir": "dist",
     "paths": {
       "@utils/*": ["src/utils/*"],
-      "@views/*": ["src/views/*"]
+      "@views/*": ["src/views/*"],
+      "@styles/*": ["src/styles/*"]
     },
     "skipLibCheck": true,
     "sourceMap": true,

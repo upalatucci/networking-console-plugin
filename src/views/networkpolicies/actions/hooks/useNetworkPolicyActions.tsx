@@ -1,6 +1,5 @@
-import { useHistory } from 'react-router';
-
 import { modelToRef, NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
+import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
   Action,
   useAnnotationsModal,
@@ -8,15 +7,15 @@ import {
   useLabelsModal,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { NetworkPolicyKind } from '@utils/resources/networkpolicies/types';
 import { asAccessReview, getName, getNamespace } from '@utils/resources/shared';
+import { useNavigate } from 'react-router-dom-v5-compat';
 
-type NetworkPolicyActionProps = (obj: NetworkPolicyKind) => [actions: Action[]];
+type NetworkPolicyActionProps = (obj: IoK8sApiNetworkingV1NetworkPolicy) => [actions: Action[]];
 
 const useNetworkPolicyActions: NetworkPolicyActionProps = (obj) => {
   const { t } = useNetworkingTranslation();
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const launchDeleteModal = useDeleteModal(obj);
   const launchLabelsModal = useLabelsModal(obj);
   const launchAnnotationsModal = useAnnotationsModal(obj);
@@ -40,15 +39,15 @@ const useNetworkPolicyActions: NetworkPolicyActionProps = (obj) => {
     {
       accessReview: asAccessReview(NetworkPolicyModel, obj, 'update'),
       cta: () =>
-        history.push(`/k8s/ns/${objNamespace}/${modelToRef(NetworkPolicyModel)}/${objName}/yaml`),
+        navigate(`/k8s/ns/${objNamespace}/${modelToRef(NetworkPolicyModel)}/${objName}/yaml`),
       id: 'edit-network-policies',
-      label: t('Edit NetworkAttachmentDefinition'),
+      label: t('Edit NetworkPolicy'),
     },
     {
       accessReview: asAccessReview(NetworkPolicyModel, obj, 'delete'),
       cta: launchDeleteModal,
       id: 'delete-network-policy',
-      label: t('Delete NetworkAttachmentDefinition'),
+      label: t('Delete NetworkPolicy'),
     },
   ];
 

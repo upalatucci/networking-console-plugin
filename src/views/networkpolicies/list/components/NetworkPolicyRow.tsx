@@ -1,8 +1,7 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom-v5-compat';
-import * as _ from 'lodash';
 
-import { NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
+import { NamespaceModel, NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
 import {
   getGroupVersionKindForModel,
   ResourceLink,
@@ -10,11 +9,13 @@ import {
   TableData,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { Selector } from '@utils/components/Selector/Selector';
-import { NetworkPolicyKind } from '@utils/resources/networkpolicies/types';
 import { getName, getNamespace } from '@utils/resources/shared';
 import NetworkPolicyActions from '@views/networkpolicies/actions/NetworkPolicyActions';
+import { modelToGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console/modelUtils';
+import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+import { isEmpty } from 'lodash';
 
-type NetworkPolicyRowType = RowProps<NetworkPolicyKind>;
+type NetworkPolicyRowType = RowProps<IoK8sApiNetworkingV1NetworkPolicy>;
 
 const NetworkPolicyRow: FC<NetworkPolicyRowType> = ({ activeColumnIDs, obj }) => {
   const namespace = getNamespace(obj);
@@ -30,14 +31,14 @@ const NetworkPolicyRow: FC<NetworkPolicyRowType> = ({ activeColumnIDs, obj }) =>
         />
       </TableData>
       <TableData activeColumnIDs={activeColumnIDs} id="namespace">
-        <ResourceLink kind="Namespace" name={namespace} />
+        <ResourceLink groupVersionKind={modelToGroupVersionKind(NamespaceModel)} name={namespace} />
       </TableData>
       <TableData
         activeColumnIDs={activeColumnIDs}
         className="pf-m-hidden pf-m-visible-on-md"
         id="pod-selector"
       >
-        {_.isEmpty(obj.spec.podSelector) ? (
+        {isEmpty(obj.spec.podSelector) ? (
           <Link
             to={`/search/ns/${obj.metadata.namespace}?kind=Pod`}
           >{`All pods within ${obj.metadata.namespace}`}</Link>
