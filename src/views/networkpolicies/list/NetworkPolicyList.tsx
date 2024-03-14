@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom-v5-compat';
 
 import {
   modelToGroupVersionKind,
@@ -22,19 +22,19 @@ import NetworkPolicyRow from './components/NetworkPolicyRow';
 import useNetworkPolicyColumn from './hooks/useNetworkPolicyColumn';
 
 type NetworkPolicyListProps = {
-  kind: string;
   namespace: string;
 };
 
 const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
   const { t } = useNetworkingTranslation();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [nads, loaded, loadError] = useK8sWatchResource<NetworkPolicyKind[]>({
     groupVersionKind: modelToGroupVersionKind(NetworkPolicyModel),
     isList: true,
     namespace,
   });
+
   const [data, filteredData, onFilterChange] = useListPageFilter(nads);
   const columns = useNetworkPolicyColumn();
 
@@ -48,7 +48,7 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
             namespace,
           }}
           onClick={() =>
-            history.push(
+            navigate(
               `/k8s/ns/${namespace || 'default'}/${modelToRef(NetworkPolicyModel)}/~new/form`,
             )
           }
