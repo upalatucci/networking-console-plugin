@@ -57,7 +57,7 @@ export const NetworkPoliciesExtensions: EncodedExtension[] = [
   } as EncodedExtension<RoutePage>,
   {
     properties: {
-      component: { $codeRef: 'NetworkPolicyDetails' },
+      component: { $codeRef: 'NetworkPolicyDetailsPage' },
       model: NetworkPolicyExtensionModel,
     },
     type: 'console.page/resource/details',
@@ -65,7 +65,7 @@ export const NetworkPoliciesExtensions: EncodedExtension[] = [
 ];
 
 export const NetworkPoliciesExposedModules: ConsolePluginBuildMetadata['exposedModules'] = {
-  NetworkPolicyDetails: './views/networkpolicies/details/NetworkPolicyDetailsPage.tsx',
+  NetworkPolicyDetailsPage: './views/networkpolicies/details/NetworkPolicyDetailsPage.tsx',
   NetworkPolicyForm: './views/networkpolicies/new/create-network-policy.tsx',
   NetworkPolicyList: './views/networkpolicies/list/NetworkPolicyList.tsx',
 };

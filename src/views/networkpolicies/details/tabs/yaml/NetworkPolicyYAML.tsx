@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, Suspense } from 'react';
 
 import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { ResourceYAMLEditor } from '@openshift-console/dynamic-plugin-sdk';
@@ -8,15 +8,11 @@ type NetworkPolicyYAMLPageProps = {
   obj?: IoK8sApiNetworkingV1NetworkPolicy;
 };
 
-const NetworkPolicyYAMLPage: FC<NetworkPolicyYAMLPageProps> = ({
-  obj: networkPolicy,
-}) => {
-  return !networkPolicy ? (
-    <Loading />
-  ) : (
-    <React.Suspense fallback={<Loading />}>
+const NetworkPolicyYAMLPage: FC<NetworkPolicyYAMLPageProps> = ({ obj: networkPolicy }) => {
+  return (
+    <Suspense fallback={<Loading />}>
       <ResourceYAMLEditor initialResource={networkPolicy} />
-    </React.Suspense>
+    </Suspense>
   );
 };
 

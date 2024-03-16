@@ -1,11 +1,6 @@
 import { NetworkPolicyPeer } from '@utils/resources/networkpolicies/types';
 
-export type ConsolidatedRow = Omit<NetworkPolicyPeer, 'ipBlock'> & {
-  ipBlocks?: {
-    cidr: string;
-    except?: string[];
-  }[];
-};
+import { ConsolidatedRow } from './types';
 
 export const consolidatePeers = (peers?: NetworkPolicyPeer[]): ConsolidatedRow[] => {
   // Consolidate peers as one row per peer, except ipblock peers which are merged into a single row
