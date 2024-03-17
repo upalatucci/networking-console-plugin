@@ -1,4 +1,5 @@
 {
+  " See more details in: <3></3>": " See more details in: <3></3>",
   " See more details in: <3></3>.": " See more details in: <3></3>.",
   "{{count}} annotation": "{{count}} annotation",
   "{{count}} annotation_plural": "{{count}} annotation",
@@ -119,6 +120,7 @@
   "NetworkAttachmentDefinitions": "NetworkAttachmentDefinitions",
   "NetworkPolicies": "NetworkPolicies",
   "NetworkPolicies documentation": "NetworkPolicies documentation",
+  "NetworkPolicy": "NetworkPolicy",
   "NetworkPolicy details": "NetworkPolicy details",
   "Networks are not project-bound. Using the same name creates a shared NAD.": "Networks are not project-bound. Using the same name creates a shared NAD.",
   "No labels": "No labels",
