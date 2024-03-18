@@ -68,6 +68,7 @@
     "prettier": "^3.2.5",
     "prettier-stylelint": "^0.4.2",
     "react": "^17.0.1",
+    "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^17.0.1",
     "react-helmet": "^6.1.0",
     "react-i18next": "^11.7.3",

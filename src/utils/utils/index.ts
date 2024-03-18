@@ -1,4 +1,8 @@
-import { K8sModel } from '@openshift-console/dynamic-plugin-sdk';
+import {
+  K8sGroupVersionKind,
+  K8sModel,
+  K8sResourceKindReference,
+} from '@openshift-console/dynamic-plugin-sdk';
 import { DEFAULT_NAMESPACE } from '@utils/constants';
 
 export * from './validateDNS';
@@ -40,3 +44,45 @@ export const resourcePathFromModel = (
 
   return url;
 };
+
+export const isEqualObject = (object, otherObject) => {
+  if (object === otherObject) {
+    return true;
+  }
+
+  if (object === null || otherObject === null) {
+    return false;
+  }
+
+  if (object?.constructor !== otherObject?.constructor) {
+    return false;
+  }
+
+  if (typeof object !== 'object') {
+    return false;
+  }
+
+  const objectKeys = Object.keys(object);
+  const otherObjectKeys = Object.keys(otherObject);
+
+  if (objectKeys.length !== otherObjectKeys.length) {
+    return false;
+  }
+
+  for (const key of objectKeys) {
+    if (!otherObjectKeys.includes(key) || !isEqualObject(object[key], otherObject[key])) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
+export const getReference = ({
+  group,
+  kind,
+  version,
+}: K8sGroupVersionKind): K8sResourceKindReference => [group || 'core', version, kind].join('~');
+
+export const getReferenceForModel = (model: K8sModel): K8sResourceKindReference =>
+  getReference({ group: model.apiGroup, kind: model.kind, version: model.apiVersion });
