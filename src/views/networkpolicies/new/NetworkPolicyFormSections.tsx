@@ -1,5 +1,5 @@
 import React, { FC, FormEvent, useState } from 'react';
-import { useNavigate } from 'react-router-dom-v5-compat';
+import { useNavigate, useParams } from 'react-router-dom-v5-compat';
 
 import { NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
 import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
@@ -26,6 +26,8 @@ import NetworkPolicyFormIngress from './components/NetworkPolicyFormIngress';
 import NetworkPolicyFormName from './components/NetworkPolicyFormName';
 import NetworkPolicyFormPodSelector from './components/NetworkPolicyFormPodSelector';
 import NetworkPolicyFormSDNAlert from './components/NetworkPolicyFormSDNAlert';
+import useIsMultiNetworkPolicy from './hooks/useIsMultiNetworkPolicy';
+import NADsSelector from './NADsSelector';
 
 type NetworkPolicyFormSectionsProps = {
   formData: IoK8sApiNetworkingV1NetworkPolicy;
@@ -35,6 +37,9 @@ type NetworkPolicyFormSectionsProps = {
 const NetworkPolicyFormSections: FC<NetworkPolicyFormSectionsProps> = ({ formData, onChange }) => {
   const navigate = useNavigate();
   const { t } = useNetworkingTranslation();
+
+  const isMultiCreateForm = useIsMultiNetworkPolicy();
+  const { ns: namespace } = useParams();
 
   const createModal = useModal();
 
@@ -104,6 +109,13 @@ const NetworkPolicyFormSections: FC<NetworkPolicyFormSectionsProps> = ({ formDat
           networkFeaturesLoaded={networkFeaturesLoaded}
         />
         <NetworkPolicyFormName networkPolicy={networkPolicy} onPolicyChange={onPolicyChange} />
+        {isMultiCreateForm && (
+          <NADsSelector
+            namespace={namespace}
+            networkPolicy={networkPolicy}
+            onPolicyChange={onPolicyChange}
+          />
+        )}
         <NetworkPolicyFormPodSelector
           networkPolicy={networkPolicy}
           onPolicyChange={onPolicyChange}

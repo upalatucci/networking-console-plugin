@@ -20,6 +20,7 @@ export interface NetworkPolicy {
   name: string;
   namespace: string;
   podSelector: string[][];
+  policyFor?: string[];
 }
 
 export interface NetworkPolicyRules {
@@ -53,6 +54,8 @@ export type NetworkPolicyPort = {
 
 const networkPolicyTypeIngress = 'Ingress';
 const networkPolicyTypeEgress = 'Egress';
+
+const POLICY_FOR_LABEL = 'k8s.v1.cni.cncf.io/policy-for';
 
 interface ConversionError {
   error: string;
@@ -182,6 +185,10 @@ export const networkPolicyToK8sResource = (
   } else if (from.egress.rules.length > 0) {
     policyTypes.push(networkPolicyTypeEgress);
     res.spec.egress = from.egress.rules.map((r) => ruleToK8s(r, NetworkPolicyEgressIngress.egress));
+  }
+
+  if (from.policyFor) {
+    res.metadata.annotations = { [POLICY_FOR_LABEL]: from.policyFor.join(',') };
   }
   return res;
 };
@@ -454,11 +461,15 @@ export const networkPolicyFromK8sResource = (
     return egressRules;
   }
 
+  const policyFor =
+    from?.metadata?.annotations?.[POLICY_FOR_LABEL]?.split(',').map((nad) => nad.trim()) || [];
+
   return {
     egress: egressRules,
     ingress: ingressRules,
     name: from.metadata.name || '',
     namespace: from.metadata.namespace || '',
     podSelector,
+    policyFor,
   };
 };
