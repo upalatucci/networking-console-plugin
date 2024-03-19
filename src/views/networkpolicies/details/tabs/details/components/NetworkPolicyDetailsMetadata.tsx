@@ -1,10 +1,6 @@
 import React, { FC } from 'react';
 
-import {
-  modelToGroupVersionKind,
-  NamespaceModel,
-  NetworkPolicyModel,
-} from '@kubevirt-ui/kubevirt-api/console';
+import { modelToGroupVersionKind, NamespaceModel } from '@kubevirt-ui/kubevirt-api/console';
 import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
   ResourceLink,
@@ -17,6 +13,7 @@ import { DetailsItem } from '@utils/components/DetailsItem/DetailsItem';
 import { LabelList } from '@utils/components/DetailsItem/LabelList';
 import { OwnerReferences } from '@utils/components/OwnerReference/owner-references';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { getPolicyModel } from '@utils/resources/networkpolicies/utils';
 
 type NetworkPolicyDetailsMetadataProps = {
   networkPolicy: IoK8sApiNetworkingV1NetworkPolicy;
@@ -25,15 +22,17 @@ type NetworkPolicyDetailsMetadataProps = {
 const NetworkPolicyDetailsMetadata: FC<NetworkPolicyDetailsMetadataProps> = ({ networkPolicy }) => {
   const { t } = useNetworkingTranslation();
 
+  const policyModel = getPolicyModel(networkPolicy);
+
   const metadata = networkPolicy?.metadata;
   const annotationsModalLauncher = useAnnotationsModal(networkPolicy);
   const labelsModalLauncher = useLabelsModal(networkPolicy);
 
   const [canUpdate] = useAccessReview({
-    group: NetworkPolicyModel?.apiGroup,
+    group: policyModel?.apiGroup,
     name: metadata?.name,
     namespace: metadata?.namespace,
-    resource: NetworkPolicyModel?.plural,
+    resource: policyModel?.plural,
     verb: 'patch',
   });
 
@@ -55,7 +54,7 @@ const NetworkPolicyDetailsMetadata: FC<NetworkPolicyDetailsMetadataProps> = ({ n
         path="metadata.labels"
       >
         <LabelList
-          groupVersionKind={modelToGroupVersionKind(NetworkPolicyModel)}
+          groupVersionKind={modelToGroupVersionKind(policyModel)}
           labels={metadata?.labels}
         />
       </DetailsItem>

@@ -1,4 +1,6 @@
-import { modelToRef, NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
+import { useNavigate } from 'react-router-dom-v5-compat';
+
+import { modelToRef } from '@kubevirt-ui/kubevirt-api/console';
 import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
   Action,
@@ -7,8 +9,8 @@ import {
   useLabelsModal,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { getPolicyModel } from '@utils/resources/networkpolicies/utils';
 import { asAccessReview, getName, getNamespace } from '@utils/resources/shared';
-import { useNavigate } from 'react-router-dom-v5-compat';
 
 type NetworkPolicyActionProps = (obj: IoK8sApiNetworkingV1NetworkPolicy) => [actions: Action[]];
 
@@ -23,31 +25,32 @@ const useNetworkPolicyActions: NetworkPolicyActionProps = (obj) => {
   const objNamespace = getNamespace(obj);
   const objName = getName(obj);
 
+  const policyModel = getPolicyModel(obj);
+
   const actions = [
     {
-      accessReview: asAccessReview(NetworkPolicyModel, obj, 'update'),
+      accessReview: asAccessReview(policyModel, obj, 'update'),
       cta: launchLabelsModal,
       id: 'edit-labels-network-policies',
       label: t('Edit labels'),
     },
     {
-      accessReview: asAccessReview(NetworkPolicyModel, obj, 'update'),
+      accessReview: asAccessReview(policyModel, obj, 'update'),
       cta: launchAnnotationsModal,
       id: 'edit-annotations-network-policies',
       label: t('Edit annotations'),
     },
     {
-      accessReview: asAccessReview(NetworkPolicyModel, obj, 'update'),
-      cta: () =>
-        navigate(`/k8s/ns/${objNamespace}/${modelToRef(NetworkPolicyModel)}/${objName}/yaml`),
+      accessReview: asAccessReview(policyModel, obj, 'update'),
+      cta: () => navigate(`/k8s/ns/${objNamespace}/${modelToRef(policyModel)}/${objName}/yaml`),
       id: 'edit-network-policies',
-      label: t('Edit NetworkPolicy'),
+      label: t('Edit {{kind}}', { kind: policyModel.kind }),
     },
     {
-      accessReview: asAccessReview(NetworkPolicyModel, obj, 'delete'),
+      accessReview: asAccessReview(policyModel, obj, 'delete'),
       cta: launchDeleteModal,
       id: 'delete-network-policy',
-      label: t('Delete NetworkPolicy'),
+      label: t('Delete {{kind}}', { kind: policyModel.kind }),
     },
   ];
 

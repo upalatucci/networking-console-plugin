@@ -15,11 +15,24 @@ const NetworkPolicyExtensionModel = {
   version: 'v1',
 };
 
+const MultiNetworkPolicyExtensionModel = {
+  group: 'k8s.cni.cncf.io',
+  kind: 'MultiNetworkPolicy',
+  version: 'v1beta1',
+};
+
 export const NetworkPoliciesExtensions: EncodedExtension[] = [
   {
     properties: {
-      component: { $codeRef: 'NetworkPolicyList' },
+      component: { $codeRef: 'NetworkPolicyPage' },
       model: NetworkPolicyExtensionModel,
+    },
+    type: 'console.page/resource/list',
+  } as EncodedExtension<ResourceListPage>,
+  {
+    properties: {
+      component: { $codeRef: 'NetworkPolicyPage' },
+      model: MultiNetworkPolicyExtensionModel,
     },
     type: 'console.page/resource/list',
   } as EncodedExtension<ResourceListPage>,
@@ -29,8 +42,8 @@ export const NetworkPoliciesExtensions: EncodedExtension[] = [
     },
     properties: {
       dataAttributes: {
-        'data-quickstart-id': 'qs-nav-nads',
-        'data-test-id': 'nads-nav-item',
+        'data-quickstart-id': 'qs-nav-np',
+        'data-test-id': 'np-nav-item',
       },
       id: 'networkPolicies',
       model: NetworkPolicyExtensionModel,
@@ -50,6 +63,7 @@ export const NetworkPoliciesExtensions: EncodedExtension[] = [
       },
       path: [
         `/k8s/ns/:ns/${NetworkPolicyExtensionModel.group}~${NetworkPolicyExtensionModel.version}~${NetworkPolicyExtensionModel.kind}/~new/form`,
+        `/k8s/ns/:ns/${MultiNetworkPolicyExtensionModel.group}~${MultiNetworkPolicyExtensionModel.version}~${MultiNetworkPolicyExtensionModel.kind}/~new/form`,
       ],
       perspective: 'admin',
     },
@@ -62,10 +76,17 @@ export const NetworkPoliciesExtensions: EncodedExtension[] = [
     },
     type: 'console.page/resource/details',
   } as EncodedExtension<ResourceDetailsPage>,
+  {
+    properties: {
+      component: { $codeRef: 'NetworkPolicyDetailsPage' },
+      model: MultiNetworkPolicyExtensionModel,
+    },
+    type: 'console.page/resource/details',
+  } as EncodedExtension<ResourceDetailsPage>,
 ];
 
 export const NetworkPoliciesExposedModules: ConsolePluginBuildMetadata['exposedModules'] = {
   NetworkPolicyDetailsPage: './views/networkpolicies/details/NetworkPolicyDetailsPage.tsx',
   NetworkPolicyForm: './views/networkpolicies/new/create-network-policy.tsx',
-  NetworkPolicyList: './views/networkpolicies/list/NetworkPolicyList.tsx',
+  NetworkPolicyPage: './views/networkpolicies/list/NetworkPolicyPage.tsx',
 };
