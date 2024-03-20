@@ -21,7 +21,7 @@ const NetworkPolicyDetails: FC<NetworkPolicyDetailsProps> = ({ obj: networkPolic
   return (
     <>
       <PageSection variant={PageSectionVariants.light}>
-        <Title headingLevel="h2">{t('NetworkPolicy details')}</Title>
+        <Title headingLevel="h2">{t('{{kind}} details', { kind: networkPolicy.kind })}</Title>
         <Grid span={6}>
           <GridItem>
             <NetworkPolicyDetailsMetadata networkPolicy={networkPolicy} />

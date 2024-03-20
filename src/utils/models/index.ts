@@ -24,3 +24,19 @@ export const EndPointSliceModel: K8sModel = {
   namespaced: true,
   plural: 'endpointslices',
 };
+
+export const MultiNetworkPolicyModel: K8sModel = {
+  abbr: 'MNP',
+  apiGroup: 'k8s.cni.cncf.io',
+  apiVersion: 'v1beta1',
+  id: 'multinetworkpolicy',
+  kind: 'MultiNetworkPolicy',
+  label: 'multi-networkpolicy',
+  // t('multi-networkpolicy')
+  labelKey: 'multi-networkpolicy',
+  labelPlural: 'MultiNetworkPolicies',
+  // t('multi-networkpolicies')
+  labelPluralKey: 'multi-networkpolicies',
+  namespaced: true,
+  plural: 'multi-networkpolicies',
+};
