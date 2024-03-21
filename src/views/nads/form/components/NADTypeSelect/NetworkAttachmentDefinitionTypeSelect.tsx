@@ -1,3 +1,6 @@
+import React, { FC, Ref, useState } from 'react';
+import { Control, Controller } from 'react-hook-form';
+
 import {
   Dropdown,
   DropdownItem,
@@ -6,14 +9,12 @@ import {
   MenuToggle,
   MenuToggleElement,
 } from '@patternfly/react-core';
-import React, { FC, Ref, useState } from 'react';
-import { getNetworkTypes } from '../../utils/utils';
-import useNetworkModels from '../../hooks/useNetworkModels';
-import useOVNK8sNetwork from '../../hooks/useOVNK8sNetwork';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { Control, Controller } from 'react-hook-form';
+
 import { NetworkAttachmentDefinitionFormInput } from '../../utils/types';
+
 import MissingOperatorsAlert from './components/MissingOperatorsAlert';
+import useNetworkItems from '../../hooks/useNetworkItems';
 
 type NetworkAttachmentDefinitionTypeSelectProps = {
   control: Control<NetworkAttachmentDefinitionFormInput, any>;
@@ -24,42 +25,31 @@ const NetworkAttachmentDefinitionTypeSelect: FC<NetworkAttachmentDefinitionTypeS
 }) => {
   const { t } = useNetworkingTranslation();
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
-  const [hasHyperConvergedCRD, hasSriovNetNodePolicyCRD] = useNetworkModels();
-  const [hasOVNK8sNetwork] = useOVNK8sNetwork();
 
-  const networkTypeItems = getNetworkTypes(
-    hasSriovNetNodePolicyCRD,
-    hasHyperConvergedCRD,
-    hasOVNK8sNetwork,
-  );
+  const networkTypeItems = useNetworkItems();
 
   const networkTypeTitle = t('Network Type');
 
   return (
     <Controller
-      name="networkType"
       control={control}
-      rules={{ required: true }}
-      render={({ field: { value, onChange } }) => (
-        <FormGroup
-          className="network-type"
-          fieldId="basic-settings-network-type"
-          label={networkTypeTitle}
-          isRequired
-        >
+      name="networkType"
+      render={({ field: { onChange, value } }) => (
+        <FormGroup fieldId="basic-settings-network-type" isRequired label={networkTypeTitle}>
           <MissingOperatorsAlert networkTypeItems={networkTypeItems} />
           <Dropdown
             id="network-type"
             isOpen={isDropdownOpen}
             onSelect={() => setIsDropdownOpen(false)}
+            onOpenChange={setIsDropdownOpen}
             selected={value}
             toggle={(toggleRef: Ref<MenuToggleElement>) => (
               <MenuToggle
                 id="toggle-nads-network-type"
                 isExpanded={isDropdownOpen}
+                isFullWidth
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 ref={toggleRef}
-                isFullWidth
               >
                 {networkTypeItems[value] || networkTypeTitle}
               </MenuToggle>
@@ -68,7 +58,6 @@ const NetworkAttachmentDefinitionTypeSelect: FC<NetworkAttachmentDefinitionTypeS
             <DropdownList>
               {Object.entries(networkTypeItems).map(([type, label]) => (
                 <DropdownItem
-                  component="button"
                   key={type}
                   onClick={() => {
                     onChange(type);
@@ -82,6 +71,7 @@ const NetworkAttachmentDefinitionTypeSelect: FC<NetworkAttachmentDefinitionTypeS
           </Dropdown>
         </FormGroup>
       )}
+      rules={{ required: true }}
     />
   );
 };

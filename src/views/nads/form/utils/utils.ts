@@ -1,5 +1,5 @@
-import { adjectives, animals, uniqueNamesGenerator } from 'unique-names-generator';
-import { isEmpty } from '@utils/utils';
+import NetworkAttachmentDefinitionModel from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
+import { k8sCreate } from '@openshift-console/dynamic-plugin-sdk';
 import {
   IPAMConfig,
   NetworkAttachmentDefinitionAnnotations,
@@ -7,43 +7,10 @@ import {
   NetworkAttachmentDefinitionKind,
   RESOURCE_NAME_ANNOTATION,
 } from '@utils/resources/nads/types';
-import NetworkAttachmentDefinitionModel from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
-import { k8sCreate } from '@openshift-console/dynamic-plugin-sdk';
-import {
-  NetworkAttachmentDefinitionFormInput,
-  NetworkTypeKeys,
-  NetworkTypeKeysType,
-  networkTypes,
-} from './types';
+import { isEmpty } from '@utils/utils';
 
-export const generateNADName = (): string => {
-  return `network-${uniqueNamesGenerator({
-    dictionaries: [adjectives, animals],
-    separator: '-',
-  })}`;
-};
-
-export const getNetworkTypes = (
-  hasSriovNetNodePolicyCRD: boolean,
-  hasHyperConvergedCRD: boolean,
-  hasOVNK8sNetwork: boolean,
-) => {
-  const types: Record<NetworkTypeKeysType, string> = { ...networkTypes };
-  if (!hasSriovNetNodePolicyCRD) {
-    delete types[NetworkTypeKeys.sriovNetworkType];
-  }
-
-  if (!hasHyperConvergedCRD) {
-    delete types[NetworkTypeKeys.cnvBridgeNetworkType];
-  }
-
-  if (!hasOVNK8sNetwork) {
-    delete types[NetworkTypeKeys.ovnKubernetesNetworkType];
-    delete types[NetworkTypeKeys.ovnKubernetesSecondaryLocalnet];
-  }
-
-  return types;
-};
+import { NetworkAttachmentDefinitionFormInput, NetworkTypeKeys } from './types';
+import { networkConsole } from '@utils/utils/utils';
 
 const buildConfig = (
   formData: NetworkAttachmentDefinitionFormInput,
@@ -63,26 +30,26 @@ const buildConfig = (
 
   const specificConfig: Record<NetworkTypeKeys, Partial<NetworkAttachmentDefinitionConfig>> = {
     [NetworkTypeKeys.cnvBridgeNetworkType]: {
-      bridge: networkTypeData?.bridge || '',
-      vlan: parseInt(networkTypeData?.vlanTagNum, 10) || undefined,
-      macspoofchk: networkTypeData?.macspoofchk ?? true,
+      bridge: networkTypeData?.bridge,
+      ipam,
+      macspoofchk: networkTypeData?.macspoofchk,
       preserveDefaultVlan: false,
-      ipam,
-    },
-    [NetworkTypeKeys.sriovNetworkType]: {
-      ipam,
+      vlan: parseInt(networkTypeData?.vlanTagNum, 10) || undefined,
     },
     [NetworkTypeKeys.ovnKubernetesNetworkType]: {
-      topology: 'layer2',
       netAttachDefName,
+      topology: 'layer2',
     },
     [NetworkTypeKeys.ovnKubernetesSecondaryLocalnet]: {
       cniVersion: '0.4.0',
-      name: networkTypeData?.bridgeMapping || '',
+      mtu: parseInt(networkTypeData?.mtu, 10) || undefined,
+      name: networkTypeData?.bridgeMapping,
+      netAttachDefName,
       topology: 'localnet',
       vlanID: parseInt(networkTypeData?.vlanID, 10) || undefined,
-      mtu: parseInt(networkTypeData?.mtu, 10) || undefined,
-      netAttachDefName,
+    },
+    [NetworkTypeKeys.sriovNetworkType]: {
+      ipam,
     },
   };
 
@@ -93,7 +60,7 @@ const parseIPAM = (ipamString: string | undefined): IPAMConfig => {
   try {
     return JSON.parse(ipamString || '{}');
   } catch (e) {
-    console.error('Could not parse ipam.value JSON', e); // eslint-disable-line no-console
+    networkConsole.error('Could not parse IP address management JSON', e);
     return {};
   }
 };
@@ -106,16 +73,17 @@ const getResourceName = (
 
   if (isEmpty(paramsData)) return null;
 
-  return networkType === NetworkTypeKeys.cnvBridgeNetworkType
-    ? `bridge.network.kubevirt.io/${paramsData?.bridge ?? ''}`
-    : `openshift.io/${paramsData?.resourceName ?? ''}`;
+  if (networkType === NetworkTypeKeys.cnvBridgeNetworkType)
+    return `bridge.network.kubevirt.io/${paramsData?.bridge}`;
+
+  return !isEmpty(paramsData?.resourceName) ? `openshift.io/${paramsData?.resourceName}` : null;
 };
 
 export const createNetAttachDef = (
   formData: NetworkAttachmentDefinitionFormInput,
   namespace: string,
 ) => {
-  const { description, networkType, name } = formData;
+  const { description, name, networkType } = formData;
   const config = JSON.stringify(buildConfig(formData, namespace));
   const resourceName = getResourceName(formData, networkType);
   const annotations: NetworkAttachmentDefinitionAnnotations = {

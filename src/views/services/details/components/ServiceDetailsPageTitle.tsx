@@ -2,10 +2,10 @@ import React, { FC } from 'react';
 import { Link } from 'react-router-dom-v5-compat';
 
 import { modelToRef, ServiceModel } from '@kubevirt-ui/kubevirt-api/console';
+import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { Breadcrumb, BreadcrumbItem } from '@patternfly/react-core';
 import { useLastNamespacePath } from '@utils/hooks/useLastNamespacePath';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import ServiceActions from '@views/services/actions/ServiceActions';
 
 type ServicePageTitleProps = {

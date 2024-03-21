@@ -1,27 +1,29 @@
+import React, { FC, Ref, useState } from 'react';
+import { Controller } from 'react-hook-form';
+
 import SriovNetworkNodePolicyModel from '@kubevirt-ui/kubevirt-api/console/models/SriovNetworkNodePolicyModel';
 import {
-  useK8sWatchResource,
-  K8sResourceKind,
   getGroupVersionKindForModel,
+  K8sResourceKind,
+  useK8sWatchResource,
 } from '@openshift-console/dynamic-plugin-sdk';
 import {
-  FormGroup,
   Dropdown,
-  MenuToggleElement,
-  MenuToggle,
-  DropdownList,
   DropdownItem,
+  DropdownList,
+  FormGroup,
+  MenuToggle,
+  MenuToggleElement,
   TextArea,
   TextInput,
 } from '@patternfly/react-core';
-import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import React, { FC, Ref, useState } from 'react';
-import { Controller } from 'react-hook-form';
-import { ParametersComponentProps } from '../../utils/types';
 import PopoverHelpIcon from '@utils/components/PopoverHelpIcon/PopoverHelpIcon';
+import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { NetworkTypeKeys } from '@views/nads/form/utils/types';
 
-const SriovParameters: FC<ParametersComponentProps> = ({ register, control }) => {
+import { ParametersComponentProps } from '../../utils/types';
+
+const SriovParameters: FC<ParametersComponentProps> = ({ control, register }) => {
   const { t } = useNetworkingTranslation();
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
@@ -35,12 +37,11 @@ const SriovParameters: FC<ParametersComponentProps> = ({ register, control }) =>
     <>
       <FormGroup isRequired label={t('Resource name')}>
         <Controller
-          name={`${NetworkTypeKeys.sriovNetworkType}.resourceName`}
-          rules={{ required: true }}
           control={control}
-          render={({ field: { value, onChange } }) => (
+          name={`${NetworkTypeKeys.sriovNetworkType}.resourceName`}
+          render={({ field: { onChange, value } }) => (
             <Dropdown
-              id="network-type"
+              id="resource-name"
               isOpen={isDropdownOpen}
               onSelect={() => setIsDropdownOpen(false)}
               selected={value}
@@ -48,9 +49,9 @@ const SriovParameters: FC<ParametersComponentProps> = ({ register, control }) =>
                 <MenuToggle
                   id="toggle-nads-network-type"
                   isExpanded={isDropdownOpen}
+                  isFullWidth
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   ref={toggleRef}
-                  isFullWidth
                 >
                   {value || t('Select resource name')}
                 </MenuToggle>
@@ -61,7 +62,6 @@ const SriovParameters: FC<ParametersComponentProps> = ({ register, control }) =>
                   const policyName = policy?.spec?.resourceName;
                   return (
                     <DropdownItem
-                      component="button"
                       key={policyName}
                       onClick={() => {
                         onChange(policyName);
@@ -75,14 +75,15 @@ const SriovParameters: FC<ParametersComponentProps> = ({ register, control }) =>
               </DropdownList>
             </Dropdown>
           )}
+          rules={{ required: true }}
         />
       </FormGroup>
       <FormGroup label={t('IP address management')}>
         <TextArea {...register(`${NetworkTypeKeys.sriovNetworkType}.ipam`)} />
       </FormGroup>
       <FormGroup
-        labelIcon={<PopoverHelpIcon bodyContent={t('Example: 100')} />}
         label={t('VLAN tag number')}
+        labelIcon={<PopoverHelpIcon bodyContent={t('Example: 100')} />}
       >
         <TextInput {...register(`${NetworkTypeKeys.sriovNetworkType}.vlanTagNum`)} />
       </FormGroup>

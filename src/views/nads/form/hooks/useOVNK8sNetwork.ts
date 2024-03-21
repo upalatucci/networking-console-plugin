@@ -1,5 +1,6 @@
 import { modelToGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console';
 import { K8sResourceKind, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
+
 import { CLUSTER_NETWORK_CONFIG_NAME, NetworkConfigModel, OVN_K8S } from '../utils/constants';
 
 const useOVNK8sNetwork = (): [boolean, boolean] => {

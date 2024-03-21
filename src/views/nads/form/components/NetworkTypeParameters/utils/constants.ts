@@ -1,12 +1,19 @@
 import { FC } from 'react';
-import { ParametersComponentProps } from './types';
-import SriovParameters from '../components/SriovParameters/SriovParameters';
+
+import { NetworkTypeKeys, NetworkTypeKeysType } from '@views/nads/form/utils/types';
+
 import BridgeParameters from '../components/BridgeParameters/BridgeParameters';
 import SecondaryLocalnetParameters from '../components/OVNK8sSecondaryLocalnetParameters/OVNK8sSecondaryLocalnetParameters';
-import { NetworkTypeKeys } from '@views/nads/form/utils/types';
+import SriovParameters from '../components/SriovParameters/SriovParameters';
 
-export const networkTypeComponentMapper: { [key: string]: FC<ParametersComponentProps> } = {
+import { ParametersComponentProps } from './types';
+
+export const networkTypeComponentMapper: Record<
+  NetworkTypeKeysType,
+  FC<ParametersComponentProps>
+> = {
   [NetworkTypeKeys.cnvBridgeNetworkType]: BridgeParameters,
   [NetworkTypeKeys.ovnKubernetesSecondaryLocalnet]: SecondaryLocalnetParameters,
   [NetworkTypeKeys.sriovNetworkType]: SriovParameters,
+  [NetworkTypeKeys.ovnKubernetesNetworkType]: null,
 };

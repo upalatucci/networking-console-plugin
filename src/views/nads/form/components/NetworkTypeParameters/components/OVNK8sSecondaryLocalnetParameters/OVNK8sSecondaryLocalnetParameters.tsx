@@ -1,9 +1,11 @@
-import { FormGroup, TextInput } from '@patternfly/react-core';
-import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import React, { FC } from 'react';
-import { ParametersComponentProps } from '../../utils/types';
+
+import { FormGroup, TextInput } from '@patternfly/react-core';
 import PopoverHelpIcon from '@utils/components/PopoverHelpIcon/PopoverHelpIcon';
+import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { NetworkTypeKeys } from '@views/nads/form/utils/types';
+
+import { ParametersComponentProps } from '../../utils/types';
 
 const OVNK8sSecondaryLocalnetParameters: FC<ParametersComponentProps> = ({ register }) => {
   const { t } = useNetworkingTranslation();

@@ -1,23 +1,25 @@
 import React, { FC } from 'react';
+
 import { isEmpty } from '@utils/utils';
 
-import { ParametersComponentProps } from './utils/types';
 import { networkTypeComponentMapper } from './utils/constants';
+import { ParametersComponentProps } from './utils/types';
+import { NetworkTypeKeysType } from '../../utils/types';
 
 type NetworkTypeParametersProps = {
-  networkType: string;
+  networkType: NetworkTypeKeysType;
 } & ParametersComponentProps;
 
 const NetworkTypeParameters: FC<NetworkTypeParametersProps> = ({
+  control,
   networkType,
   register,
-  control,
 }) => {
-  const ParametersComponent = networkTypeComponentMapper[networkType];
+  const ParametersComponent = networkTypeComponentMapper?.[networkType];
 
   if (isEmpty(networkType) || isEmpty(ParametersComponent)) return null;
 
-  return <ParametersComponent register={register} control={control} />;
+  return <ParametersComponent control={control} register={register} />;
 };
 
 export default NetworkTypeParameters;

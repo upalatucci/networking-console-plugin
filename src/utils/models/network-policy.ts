@@ -1,12 +1,15 @@
 import { TFunction } from 'i18next';
 import * as _ from 'lodash';
 
+import {
+  IoK8sApiNetworkingV1NetworkPolicy,
+  IoK8sApiNetworkingV1NetworkPolicyIngressRule,
+} from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { Selector } from '@openshift-console/dynamic-plugin-sdk';
 import {
   NetworkPolicyPeer as K8SPeer,
   NetworkPolicyPort as K8SPort,
 } from '@utils/resources/networkpolicies/types';
-import {  IoK8sApiNetworkingV1NetworkPolicy, IoK8sApiNetworkingV1NetworkPolicyIngressRule } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 
 // Reference: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#networkpolicyspec-v1-networking-k8s-io
 
@@ -108,7 +111,10 @@ const isValidSelector = (selector: string[][]): boolean => {
 
 type Rule = { from?: K8SPeer[]; ports?: K8SPort[]; to?: K8SPeer[] };
 
-const ruleToK8s = (rule: NetworkPolicyRule, direction: 'egress' | 'ingress'): IoK8sApiNetworkingV1NetworkPolicyIngressRule => {
+const ruleToK8s = (
+  rule: NetworkPolicyRule,
+  direction: 'egress' | 'ingress',
+): IoK8sApiNetworkingV1NetworkPolicyIngressRule => {
   const res: IoK8sApiNetworkingV1NetworkPolicyIngressRule = {};
   if (rule.peers.length > 0) {
     const peers = rule.peers.map((p) => {
@@ -143,7 +149,9 @@ const ruleToK8s = (rule: NetworkPolicyRule, direction: 'egress' | 'ingress'): Io
   return res;
 };
 
-export const networkPolicyToK8sResource = (from: NetworkPolicy): IoK8sApiNetworkingV1NetworkPolicy => {
+export const networkPolicyToK8sResource = (
+  from: NetworkPolicy,
+): IoK8sApiNetworkingV1NetworkPolicy => {
   const podSelector = selectorToK8s(from.podSelector);
   const policyTypes: string[] = [];
   const res: IoK8sApiNetworkingV1NetworkPolicy = {
@@ -219,7 +227,9 @@ export const checkNetworkPolicyValidity = (
   return undefined;
 };
 
-export const networkPolicyNormalizeK8sResource = (from: IoK8sApiNetworkingV1NetworkPolicy): IoK8sApiNetworkingV1NetworkPolicy => {
+export const networkPolicyNormalizeK8sResource = (
+  from: IoK8sApiNetworkingV1NetworkPolicy,
+): IoK8sApiNetworkingV1NetworkPolicy => {
   // This normalization is performed in order to make sure that converting from and to k8s back and forth remains consistent
   const clone = _.cloneDeep(from);
   if (clone.spec) {

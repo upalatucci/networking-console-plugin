@@ -1,13 +1,14 @@
-import { Checkbox, FormGroup, TextInput } from '@patternfly/react-core';
-import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import React, { FC } from 'react';
-import { ParametersComponentProps } from '../../utils/types';
-
 import { Controller } from 'react-hook-form';
+
+import { Checkbox, FormGroup, TextInput } from '@patternfly/react-core';
 import PopoverHelpIcon from '@utils/components/PopoverHelpIcon/PopoverHelpIcon';
+import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { NetworkTypeKeys } from '@views/nads/form/utils/types';
 
-const BridgeParameters: FC<ParametersComponentProps> = ({ register, control }) => {
+import { ParametersComponentProps } from '../../utils/types';
+
+const BridgeParameters: FC<ParametersComponentProps> = ({ control, register }) => {
   const { t } = useNetworkingTranslation();
   return (
     <>
@@ -23,8 +24,8 @@ const BridgeParameters: FC<ParametersComponentProps> = ({ register, control }) =
         <TextInput {...register(`${NetworkTypeKeys.cnvBridgeNetworkType}.vlanTagNum`)} />
       </FormGroup>
       <Controller
-        name={`${NetworkTypeKeys.cnvBridgeNetworkType}.macspoofchk`}
         control={control}
+        name={`${NetworkTypeKeys.cnvBridgeNetworkType}.macspoofchk`}
         render={() => (
           <Checkbox
             defaultChecked

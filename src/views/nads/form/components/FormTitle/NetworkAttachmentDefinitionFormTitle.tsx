@@ -1,25 +1,35 @@
+import React, { FC } from 'react';
+import { Link } from 'react-router-dom-v5-compat';
+
 import NetworkAttachmentDefinitionModel from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
 import { NET_ATTACH_DEF_HEADER_LABEL } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { resourcePathFromModel } from '@utils/utils';
-import React, { FC } from 'react';
-import { Link } from 'react-router-dom-v5-compat';
+import { Flex, FlexItem, Title } from '@patternfly/react-core';
 
-const NetworkAttachmentDefinitionFormTitle: FC = () => {
+type NetworkAttachmentDefinitionFormTitleProps = {
+  namespace: string;
+};
+
+const NetworkAttachmentDefinitionFormTitle: FC<NetworkAttachmentDefinitionFormTitleProps> = ({
+  namespace,
+}) => {
   const { t } = useNetworkingTranslation();
   return (
-    <h1 className="co-m-pane__heading co-m-pane__heading--baseline">
-      <div className="co-m-pane__name">{NET_ATTACH_DEF_HEADER_LABEL}</div>
-      <div className="co-m-pane__heading-link">
+    <Flex justifyContent={{ default: 'justifyContentSpaceBetween' }}>
+      <FlexItem>
+        <Title headingLevel="h1">{NET_ATTACH_DEF_HEADER_LABEL}</Title>
+      </FlexItem>
+      <FlexItem>
         <Link
           id="yaml-link"
           replace
-          to={`${resourcePathFromModel(NetworkAttachmentDefinitionModel)}/~new`}
+          to={`${resourcePathFromModel(NetworkAttachmentDefinitionModel, null, namespace)}/~new`}
         >
           {t('Edit YAML')}
         </Link>
-      </div>
-    </h1>
+      </FlexItem>
+    </Flex>
   );
 };
 

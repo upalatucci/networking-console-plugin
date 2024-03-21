@@ -19,9 +19,6 @@ export const networkTypes: Record<NetworkTypeKeysType, string> = {
 };
 
 export type NetworkAttachmentDefinitionFormInput = {
-  name: string;
-  description?: string;
-  networkType: string;
   [NetworkTypeKeys.cnvBridgeNetworkType]?: {
     bridge: string;
     macspoofchk?: boolean;
@@ -37,4 +34,7 @@ export type NetworkAttachmentDefinitionFormInput = {
     resourceName: string;
     vlanTagNum?: string;
   };
+  description?: string;
+  name: string;
+  networkType: string;
 };
