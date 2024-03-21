@@ -5,8 +5,6 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import { DEFAULT_NAMESPACE } from '@utils/constants';
 
-export * from './validateDNS';
-
 export const getContentScrollableElement = (): HTMLElement =>
   document.getElementById('content-scrollable');
 

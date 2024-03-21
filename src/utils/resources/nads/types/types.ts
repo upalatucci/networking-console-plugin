@@ -1,8 +1,10 @@
 import { K8sResourceKind } from '@openshift-console/dynamic-plugin-sdk';
 
+export const RESOURCE_NAME_ANNOTATION = 'k8s.v1.cni.cncf.io/resourceName';
+
 export type NetworkAttachmentDefinitionAnnotations = {
   description?: string;
-  'k8s.v1.cni.cncf.io/resourceName'?: string;
+  [RESOURCE_NAME_ANNOTATION]?: string;
 };
 
 export type IPAMConfig = {
@@ -40,12 +42,3 @@ export type NetworkAttachmentDefinitionSpec = {
 export type NetworkAttachmentDefinitionKind = {
   spec?: NetworkAttachmentDefinitionSpec;
 } & K8sResourceKind;
-
-export type TypeParamsDataItem = {
-  validationMsg?: string;
-  value?: any;
-};
-
-export type TypeParamsData = {
-  [key: string]: TypeParamsDataItem;
-};
