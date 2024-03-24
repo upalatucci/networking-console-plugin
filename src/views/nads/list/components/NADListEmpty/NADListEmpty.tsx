@@ -1,9 +1,8 @@
 import React, { FC } from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom-v5-compat';
 
-import { NetworkAttachmentDefinitionModelRef } from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
 import { modelToGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console/modelUtils';
-import { useActiveNamespace, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
+import { useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { QuickStart } from '@patternfly/quickstarts';
 import {
   Button,
@@ -13,14 +12,18 @@ import {
   EmptyStateHeader,
 } from '@patternfly/react-core';
 import { RocketIcon } from '@patternfly/react-icons/dist/esm/icons/rocket-icon';
-import { ALL_NAMESPACES_KEY, DEFAULT_NAMESPACE } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { QuickStartModel } from '@utils/models';
 
-const NADListEmpty: FC = () => {
-  const history = useHistory();
+import NADCreateDropdown from '../NADCreateDropdown/NADCreateDropdown';
+
+type NADListEmptyProps = {
+  namespace: string;
+};
+
+const NADListEmpty: FC<NADListEmptyProps> = ({ namespace }) => {
+  const navigate = useNavigate();
   const { t } = useNetworkingTranslation();
-  const [namespace] = useActiveNamespace();
 
   const searchText = 'network attachment definition';
   const [quickStarts, quickStartsLoaded] = useK8sWatchResource<QuickStart[]>({
@@ -37,32 +40,17 @@ const NADListEmpty: FC = () => {
 
   return (
     <EmptyState>
-      <EmptyStateHeader
-        headingLevel="h4"
-        titleText={<>{t('No NetworkAttachmentDefinition found')}</>}
-      />
+      <EmptyStateHeader headingLevel="h4" titleText={t('No NetworkAttachmentDefinition found')} />
       <EmptyStateFooter>
-        <Button
-          data-test-id="create-nad-empty"
-          onClick={() =>
-            history.push(
-              `/k8s/ns/${
-                namespace === ALL_NAMESPACES_KEY ? DEFAULT_NAMESPACE : namespace
-              }/${NetworkAttachmentDefinitionModelRef}/~new/form`,
-            )
-          }
-          variant="primary"
-        >
-          {t('Create NetworkAttachmentDefinition')}
-        </Button>
+        <NADCreateDropdown namespace={namespace} />
         {hasQuickStarts && (
           <EmptyStateActions>
             <Button
               data-test-id="nad-quickstart"
-              onClick={() => history.push('/quickstart?keyword=network+attachment+definition')}
+              onClick={() => navigate('/quickstart?keyword=network+attachment+definition')}
               variant="secondary"
             >
-              <RocketIcon className="nad-quickstart-icon" />
+              <RocketIcon />
               {t('Learn how to use NetworkAttachmentDefinitions')}
             </Button>
           </EmptyStateActions>
