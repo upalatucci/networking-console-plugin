@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom-v5-compat';
 import * as _ from 'lodash';
 
 import { NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
+import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { CodeEditor } from '@openshift-console/dynamic-plugin-sdk';
 import { Text, TextContent, TextVariants, Title } from '@patternfly/react-core';
 import { EditorType } from '@utils/components/SyncedEditor/EditorToggle';
@@ -19,7 +20,6 @@ import {
 import { NetworkPolicyForm } from './network-policy-form';
 
 import './_create-network-policy.scss';
-import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 
 const LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY = 'console.createNetworkPolicy.editor.lastView';
 

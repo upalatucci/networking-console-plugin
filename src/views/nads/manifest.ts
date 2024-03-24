@@ -80,5 +80,5 @@ export const NADsExtensions: EncodedExtension[] = [
 export const NADsExposedModules: ConsolePluginBuildMetadata['exposedModules'] = {
   NetworkAttachmentDefinitionList: './views/nads/list/NetworkAttachmentDefinitionList.tsx',
   NetworkAttachmentDefinitionPage: './views/nads/details/NetworkAttachmentDefinitionPage.tsx',
-  NetworkAttachmentDefinitionsForm: './views/nads/new/NetworkAttachmentDefinitionsForm',
+  NetworkAttachmentDefinitionsForm: './views/nads/form/NetworkAttachmentDefinitionForm.tsx',
 };

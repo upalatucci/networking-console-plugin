@@ -20,7 +20,9 @@
     "cypress-generate": "marge -o ./integration-tests/screenshots/ -f cypress-report -t 'OpenShift Console Plugin Template Cypress Test Results' -p 'OpenShift Cypress Plugin Template Test Results' --showPassed false --assetsDir ./integration-tests/screenshots/cypress/assets ./integration-tests/screenshots/cypress.json",
     "cypress-postreport": "yarn cypress-merge && yarn cypress-generate"
   },
-  "dependencies": {},
+  "dependencies": {
+    "react-hook-form": "^7.51.1"
+  },
   "devDependencies": {
     "@cypress/webpack-preprocessor": "^5.15.5",
     "@kubevirt-ui/kubevirt-api": "^1.2.2",

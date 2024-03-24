@@ -1,6 +1,7 @@
 import { useHistory } from 'react-router';
 
 import { modelToRef, ServiceModel } from '@kubevirt-ui/kubevirt-api/console';
+import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
   Action,
   useAnnotationsModal,
@@ -9,7 +10,6 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { asAccessReview, getName, getNamespace } from '@utils/resources/shared';
-import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 
 type ServiceActionProps = (obj: IoK8sApiCoreV1Service) => [actions: Action[]];
 

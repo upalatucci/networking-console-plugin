@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 
+import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import ActionsDropdown from '@utils/components/ActionsDropdown/ActionsDropdown';
 
 import useNetworkPolicyActions from './hooks/useNetworkPolicyActions';
-import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 
 type NetworkPolicyActionsProps = {
   isKebabToggle?: boolean;

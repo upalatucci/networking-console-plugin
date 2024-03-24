@@ -4,6 +4,7 @@ import { useHistory } from 'react-router';
 import * as _ from 'lodash';
 
 import { NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
+import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { k8sCreate, useFlag, useModal } from '@openshift-console/dynamic-plugin-sdk';
 import {
   ActionGroup,
@@ -38,7 +39,6 @@ import { resourcePathFromModel } from '@utils/utils';
 import { NetworkPolicyConditionalSelector } from './network-policy-conditional-selector';
 import { NetworkPolicyRuleConfigPanel } from './network-policy-rule-config';
 import { NetworkPolicySelectorPreview } from './network-policy-selector-preview';
-import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 
 const emptyRule = (): NetworkPolicyRule => {
   return {
