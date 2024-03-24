@@ -5,6 +5,7 @@ import { NetworkAttachmentDefinitionModelRef } from '@kubevirt-ui/kubevirt-api/c
 import { ListPageCreateDropdown } from '@openshift-console/dynamic-plugin-sdk';
 import { DEFAULT_NAMESPACE } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { createItems } from './utils/constants';
 
 type NADCreateDropdownProps = {
   namespace: string;
@@ -13,11 +14,6 @@ type NADCreateDropdownProps = {
 const NADCreateDropdown: FC<NADCreateDropdownProps> = ({ namespace }) => {
   const { t } = useNetworkingTranslation();
   const navigate = useNavigate();
-
-  const createItems = {
-    form: t('With form'),
-    yaml: t('With YAML'),
-  };
 
   const onCreate = useCallback(
     (type: string) => {

@@ -13,9 +13,9 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
 import { isEmpty } from '@utils/utils/utils';
 
-import NADCreateDropdown from './components/NADCreateDropdown';
-import NADListEmpty from './components/NADListEmpty';
-import NADsRow from './components/NADsRow';
+import NADCreateDropdown from './components/NADCreateDropdown/NADCreateDropdown';
+import NADListEmpty from './components/NADListEmpty/NADListEmpty';
+import NADsRow from './components/NADsRow/NADsRow';
 import useNADsColumns from './hooks/useNADsColumns';
 
 type NetworkAttachmentDefinitionListProps = {

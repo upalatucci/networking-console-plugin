@@ -15,7 +15,7 @@ import { RocketIcon } from '@patternfly/react-icons/dist/esm/icons/rocket-icon';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { QuickStartModel } from '@utils/models';
 
-import NADCreateDropdown from './NADCreateDropdown';
+import NADCreateDropdown from '../NADCreateDropdown/NADCreateDropdown';
 
 type NADListEmptyProps = {
   namespace: string;
@@ -40,10 +40,7 @@ const NADListEmpty: FC<NADListEmptyProps> = ({ namespace }) => {
 
   return (
     <EmptyState>
-      <EmptyStateHeader
-        headingLevel="h4"
-        titleText={<>{t('No NetworkAttachmentDefinition found')}</>}
-      />
+      <EmptyStateHeader headingLevel="h4" titleText={t('No NetworkAttachmentDefinition found')} />
       <EmptyStateFooter>
         <NADCreateDropdown namespace={namespace} />
         {hasQuickStarts && (
