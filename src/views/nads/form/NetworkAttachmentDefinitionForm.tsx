@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
 import NetworkAttachmentDefinitionModel from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
+import { useActiveNamespace } from '@openshift-console/dynamic-plugin-sdk';
 import {
   ActionGroup,
   Alert,
@@ -17,17 +18,16 @@ import {
   TextInput,
 } from '@patternfly/react-core';
 import PopoverHelpIcon from '@utils/components/PopoverHelpIcon/PopoverHelpIcon';
+import { ALL_NAMESPACES_KEY, DEFAULT_NAMESPACE } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { isEmpty, resourcePathFromModel } from '@utils/utils';
+import { generateName } from '@utils/utils/utils';
 
 import NetworkAttachmentDefinitionFormTitle from './components/FormTitle/NetworkAttachmentDefinitionFormTitle';
 import NetworkAttachmentDefinitionTypeSelect from './components/NADTypeSelect/NetworkAttachmentDefinitionTypeSelect';
 import NetworkTypeParameters from './components/NetworkTypeParameters/NetworkTypeParameters';
 import { NetworkAttachmentDefinitionFormInput, NetworkTypeKeysType } from './utils/types';
 import { createNetAttachDef } from './utils/utils';
-import { generateName } from '@utils/utils/utils';
-import { ALL_NAMESPACES_KEY, DEFAULT_NAMESPACE } from '@utils/constants';
-import { useActiveNamespace } from '@openshift-console/dynamic-plugin-sdk';
 
 const NetworkAttachmentDefinitionForm: FC = () => {
   const { t } = useNetworkingTranslation();

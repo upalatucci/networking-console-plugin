@@ -13,7 +13,7 @@ export const networkTypeComponentMapper: Record<
   FC<ParametersComponentProps>
 > = {
   [NetworkTypeKeys.cnvBridgeNetworkType]: BridgeParameters,
+  [NetworkTypeKeys.ovnKubernetesNetworkType]: null,
   [NetworkTypeKeys.ovnKubernetesSecondaryLocalnet]: SecondaryLocalnetParameters,
   [NetworkTypeKeys.sriovNetworkType]: SriovParameters,
-  [NetworkTypeKeys.ovnKubernetesNetworkType]: null,
 };

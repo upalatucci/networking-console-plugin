@@ -1,0 +1,51 @@
+import React, { FC, useState } from 'react';
+import { useParams } from 'react-router-dom-v5-compat';
+
+import { CodeEditor } from '@openshift-console/dynamic-plugin-sdk';
+import {
+  PageSection,
+  PageSectionVariants,
+  Text,
+  TextVariants,
+  Title,
+} from '@patternfly/react-core';
+import { EditorType } from '@utils/components/SyncedEditor/EditorToggle';
+import { SyncedEditor } from '@utils/components/SyncedEditor/SyncedEditor';
+import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { networkPolicyToK8sResource } from '@utils/models';
+
+import { LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY } from './utils/const';
+import { FORM_HELPER_TEXT, getInitialPolicy, YAM_HELPER_TEXT } from './utils/utils';
+import NetworkPolicyFormSections from './NetworkPolicyFormSections';
+
+const NetworkPolicyForm: FC = () => {
+  const { t } = useNetworkingTranslation();
+  const { ns } = useParams();
+  const [helpText, setHelpText] = useState<string>(FORM_HELPER_TEXT);
+
+  const k8sObj = networkPolicyToK8sResource(getInitialPolicy(ns));
+
+  return (
+    <>
+      <PageSection variant={PageSectionVariants.light}>
+        <Title headingLevel="h2">{t('NetworkPolicies')}</Title>
+        <Text component={TextVariants.p}>{helpText}</Text>
+      </PageSection>
+      <SyncedEditor
+        displayConversionError
+        FormEditor={NetworkPolicyFormSections}
+        initialData={k8sObj}
+        initialType={EditorType.Form}
+        lastViewUserSettingKey={LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY}
+        onChangeEditorType={(type) =>
+          setHelpText(type === EditorType.Form ? FORM_HELPER_TEXT : YAM_HELPER_TEXT)
+        }
+        YAMLEditor={({ initialYAML = '', onChange }) => (
+          <CodeEditor onChange={onChange} value={initialYAML} />
+        )}
+      />
+    </>
+  );
+};
+
+export default NetworkPolicyForm;

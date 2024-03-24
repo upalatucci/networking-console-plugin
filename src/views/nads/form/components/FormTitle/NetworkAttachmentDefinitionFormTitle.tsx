@@ -2,10 +2,10 @@ import React, { FC } from 'react';
 import { Link } from 'react-router-dom-v5-compat';
 
 import NetworkAttachmentDefinitionModel from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
+import { Flex, FlexItem, Title } from '@patternfly/react-core';
 import { NET_ATTACH_DEF_HEADER_LABEL } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { resourcePathFromModel } from '@utils/utils';
-import { Flex, FlexItem, Title } from '@patternfly/react-core';
 
 type NetworkAttachmentDefinitionFormTitleProps = {
   namespace: string;

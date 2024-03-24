@@ -87,6 +87,6 @@ export const NetworkPoliciesExtensions: EncodedExtension[] = [
 
 export const NetworkPoliciesExposedModules: ConsolePluginBuildMetadata['exposedModules'] = {
   NetworkPolicyDetailsPage: './views/networkpolicies/details/NetworkPolicyDetailsPage.tsx',
-  NetworkPolicyForm: './views/networkpolicies/new/create-network-policy.tsx',
+  NetworkPolicyForm: './views/networkpolicies/new/NetworkPolicyForm.tsx',
   NetworkPolicyPage: './views/networkpolicies/list/NetworkPolicyPage.tsx',
 };

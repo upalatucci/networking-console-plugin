@@ -2,9 +2,10 @@ import React, { FC } from 'react';
 
 import { isEmpty } from '@utils/utils';
 
+import { NetworkTypeKeysType } from '../../utils/types';
+
 import { networkTypeComponentMapper } from './utils/constants';
 import { ParametersComponentProps } from './utils/types';
-import { NetworkTypeKeysType } from '../../utils/types';
 
 type NetworkTypeParametersProps = {
   networkType: NetworkTypeKeysType;
