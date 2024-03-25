@@ -44,7 +44,7 @@ const NADsRow: FC<NADsRowType> = ({ activeColumnIDs, obj }) => {
         className="dropdown-kebab-pf pf-v5-c-table__action"
         id=""
       >
-        <NADsActions isKebabToggle obj={obj} />
+        <NADsActions obj={obj} />
       </TableData>
     </>
   );

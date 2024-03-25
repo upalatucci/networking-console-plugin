@@ -6,19 +6,14 @@ import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
 import useNADsActions from './hooks/useNADsActions';
 
 type NADsActionsProps = {
-  isKebabToggle?: boolean;
   obj: NetworkAttachmentDefinitionKind;
 };
 
-const NADsActions: FC<NADsActionsProps> = ({ isKebabToggle, obj }) => {
+const NADsActions: FC<NADsActionsProps> = ({ obj }) => {
   const [actions] = useNADsActions(obj);
 
   return (
-    <ActionsDropdown
-      actions={actions}
-      id="virtual-machine-instance-migration-actions"
-      isKebabToggle={isKebabToggle}
-    />
+    <ActionsDropdown actions={actions} id="network-attachment-definition-actions" isKebabToggle />
   );
 };
 
