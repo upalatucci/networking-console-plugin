@@ -7,6 +7,7 @@ import {
   NetworkPoliciesExposedModules,
   NetworkPoliciesExtensions,
 } from './src/views/networkpolicies/manifest';
+import { RoutesExposedModules, RoutesExtensions } from './src/views/routes/manifest';
 import { ServicesExposedModules, ServicesExtensions } from './src/views/services/manifest';
 
 export const pluginMetadata: ConsolePluginBuildMetadata = {
@@ -20,6 +21,7 @@ export const pluginMetadata: ConsolePluginBuildMetadata = {
     ...NetworkPoliciesExposedModules,
     ...NADsExposedModules,
     ...FlagsExposedModules,
+    ...RoutesExposedModules,
     yamlTemplates: './templates/index.ts',
   },
   name: 'networking-console-plugin',
@@ -31,4 +33,5 @@ export const extensions: EncodedExtension[] = [
   ...NetworkPoliciesExtensions,
   ...NADsExtensions,
   ...FlagsExtensions,
+  ...RoutesExtensions,
 ];

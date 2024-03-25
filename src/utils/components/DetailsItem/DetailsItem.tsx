@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { FC, MouseEvent, ReactNode, SFC } from 'react';
 import classnames from 'classnames';
 import * as _ from 'lodash-es';
 
@@ -20,7 +20,7 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 
 import { getPropertyDescription } from './swagger';
 
-export const PropertyPath: React.FC<{
+export const PropertyPath: FC<{
   kind: string;
   path: string | string[];
 }> = ({ kind, path }) => {
@@ -40,7 +40,7 @@ export const PropertyPath: React.FC<{
   );
 };
 
-const EditButton: React.SFC<EditButtonProps> = (props) => {
+const EditButton: SFC<EditButtonProps> = (props) => {
   return (
     <Button
       data-test={
@@ -57,7 +57,7 @@ const EditButton: React.SFC<EditButtonProps> = (props) => {
   );
 };
 
-export const DetailsItem: React.FC<DetailsItemProps> = ({
+export const DetailsItem: FC<DetailsItemProps> = ({
   canEdit = true,
   children,
   defaultValue = '-',
@@ -77,7 +77,7 @@ export const DetailsItem: React.FC<DetailsItemProps> = ({
 
   const hide = hideEmpty && _.isEmpty(_.get(obj, path));
   const popoverContent: string = description ?? getPropertyDescription(model, path);
-  const value: React.ReactNode = children || _.get(obj, path, defaultValue);
+  const value: ReactNode = children || _.get(obj, path, defaultValue);
   const editable = onEdit && canEdit;
   return hide ? null : (
     <>
@@ -138,20 +138,20 @@ export const DetailsItem: React.FC<DetailsItemProps> = ({
 
 export type DetailsItemProps = {
   canEdit?: boolean;
-  defaultValue?: React.ReactNode;
+  defaultValue?: ReactNode;
   description?: string;
   editAsGroup?: boolean;
   hideEmpty?: boolean;
   label: string;
   labelClassName?: string;
   obj?: K8sResourceKind;
-  onEdit?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onEdit?: (e: MouseEvent<HTMLButtonElement>) => void;
   path?: string | string[];
   valueClassName?: string;
 };
 
 type EditButtonProps = {
-  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick: (e: MouseEvent<HTMLButtonElement>) => void;
   testId?: string;
 };
 

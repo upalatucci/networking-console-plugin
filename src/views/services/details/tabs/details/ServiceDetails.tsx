@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import * as _ from 'lodash';
 
 import { modelToGroupVersionKind, ServiceModel } from '@kubevirt-ui/kubevirt-api/console';
@@ -26,7 +26,7 @@ type DetailsProps = {
   obj: IoK8sApiCoreV1Service;
 };
 
-const ServiceDetails: React.FunctionComponent<DetailsProps> = ({ obj: service }) => {
+const ServiceDetails: FC<DetailsProps> = ({ obj: service }) => {
   const { t } = useNetworkingTranslation();
   const metadata = service?.metadata;
   const annotationsModalLauncher = useAnnotationsModal(service);

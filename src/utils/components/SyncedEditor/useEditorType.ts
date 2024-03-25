@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 
 import { useUserSettings } from '@openshift-console/dynamic-plugin-sdk-internal';
 import {
@@ -36,12 +36,12 @@ export const useEditorType = (
     return defaultValue;
   };
 
-  const [activeEditorType, setActiveEditorType] = React.useState<EditorType>(null);
+  const [activeEditorType, setActiveEditorType] = useState<EditorType>(null);
   const setEditorType = (type: EditorType) => {
     setActiveEditorType(type);
     setLastViewedEditorType(type);
   };
-  React.useEffect(() => {
+  useEffect(() => {
     if (resourceLoaded) {
       const editorType: EditorType = getEditorType();
       if (!lastViewedEditorType || lastViewedEditorType !== editorType) {

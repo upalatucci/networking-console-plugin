@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, ReactNode } from 'react';
 
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 
@@ -7,7 +7,7 @@ type ExternalLinkProps = {
   dataTestID?: string;
   href: string;
   stopPropagation?: boolean;
-  text?: React.ReactNode;
+  text?: ReactNode;
 };
 
 const ExternalLink: FC<ExternalLinkProps> = ({

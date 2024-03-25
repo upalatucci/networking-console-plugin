@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
@@ -16,7 +16,7 @@ export type PodTrafficProp = {
   tooltipFlag?: boolean;
 };
 
-export const PodTraffic: React.FC<PodTrafficProp> = ({ namespace, podName, tooltipFlag }) => {
+export const PodTraffic: FC<PodTrafficProp> = ({ namespace, podName, tooltipFlag }) => {
   const { t } = useTranslation();
   const [data, loaded, loadError] = useK8sWatchResource<EndpointSliceKind[]>({
     groupVersionKind: {
