@@ -11,10 +11,10 @@ import {
 } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
+import useNetworkItems from '../../hooks/useNetworkItems';
 import { NetworkAttachmentDefinitionFormInput } from '../../utils/types';
 
 import MissingOperatorsAlert from './components/MissingOperatorsAlert';
-import useNetworkItems from '../../hooks/useNetworkItems';
 
 type NetworkAttachmentDefinitionTypeSelectProps = {
   control: Control<NetworkAttachmentDefinitionFormInput, any>;
@@ -40,8 +40,8 @@ const NetworkAttachmentDefinitionTypeSelect: FC<NetworkAttachmentDefinitionTypeS
           <Dropdown
             id="network-type"
             isOpen={isDropdownOpen}
-            onSelect={() => setIsDropdownOpen(false)}
             onOpenChange={setIsDropdownOpen}
+            onSelect={() => setIsDropdownOpen(false)}
             selected={value}
             toggle={(toggleRef: Ref<MenuToggleElement>) => (
               <MenuToggle

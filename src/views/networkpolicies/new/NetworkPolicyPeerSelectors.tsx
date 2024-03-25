@@ -1,15 +1,30 @@
-import * as React from 'react';
+import React, { FC, useRef } from 'react';
 import { Trans } from 'react-i18next';
 
-import { Button } from '@patternfly/react-core';
+import { Button, ButtonVariant } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
-import { NetworkPolicyConditionalSelector } from './network-policy-conditional-selector';
-import { NetworkPolicySelectorPreview } from './network-policy-selector-preview';
+import NetworkPolicySelectorPreview from './components/NetworkPolicySelectorPreview/NetworkPolicySelectorPreview';
+import { NetworkPolicyEgressIngress } from './utils/types';
+import { getHelpTextPodSelector } from './utils/utils';
+import NetworkPolicyConditionalSelector from './NetworkPolicyConditionalSelector';
 
-export const NetworkPolicyPeerSelectors: React.FC<PeerSelectorProps> = (props) => {
+type NetworkPolicyPeerSelectorsProps = {
+  direction: NetworkPolicyEgressIngress;
+  namespaceSelector?: string[][];
+  onChange: (podSelector: string[][], namespaceSelector?: string[][]) => void;
+  podSelector: string[][];
+  policyNamespace: string;
+};
+
+const NetworkPolicyPeerSelectors: FC<NetworkPolicyPeerSelectorsProps> = ({
+  direction,
+  namespaceSelector,
+  onChange,
+  podSelector,
+  policyNamespace,
+}) => {
   const { t } = useNetworkingTranslation();
-  const { direction, namespaceSelector, onChange, podSelector, policyNamespace } = props;
 
   const handlePodSelectorChange = (updated: string[][]) => {
     onChange(updated, namespaceSelector);
@@ -18,28 +33,12 @@ export const NetworkPolicyPeerSelectors: React.FC<PeerSelectorProps> = (props) =
   const handleNamespaceSelectorChange = (updated: string[][]) => {
     onChange(podSelector, updated);
   };
-  const podsPreviewPopoverRef = React.useRef();
-  let helpTextPodSelector;
-  if (direction === 'ingress') {
-    helpTextPodSelector = namespaceSelector
-      ? t(
-          'If no pod selector is provided, traffic from all pods in eligible namespaces will be allowed.',
-        )
-      : t(
-          'If no pod selector is provided, traffic from all pods in this namespace will be allowed.',
-        );
-  } else {
-    helpTextPodSelector = namespaceSelector
-      ? t(
-          'If no pod selector is provided, traffic to all pods in eligible namespaces will be allowed.',
-        )
-      : t('If no pod selector is provided, traffic to all pods in this namespace will be allowed.');
-  }
+  const podsPreviewPopoverRef = useRef();
 
   return (
     <>
       {namespaceSelector && (
-        <div className="form-group co-create-networkpolicy__namespaceselector">
+        <div className="form-group">
           <NetworkPolicyConditionalSelector
             dataTest="peer-namespace-selector"
             helpText={t(
@@ -51,24 +50,24 @@ export const NetworkPolicyPeerSelectors: React.FC<PeerSelectorProps> = (props) =
           />
         </div>
       )}
-      <div className="form-group co-create-networkpolicy__podselector">
+      <div className="form-group">
         <NetworkPolicyConditionalSelector
           dataTest="peer-pod-selector"
-          helpText={helpTextPodSelector}
+          helpText={getHelpTextPodSelector(direction, !!namespaceSelector)}
           onChange={handlePodSelectorChange}
           selectorType="pod"
           values={podSelector || []}
         />
       </div>
       <p>
-        {props.direction === 'ingress' ? (
+        {direction === 'ingress' ? (
           <Trans t={t}>
             Show a preview of the{' '}
             <Button
               data-test="show-affected-pods-ingress"
               isInline
               ref={podsPreviewPopoverRef}
-              variant="link"
+              variant={ButtonVariant.link}
             >
               affected pods
             </Button>{' '}
@@ -81,7 +80,7 @@ export const NetworkPolicyPeerSelectors: React.FC<PeerSelectorProps> = (props) =
               data-test="show-affected-pods-egress"
               isInline
               ref={podsPreviewPopoverRef}
-              variant="link"
+              variant={ButtonVariant.link}
             >
               affected pods
             </Button>{' '}
@@ -90,7 +89,7 @@ export const NetworkPolicyPeerSelectors: React.FC<PeerSelectorProps> = (props) =
         )}
       </p>
       <NetworkPolicySelectorPreview
-        dataTest={`pods-preview-${props.direction}`}
+        dataTest={`pods-preview-${direction}`}
         namespaceSelector={namespaceSelector}
         podSelector={podSelector}
         policyNamespace={policyNamespace}
@@ -100,10 +99,4 @@ export const NetworkPolicyPeerSelectors: React.FC<PeerSelectorProps> = (props) =
   );
 };
 
-type PeerSelectorProps = {
-  direction: 'egress' | 'ingress';
-  namespaceSelector?: string[][];
-  onChange: (podSelector: string[][], namespaceSelector?: string[][]) => void;
-  podSelector: string[][];
-  policyNamespace: string;
-};
+export default NetworkPolicyPeerSelectors;

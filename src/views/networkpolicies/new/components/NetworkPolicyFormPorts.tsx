@@ -1,5 +1,5 @@
-import * as React from 'react';
-import * as _ from 'lodash';
+import React, { FC } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 import { Button } from '@patternfly/react-core';
 import { MinusCircleIcon } from '@patternfly/react-icons/dist/esm/icons/minus-circle-icon';
@@ -7,9 +7,13 @@ import { PlusCircleIcon } from '@patternfly/react-icons/dist/esm/icons/plus-circ
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { NetworkPolicyPort } from '@utils/models';
 
-import PortsDropdown from './PortsDropdown';
+import PortsDropdown from '../NetworkPolicyPortsDropdown';
 
-export const NetworkPolicyPorts: React.FunctionComponent<NetworkPolicyPortsProps> = (props) => {
+type NetworkPolicyPortsProps = {
+  onChange: (ports: NetworkPolicyPort[]) => void;
+  ports: NetworkPolicyPort[];
+};
+const NetworkPolicyPorts: FC<NetworkPolicyPortsProps> = (props) => {
   const { onChange, ports } = props;
   const { t } = useNetworkingTranslation();
 
@@ -68,7 +72,7 @@ export const NetworkPolicyPorts: React.FunctionComponent<NetworkPolicyPortsProps
               className="pf-m-link--align-left"
               data-test="add-port"
               onClick={() => {
-                onChange([...ports, { key: _.uniqueId('port-'), port: '', protocol: 'TCP' }]);
+                onChange([...ports, { key: `port-${uuidv4}`, port: '', protocol: 'TCP' }]);
               }}
               type="button"
               variant="link"
@@ -83,7 +87,4 @@ export const NetworkPolicyPorts: React.FunctionComponent<NetworkPolicyPortsProps
   );
 };
 
-type NetworkPolicyPortsProps = {
-  onChange: (ports: NetworkPolicyPort[]) => void;
-  ports: NetworkPolicyPort[];
-};
+export default NetworkPolicyPorts;

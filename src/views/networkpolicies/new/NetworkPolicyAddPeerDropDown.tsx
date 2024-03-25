@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { FC, Ref, useState } from 'react';
 
 import {
   Dropdown,
@@ -9,26 +9,29 @@ import {
 } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
-export type NetworkPolicyPeerType = 'anyNS' | 'ipBlock' | 'sameNS';
+import { NetworkPolicyPeerType } from './utils/types';
 
-export const NetworkPolicyAddPeerDropdown: React.FunctionComponent<
-  NetworkPolicyAddPeerDropdownProps
-> = (props) => {
+type NetworkPolicyAddPeerDropdownProps = {
+  onSelect: (type: NetworkPolicyPeerType) => void;
+  title: string;
+};
+
+const NetworkPolicyAddPeerDropdown: FC<NetworkPolicyAddPeerDropdownProps> = (props) => {
   const { t } = useNetworkingTranslation();
   const { onSelect, title } = props;
 
-  const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   return (
     <div className="form-group co-create-networkpolicy__add-peer">
       <Dropdown
         data-test="add-peer"
         isOpen={isDropdownOpen}
-        onSelect={(event, networkType: NetworkPolicyPeerType) => {
+        onSelect={(_event, networkType: NetworkPolicyPeerType) => {
           onSelect(networkType);
           setIsDropdownOpen(false);
         }}
-        toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
+        toggle={(toggleRef: Ref<MenuToggleElement>) => (
           <MenuToggle
             id="toggle-basic"
             isExpanded={isDropdownOpen}
@@ -49,7 +52,4 @@ export const NetworkPolicyAddPeerDropdown: React.FunctionComponent<
   );
 };
 
-type NetworkPolicyAddPeerDropdownProps = {
-  onSelect: (type: NetworkPolicyPeerType) => void;
-  title: string;
-};
+export default NetworkPolicyAddPeerDropdown;

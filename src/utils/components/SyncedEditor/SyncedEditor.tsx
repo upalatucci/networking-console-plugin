@@ -37,8 +37,8 @@ export const SyncedEditor: React.FC<SyncedEditorProps> = ({
   initialData = {},
   initialType = EditorType.Form,
   lastViewUserSettingKey,
-  onChange = _.noop,
-  onChangeEditorType = _.noop,
+  onChange = () => null,
+  onChangeEditorType = () => null,
   prune,
   YAMLEditor,
 }) => {
@@ -163,7 +163,7 @@ type YAMLEditorProps = {
 };
 
 type SyncedEditorProps = {
-  context: {
+  context?: {
     formContext: { [key: string]: any };
     yamlContext: { [key: string]: any };
   };

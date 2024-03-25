@@ -1,9 +1,10 @@
-import * as React from 'react';
+import React, { FC, useState } from 'react';
 
-import { Button } from '@patternfly/react-core';
+import { Button, ButtonVariant, Text } from '@patternfly/react-core';
 import { PlusCircleIcon } from '@patternfly/react-icons/dist/esm/icons/plus-circle-icon';
 import LabelSelectorEditor from '@utils/components/LabelSelectorEditor/LabelSelectorEditor';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { isEmpty } from '@utils/utils';
 
 type NetworkPolicyConditionalSelectorProps = {
   dataTest?: string;
@@ -13,12 +14,15 @@ type NetworkPolicyConditionalSelectorProps = {
   values: string[][];
 };
 
-export const NetworkPolicyConditionalSelector: React.FunctionComponent<
-  NetworkPolicyConditionalSelectorProps
-> = (props) => {
+const NetworkPolicyConditionalSelector: FC<NetworkPolicyConditionalSelectorProps> = ({
+  dataTest,
+  helpText,
+  onChange,
+  selectorType,
+  values,
+}) => {
   const { t } = useNetworkingTranslation();
-  const { dataTest, helpText, onChange, selectorType, values } = props;
-  const [isVisible, setVisible] = React.useState(values.length > 0);
+  const [isVisible, setVisible] = useState<boolean>(isEmpty(values));
 
   const handleSelectorChange = (nameValuePairs: string[][]) => {
     onChange(nameValuePairs);
@@ -37,35 +41,30 @@ export const NetworkPolicyConditionalSelector: React.FunctionComponent<
       <span>
         <label>{title}</label>
       </span>
-      <div className="help-block">
-        <p className="co-create-networkpolicy__paragraph">{helpText}</p>
-      </div>
+      <Text component="p">{helpText}</Text>
       {isVisible ? (
         <>
-          <div className="help-block">
-            <p className="co-create-networkpolicy__paragraph">{secondHelpText}</p>
-          </div>
-
+          <Text component="p">{secondHelpText}</Text>
           <LabelSelectorEditor
-            labelSelectorPairs={values.length > 0 ? values : [['', '']]}
+            labelSelectorPairs={!isEmpty(values) ? values : [['', '']]}
             onLastItemRemoved={() => setVisible(false)}
             updateParentData={handleSelectorChange}
           />
         </>
       ) : (
-        <div className="co-toolbar__group co-toolbar__group--left co-create-networkpolicy__show-selector">
-          <Button
-            className="pf-m-link--align-left"
-            data-test={dataTest ? `add-${dataTest}` : 'add-labels-selector'}
-            onClick={() => setVisible(true)}
-            type="button"
-            variant="link"
-          >
-            <PlusCircleIcon className="co-icon-space-r" />
-            {addSelectorText}
-          </Button>
-        </div>
+        <Button
+          className="pf-m-link--align-left"
+          data-test={dataTest ? `add-${dataTest}` : 'add-labels-selector'}
+          onClick={() => setVisible(true)}
+          type="button"
+          variant={ButtonVariant.link}
+        >
+          <PlusCircleIcon className="co-icon-space-r" />
+          {addSelectorText}
+        </Button>
       )}
     </>
   );
 };
+
+export default NetworkPolicyConditionalSelector;

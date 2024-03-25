@@ -8,9 +8,9 @@ import {
   RESOURCE_NAME_ANNOTATION,
 } from '@utils/resources/nads/types';
 import { isEmpty } from '@utils/utils';
+import { networkConsole } from '@utils/utils/utils';
 
 import { NetworkAttachmentDefinitionFormInput, NetworkTypeKeys } from './types';
-import { networkConsole } from '@utils/utils/utils';
 
 const buildConfig = (
   formData: NetworkAttachmentDefinitionFormInput,

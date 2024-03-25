@@ -1,4 +1,4 @@
-import { uniqueNamesGenerator, adjectives, animals } from 'unique-names-generator';
+import { adjectives, animals, uniqueNamesGenerator } from 'unique-names-generator';
 
 export const networkConsole = console;
 

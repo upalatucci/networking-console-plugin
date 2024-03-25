@@ -5,6 +5,7 @@ import { NetworkAttachmentDefinitionModelRef } from '@kubevirt-ui/kubevirt-api/c
 import { ListPageCreateDropdown } from '@openshift-console/dynamic-plugin-sdk';
 import { DEFAULT_NAMESPACE } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+
 import { createItems } from './utils/constants';
 
 type NADCreateDropdownProps = {
