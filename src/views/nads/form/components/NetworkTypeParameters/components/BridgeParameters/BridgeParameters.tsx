@@ -25,12 +25,14 @@ const BridgeParameters: FC<ParametersComponentProps> = ({ control, register }) =
       </FormGroup>
       <Controller
         control={control}
+        defaultValue={true as never}
         name={`${NetworkTypeKeys.cnvBridgeNetworkType}.macspoofchk`}
-        render={() => (
+        render={({ field: { onChange, value } }) => (
           <Checkbox
-            defaultChecked
             id={`${NetworkTypeKeys.cnvBridgeNetworkType}.macspoofchk`}
+            isChecked={value}
             label={t('MAC spoof check')}
+            onChange={onChange}
           />
         )}
       />
