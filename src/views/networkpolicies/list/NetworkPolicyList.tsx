@@ -20,7 +20,9 @@ import { Pagination } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import usePagination from '@utils/hooks/usePagination/usePagination';
 import { paginationDefaultValues } from '@utils/hooks/usePagination/utils/constants';
+import { isEmpty } from '@utils/utils';
 
+import NetworkPolicyEmptyState from './components/NetworkPolicyEmptyState';
 import NetworkPolicyRow from './components/NetworkPolicyRow';
 import useNetworkPolicyColumn from './hooks/useNetworkPolicyColumn';
 
@@ -49,20 +51,22 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
   return (
     <>
       <ListPageHeader title={t('NetworkPolicies')}>
-        <ListPageCreateButton
-          className="list-page-create-button-margin"
-          createAccessReview={{
-            groupVersionKind: modelToGroupVersionKind(NetworkPolicyModel),
-            namespace,
-          }}
-          onClick={() =>
-            navigate(
-              `/k8s/ns/${namespace || 'default'}/${modelToRef(NetworkPolicyModel)}/~new/form`,
-            )
-          }
-        >
-          {t('Create NetworkPolicy')}
-        </ListPageCreateButton>
+        {!isEmpty(data.length) && (
+          <ListPageCreateButton
+            className="list-page-create-button-margin"
+            createAccessReview={{
+              groupVersionKind: modelToGroupVersionKind(NetworkPolicyModel),
+              namespace,
+            }}
+            onClick={() =>
+              navigate(
+                `/k8s/ns/${namespace || 'default'}/${modelToRef(NetworkPolicyModel)}/~new/form`,
+              )
+            }
+          >
+            {t('Create NetworkPolicy')}
+          </ListPageCreateButton>
+        )}
       </ListPageHeader>
       <ListPageBody>
         <div className="list-management-group">
@@ -89,10 +93,10 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
               });
             }}
           />
-          {loaded && (
+          {loaded && !isEmpty(data.length) && (
             <Pagination
               isLastFullPageShown
-              itemCount={data?.length}
+              itemCount={data.length}
               onPerPageSelect={(_e, perPage, page, startIndex, endIndex) =>
                 onPaginationChange({ endIndex, page, perPage, startIndex })
               }
@@ -110,6 +114,7 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
           data={filteredData}
           loaded={loaded}
           loadError={loadError}
+          NoDataEmptyMsg={NetworkPolicyEmptyState}
           Row={NetworkPolicyRow}
           unfilteredData={data}
         />
