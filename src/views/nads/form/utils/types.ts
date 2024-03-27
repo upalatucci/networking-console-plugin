@@ -1,5 +1,5 @@
 export enum NetworkTypeKeys {
-  cnvBridgeNetworkType = 'cnv-bridge',
+  cnvBridgeNetworkType = 'bridge',
   ovnKubernetesNetworkType = 'ovn-k8s-cni-overlay',
   ovnKubernetesSecondaryLocalnet = 'ovn-k8s-cni-overlay-localnet',
   sriovNetworkType = 'sriov',
@@ -12,7 +12,7 @@ export type NetworkTypeKeysType =
   | NetworkTypeKeys.sriovNetworkType;
 
 export const networkTypes: Record<NetworkTypeKeysType, string> = {
-  [NetworkTypeKeys.cnvBridgeNetworkType]: 'CNV Linux bridge',
+  [NetworkTypeKeys.cnvBridgeNetworkType]: 'Linux bridge',
   [NetworkTypeKeys.ovnKubernetesNetworkType]: 'OVN Kubernetes L2 overlay network',
   [NetworkTypeKeys.ovnKubernetesSecondaryLocalnet]: 'OVN Kubernetes secondary localnet network',
   [NetworkTypeKeys.sriovNetworkType]: 'SR-IOV',
