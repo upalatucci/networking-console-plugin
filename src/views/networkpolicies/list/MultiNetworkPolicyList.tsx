@@ -86,19 +86,21 @@ const MultiNetworkPolicyList: FC<MultiNetworkPolicyListProps> = ({ namespace }) 
               });
             }}
           />
-          <Pagination
-            isLastFullPageShown
-            itemCount={data?.length}
-            onPerPageSelect={(_e, perPage, page, startIndex, endIndex) =>
-              onPaginationChange({ endIndex, page, perPage, startIndex })
-            }
-            onSetPage={(_e, page, perPage, startIndex, endIndex) =>
-              onPaginationChange({ endIndex, page, perPage, startIndex })
-            }
-            page={pagination?.page}
-            perPage={pagination?.perPage}
-            perPageOptions={paginationDefaultValues}
-          />
+          {loaded && (
+            <Pagination
+              isLastFullPageShown
+              itemCount={data?.length}
+              onPerPageSelect={(_e, perPage, page, startIndex, endIndex) =>
+                onPaginationChange({ endIndex, page, perPage, startIndex })
+              }
+              onSetPage={(_e, page, perPage, startIndex, endIndex) =>
+                onPaginationChange({ endIndex, page, perPage, startIndex })
+              }
+              page={pagination?.page}
+              perPage={pagination?.perPage}
+              perPageOptions={paginationDefaultValues}
+            />
+          )}
         </div>
         <VirtualizedTable<IoK8sApiNetworkingV1NetworkPolicy>
           columns={activeColumns}
