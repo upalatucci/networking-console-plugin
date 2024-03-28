@@ -7,8 +7,6 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import { ConsolePluginBuildMetadata } from '@openshift-console/dynamic-plugin-sdk-webpack/lib/build-types';
 
-import { FLAG_KUBEVIRT, FLAG_NET_ATTACH_DEF } from '../../utils/flags/consts';
-
 const NetworkPolicyExtensionModel = {
   group: 'networking.k8s.io',
   kind: 'NetworkPolicy',
@@ -37,9 +35,20 @@ export const NetworkPoliciesExtensions: EncodedExtension[] = [
     type: 'console.page/resource/list',
   } as EncodedExtension<ResourceListPage>,
   {
-    flags: {
-      required: [FLAG_NET_ATTACH_DEF, FLAG_KUBEVIRT],
+    properties: {
+      component: {
+        $codeRef: 'NetworkPolicyPage',
+      },
+      exact: true,
+      path: [
+        `/k8s/ns/:ns/${NetworkPolicyExtensionModel.group}~${NetworkPolicyExtensionModel.version}~${NetworkPolicyExtensionModel.kind}/enable-multi`,
+        `/k8s/all-namespaces/${NetworkPolicyExtensionModel.group}~${NetworkPolicyExtensionModel.version}~${NetworkPolicyExtensionModel.kind}/enable-multi`,
+      ],
+      perspective: 'admin',
     },
+    type: 'console.page/route',
+  } as EncodedExtension<RoutePage>,
+  {
     properties: {
       dataAttributes: {
         'data-quickstart-id': 'qs-nav-np',
@@ -58,9 +67,6 @@ export const NetworkPoliciesExtensions: EncodedExtension[] = [
         $codeRef: 'NetworkPolicyForm',
       },
       exact: true,
-      flags: {
-        required: [FLAG_NET_ATTACH_DEF],
-      },
       path: [
         `/k8s/ns/:ns/${NetworkPolicyExtensionModel.group}~${NetworkPolicyExtensionModel.version}~${NetworkPolicyExtensionModel.kind}/~new/form`,
         `/k8s/ns/:ns/${MultiNetworkPolicyExtensionModel.group}~${MultiNetworkPolicyExtensionModel.version}~${MultiNetworkPolicyExtensionModel.kind}/~new/form`,

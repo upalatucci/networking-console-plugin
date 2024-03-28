@@ -34,7 +34,7 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
   const { t } = useNetworkingTranslation();
   const navigate = useNavigate();
 
-  const [netwrkPolicies, loaded, loadError] = useK8sWatchResource<
+  const [networkPolicies, loaded, loadError] = useK8sWatchResource<
     IoK8sApiNetworkingV1NetworkPolicy[]
   >({
     groupVersionKind: modelToGroupVersionKind(NetworkPolicyModel),
@@ -43,7 +43,7 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
   });
 
   const { onPaginationChange, pagination } = usePagination();
-  const [data, filteredData, onFilterChange] = useListPageFilter(netwrkPolicies);
+  const [data, filteredData, onFilterChange] = useListPageFilter(networkPolicies);
   const [columns, activeColumns] = useNetworkPolicyColumn(pagination, data);
 
   return (
@@ -89,19 +89,21 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
               });
             }}
           />
-          <Pagination
-            isLastFullPageShown
-            itemCount={data?.length}
-            onPerPageSelect={(_e, perPage, page, startIndex, endIndex) =>
-              onPaginationChange({ endIndex, page, perPage, startIndex })
-            }
-            onSetPage={(_e, page, perPage, startIndex, endIndex) =>
-              onPaginationChange({ endIndex, page, perPage, startIndex })
-            }
-            page={pagination?.page}
-            perPage={pagination?.perPage}
-            perPageOptions={paginationDefaultValues}
-          />
+          {loaded && (
+            <Pagination
+              isLastFullPageShown
+              itemCount={data?.length}
+              onPerPageSelect={(_e, perPage, page, startIndex, endIndex) =>
+                onPaginationChange({ endIndex, page, perPage, startIndex })
+              }
+              onSetPage={(_e, page, perPage, startIndex, endIndex) =>
+                onPaginationChange({ endIndex, page, perPage, startIndex })
+              }
+              page={pagination?.page}
+              perPage={pagination?.perPage}
+              perPageOptions={paginationDefaultValues}
+            />
+          )}
         </div>
         <VirtualizedTable<IoK8sApiNetworkingV1NetworkPolicy>
           columns={activeColumns}

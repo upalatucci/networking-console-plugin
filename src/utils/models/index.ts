@@ -1,5 +1,6 @@
 export * from './network-policy';
 import { K8sModel } from '@openshift-console/dynamic-plugin-sdk';
+import { t } from '@utils/hooks/useNetworkingTranslation';
 
 export const QuickStartModel: K8sModel = {
   abbr: 'CQS',
@@ -39,4 +40,18 @@ export const MultiNetworkPolicyModel: K8sModel = {
   labelPluralKey: 'multi-networkpolicies',
   namespaced: true,
   plural: 'multi-networkpolicies',
+};
+
+export const NetworkOperatorModel: K8sModel = {
+  abbr: 'N',
+  apiGroup: 'operator.openshift.io',
+  apiVersion: 'v1',
+  id: 'Network',
+  kind: 'Network',
+  label: 'network',
+  labelKey: t('network'),
+  labelPlural: 'Networks',
+  labelPluralKey: t('networks'),
+  namespaced: false,
+  plural: 'networks',
 };
