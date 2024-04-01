@@ -4,6 +4,8 @@ import {
   K8sResourceCommon,
   K8sVerb,
 } from '@openshift-console/dynamic-plugin-sdk';
+import { ALL_NAMESPACES, CLUSTER, CORE } from '@utils/constants';
+import { getValidNamespace } from '@utils/utils/utils';
 
 /**
  *
@@ -88,3 +90,35 @@ export const getLabels = <A extends K8sResourceCommon = K8sResourceCommon>(
  */
 export const getUID = <A extends K8sResourceCommon = K8sResourceCommon>(resource: A): string =>
   resource?.metadata?.uid;
+
+type ResourceUrlProps = {
+  activeNamespace?: string;
+  model: K8sModel;
+  path?: string;
+  resource?: K8sResourceCommon;
+};
+
+/**
+ * function for getting a resource URL
+ * @param {ResourceUrlProps} urlProps - object with model, resource to get the URL from (optional) and active namespace/project name (optional)
+ * @returns {string} the URL for the resource
+ */
+export const getResourceURL = (urlProps: ResourceUrlProps): string => {
+  const { activeNamespace, model, path, resource } = urlProps;
+
+  if (!model) return null;
+  const { crd, namespaced, plural } = model;
+
+  const namespace = resource?.metadata?.namespace || getValidNamespace(activeNamespace);
+  const namespaceURL = namespace ? `ns/${namespace}` : ALL_NAMESPACES;
+  const ref = crd ? `${model.apiGroup || CORE}~${model.apiVersion}~${model.kind}` : plural || '';
+  const name = resource?.metadata?.name || '';
+
+  let url = `/k8s/${namespaced ? namespaceURL : CLUSTER}`;
+
+  if (ref) url += `/${ref}`;
+  if (name) url += `/${name}`;
+  if (path) url += `/${path}`;
+
+  return url;
+};

@@ -3,6 +3,7 @@ import classNames from 'classnames';
 
 import { Action, useAccessReview } from '@openshift-console/dynamic-plugin-sdk';
 import { DropdownItem, TooltipPosition } from '@patternfly/react-core';
+import MutedText from '@utils/components/MutedText/MutedText';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 import './action-dropdown-item.scss';
@@ -43,7 +44,7 @@ const ActionDropdownItem: FC<ActionDropdownItemProps> = ({ action, setIsOpen }) 
       {action?.icon && (
         <>
           {' '}
-          <span className="text-muted">{action.icon}</span>
+          <MutedText content={action.icon} isSpan />
         </>
       )}
     </DropdownItem>

@@ -28,7 +28,7 @@ const NetworkPolicyDetailsRowSelector: FC<NetworkPolicyDetailsRowSelectorProps> 
     <>
       {namespaceSelector ? (
         <div>
-          <MutedText text={t('NS selector')} />
+          <MutedText content={t('NS selector')} />
           {isEmpty(namespaceSelector) ? (
             <span>{t('Any namespace')}</span>
           ) : (
@@ -38,14 +38,14 @@ const NetworkPolicyDetailsRowSelector: FC<NetworkPolicyDetailsRowSelectorProps> 
       ) : (
         podSelector && (
           <div>
-            <MutedText text={t('Namespace')} />
+            <MutedText content={t('Namespace')} />
             <div>{namespace}</div>
           </div>
         )
       )}
       {podSelector && (
         <div>
-          <MutedText text={t('Pod selector')} />
+          <MutedText content={t('Pod selector')} />
           <div>
             {isEmpty(podSelector) ? (
               <span>{t('Any pod')}</span>
@@ -60,7 +60,7 @@ const NetworkPolicyDetailsRowSelector: FC<NetworkPolicyDetailsRowSelectorProps> 
       )}
       {ipBlocks && (
         <div>
-          <MutedText text={t('IP blocks')} />
+          <MutedText content={t('IP blocks')} />
           {ipBlocks.map((ipblock, idx) => (
             <NetworkPolicyDetailsRowIPBlocks ipBlock={ipblock} key={`${ipblock?.cidr}-${idx}`} />
           ))}

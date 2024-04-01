@@ -1,11 +1,12 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom-v5-compat';
 import classNames from 'classnames';
-import * as _ from 'lodash-es';
 
 import { K8sGroupVersionKind } from '@openshift-console/dynamic-plugin-sdk';
 import { Label as PfLabel, LabelGroup as PfLabelGroup } from '@patternfly/react-core';
+import MutedText from '@utils/components/MutedText/MutedText';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { isEmpty } from '@utils/utils';
 
 export type LabelProps = {
   expand: boolean;
@@ -45,16 +46,16 @@ type LabelListProps = {
 export const LabelList: FC<LabelListProps> = ({ expand = true, groupVersionKind, labels }) => {
   const { t } = useNetworkingTranslation();
 
-  const list = _.map(labels, (label, key) => (
+  const list = Object.entries(labels || []).map(([label, key]) => (
     <Label expand={expand} groupVersionKind={groupVersionKind} key={key} name={key} value={label} />
   ));
 
   return (
     <>
-      {_.isEmpty(list) ? (
-        <div className="text-muted" key="0">
+      {isEmpty(list) ? (
+        <MutedText content={t('No labels')} key="0">
           {t('No labels')}
-        </div>
+        </MutedText>
       ) : (
         <PfLabelGroup
           className="co-label-group"

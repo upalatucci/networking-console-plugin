@@ -4,6 +4,9 @@ export const ALL_NAMESPACES_KEY = '#ALL_NS#';
 export const ALL_NAMESPACES = 'all-namespaces';
 export const DEFAULT_NAMESPACE = 'default';
 
+export const CLUSTER = 'cluster';
+export const CORE = 'core';
+
 export enum FLAGS {
   AUTH_ENABLED = 'AUTH_ENABLED',
   CAN_CREATE_PROJECT = 'CAN_CREATE_PROJECT',

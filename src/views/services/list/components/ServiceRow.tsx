@@ -56,7 +56,7 @@ const ServiceRow: FC<ServiceRowType> = ({ activeColumnIDs, obj }) => {
         )}
       </TableData>
       <TableData activeColumnIDs={activeColumnIDs} className={tableColumnClasses[2]} id="labels">
-        <ServiceLocation s={obj} />
+        <ServiceLocation service={obj} />
       </TableData>
       <TableData activeColumnIDs={activeColumnIDs} id="">
         <ServiceActions isKebabToggle obj={obj} />

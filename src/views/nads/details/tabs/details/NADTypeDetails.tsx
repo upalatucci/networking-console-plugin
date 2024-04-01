@@ -13,7 +13,7 @@ const NADTypeDetails: FC<DetailsItemComponentProps<NetworkAttachmentDefinitionKi
   const { t } = useNetworkingTranslation();
   const type = getType(getConfigAsJSON(nad));
 
-  if (!type) return <MutedText text={t('Not available')} />;
+  if (!type) return <MutedText content={t('Not available')} />;
 
   return networkTypes?.[type] || type;
 };
