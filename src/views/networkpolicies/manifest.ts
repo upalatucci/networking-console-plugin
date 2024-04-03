@@ -36,20 +36,6 @@ export const NetworkPoliciesExtensions: EncodedExtension[] = [
   } as EncodedExtension<ResourceListPage>,
   {
     properties: {
-      component: {
-        $codeRef: 'NetworkPolicyPage',
-      },
-      exact: true,
-      path: [
-        `/k8s/ns/:ns/${NetworkPolicyExtensionModel.group}~${NetworkPolicyExtensionModel.version}~${NetworkPolicyExtensionModel.kind}/enable-multi`,
-        `/k8s/all-namespaces/${NetworkPolicyExtensionModel.group}~${NetworkPolicyExtensionModel.version}~${NetworkPolicyExtensionModel.kind}/enable-multi`,
-      ],
-      perspective: 'admin',
-    },
-    type: 'console.page/route',
-  } as EncodedExtension<RoutePage>,
-  {
-    properties: {
       dataAttributes: {
         'data-quickstart-id': 'qs-nav-np',
         'data-test-id': 'np-nav-item',
