@@ -4,6 +4,7 @@ import {
   ResourceListPage,
   ResourceNSNavItem,
   RoutePage,
+  YAMLTemplate,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { ConsolePluginBuildMetadata } from '@openshift-console/dynamic-plugin-sdk-webpack/lib/build-types';
 
@@ -83,6 +84,86 @@ export const NetworkPoliciesExtensions: EncodedExtension[] = [
     },
     type: 'console.page/resource/details',
   } as EncodedExtension<ResourceDetailsPage>,
+  {
+    properties: {
+      model: MultiNetworkPolicyExtensionModel,
+      name: 'default',
+      template: {
+        $codeRef: 'yamlTemplates.NetworkPolicyYAMLTemplateDefault',
+      },
+    },
+    type: 'console.yaml-template',
+  } as EncodedExtension<YAMLTemplate>,
+  {
+    properties: {
+      model: MultiNetworkPolicyExtensionModel,
+      name: 'deny-other-namespaces',
+      template: {
+        $codeRef: 'yamlTemplates.NetworkPolicyYAMLTemplateDenyNamespaces',
+      },
+    },
+    type: 'console.yaml-template',
+  } as EncodedExtension<YAMLTemplate>,
+  {
+    properties: {
+      model: MultiNetworkPolicyExtensionModel,
+      name: 'db-or-api-allow-app',
+      template: {
+        $codeRef: 'yamlTemplates.NetworkPolicyYAMLTemplateAllowApp',
+      },
+    },
+    type: 'console.yaml-template',
+  } as EncodedExtension<YAMLTemplate>,
+  {
+    properties: {
+      model: MultiNetworkPolicyExtensionModel,
+      name: 'api-allow-http-and-https',
+      template: {
+        $codeRef: 'yamlTemplates.NetworkPolicyYAMLTemplateAPIAllowHttp',
+      },
+    },
+    type: 'console.yaml-template',
+  } as EncodedExtension<YAMLTemplate>,
+  {
+    properties: {
+      model: MultiNetworkPolicyExtensionModel,
+      name: 'default-deny-all',
+      template: {
+        $codeRef: 'yamlTemplates.NetworkPolicyYAMLTemplateDenyAll',
+      },
+    },
+    type: 'console.yaml-template',
+  } as EncodedExtension<YAMLTemplate>,
+  {
+    properties: {
+      model: MultiNetworkPolicyExtensionModel,
+      name: 'web-allow-external',
+      template: {
+        $codeRef: 'yamlTemplates.NetworkPolicyYAMLTemplateWebAllow',
+      },
+    },
+    type: 'console.yaml-template',
+  } as EncodedExtension<YAMLTemplate>,
+  {
+    properties: {
+      model: MultiNetworkPolicyExtensionModel,
+      name: 'web-db-allow-all-ns',
+      template: {
+        $codeRef: 'yamlTemplates.NetworkPolicyYAMLTemplateAllowAllNS',
+      },
+    },
+    type: 'console.yaml-template',
+  } as EncodedExtension<YAMLTemplate>,
+  {
+    properties: {
+      model: MultiNetworkPolicyExtensionModel,
+      name: 'web-allow-production',
+      template: {
+        $codeRef: 'yamlTemplates.NetworkPolicyYAMLTemplateAllowProduction',
+      },
+    },
+    type: 'console.yaml-template',
+  } as EncodedExtension<YAMLTemplate>,
 ];
 
 export const NetworkPoliciesExposedModules: ConsolePluginBuildMetadata['exposedModules'] = {
