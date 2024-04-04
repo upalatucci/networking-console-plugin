@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
@@ -32,15 +32,15 @@ import { createNetAttachDef } from './utils/utils';
 const NetworkAttachmentDefinitionForm: FC = () => {
   const { t } = useNetworkingTranslation();
   const navigate = useNavigate();
+  const [apiError, setError] = useState<Error>(null);
   const [activeNamespace] = useActiveNamespace();
   const namespace = ALL_NAMESPACES_KEY === activeNamespace ? DEFAULT_NAMESPACE : activeNamespace;
 
   const {
     control,
-    formState: { errors, isSubmitting, isValid },
+    formState: { isSubmitting, isValid },
     handleSubmit,
     register,
-    setError,
     watch,
   } = useForm<NetworkAttachmentDefinitionFormInput>({
     defaultValues: {
@@ -56,7 +56,7 @@ const NetworkAttachmentDefinitionForm: FC = () => {
         navigate(resourcePathFromModel(NetworkAttachmentDefinitionModel, data?.name, namespace));
       })
       .catch((err) => {
-        setError('root', err);
+        setError(err);
       });
   };
 
@@ -84,9 +84,9 @@ const NetworkAttachmentDefinitionForm: FC = () => {
           </FormGroup>
           <NetworkAttachmentDefinitionTypeSelect control={control} />
           <NetworkTypeParameters control={control} networkType={networkType} register={register} />
-          {!isEmpty(errors?.root) && (
+          {!isEmpty(apiError) && (
             <Alert isInline title={t('Error')} variant={AlertVariant.danger}>
-              {errors?.root?.message}
+              {apiError?.message}
             </Alert>
           )}
           <ActionGroup>
