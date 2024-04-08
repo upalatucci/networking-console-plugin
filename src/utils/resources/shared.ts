@@ -47,3 +47,44 @@ export const asAccessReview = (
     verb,
   };
 };
+
+/**
+ * Get creation timestamp
+ * @param resource - resource from which to retrieve creation timestamp
+ * @returns Date - creation timestamp as a Date object
+ */
+export const getCreationTimestamp = <A extends K8sResourceCommon = K8sResourceCommon>(
+  resource: A,
+) => new Date(resource?.metadata?.creationTimestamp);
+
+/**
+ * Get annotations
+ * @param resource - resource from which to retrieve annotations
+ * @param defaultValue - value to return if there are no annotations
+ * @returns { [key: string]: string } - annotations
+ */
+export const getAnnotations = <A extends K8sResourceCommon = K8sResourceCommon>(
+  resource: A,
+  defaultValue?: {
+    [key: string]: string;
+  },
+): { [key: string]: string } => resource?.metadata?.annotations || defaultValue;
+
+/**
+ * Get labels
+ * @param resource - resource from which to retrieve labels
+ * @param defaultValue - value to return if there are no annotations
+ * @returns { [key: string]: string } - labels
+ */
+export const getLabels = <A extends K8sResourceCommon = K8sResourceCommon>(
+  resource: A,
+  defaultValue?: { [key: string]: string },
+): { [key: string]: string } => resource?.metadata?.labels || defaultValue;
+
+/**
+ * Get UID
+ * @param resource - resource from which to retrieve UID
+ * @returns string - UID
+ */
+export const getUID = <A extends K8sResourceCommon = K8sResourceCommon>(resource: A): string =>
+  resource?.metadata?.uid;

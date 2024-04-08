@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { ChangeEvent, FC } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Button, ButtonVariant, Text } from '@patternfly/react-core';
@@ -24,7 +24,7 @@ const NetworkPolicyPeerIPBlock: FC<NetworkPolicyPeerIPBlockProps> = ({
   const { t } = useNetworkingTranslation();
   const [networkFeatures, networkFeaturesLoaded] = useClusterNetworkFeatures();
 
-  const handleCIDRChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCIDRChange = (event: ChangeEvent<HTMLInputElement>) => {
     ipBlock.cidr = event.currentTarget.value;
     onChange(ipBlock);
   };

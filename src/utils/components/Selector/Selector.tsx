@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { FC } from 'react';
 import { Link } from 'react-router-dom-v5-compat';
 import * as _ from 'lodash-es';
 
@@ -8,7 +8,7 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 
 import { selectorToString } from './utilts';
 
-const Requirement: React.FC<RequirementProps> = ({ kind, namespace = '', requirements }) => {
+const Requirement: FC<RequirementProps> = ({ kind, namespace = '', requirements }) => {
   // Strip off any trailing '=' characters for valueless selectors
   const requirementAsString = selectorToString(requirements).replace(/=,/g, ',').replace(/=$/g, '');
   const requirementAsUrlEncodedString = encodeURIComponent(requirementAsString);
@@ -28,7 +28,7 @@ const Requirement: React.FC<RequirementProps> = ({ kind, namespace = '', require
 };
 Requirement.displayName = 'Requirement';
 
-export const Selector: React.FC<SelectorProps> = ({
+export const Selector: FC<SelectorProps> = ({
   kind = 'Pod',
   namespace = undefined,
   selector = {},

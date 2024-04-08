@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { FC } from 'react';
 import * as _ from 'lodash-es';
 
 import {
@@ -10,7 +10,7 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 
 import { referenceForOwnerRef } from './utils';
 
-export const OwnerReferences: React.FC<OwnerReferencesProps> = ({ resource }) => {
+export const OwnerReferences: FC<OwnerReferencesProps> = ({ resource }) => {
   const { t } = useNetworkingTranslation();
   const owners = (_.get(resource.metadata, 'ownerReferences') || []).map((o: OwnerReference) => (
     <ResourceLink

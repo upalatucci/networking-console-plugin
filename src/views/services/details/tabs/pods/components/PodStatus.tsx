@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC, ReactNode } from 'react';
 import { Link } from 'react-router-dom-v5-compat';
 
 import { PodModel } from '@kubevirt-ui/kubevirt-api/console';
@@ -15,7 +15,7 @@ import { isContainerCrashLoopBackOff, isWindowsPod, podPhase } from '../utils';
 
 type PodStatusPopoverProps = {
   bodyContent: string;
-  footerContent?: React.ReactNode | string;
+  footerContent?: ReactNode | string;
   headerContent?: string;
   status: string;
 };
@@ -24,7 +24,7 @@ export type PodStatusProps = {
   pod: IoK8sApiCoreV1Pod;
 };
 
-const PodStatusPopover: React.FC<PodStatusPopoverProps> = ({
+const PodStatusPopover: FC<PodStatusPopoverProps> = ({
   bodyContent,
   footerContent,
   headerContent,
@@ -39,7 +39,7 @@ const PodStatusPopover: React.FC<PodStatusPopoverProps> = ({
   );
 };
 
-export const PodStatus: React.FC<PodStatusProps> = ({ pod }) => {
+export const PodStatus: FC<PodStatusProps> = ({ pod }) => {
   const status = podPhase(pod);
   const unschedulableCondition = pod.status?.conditions?.find(
     (condition) => condition.reason === 'Unschedulable' && condition.status === 'False',
@@ -62,7 +62,7 @@ export const PodStatus: React.FC<PodStatusProps> = ({ pod }) => {
     (status === 'CrashLoopBackOff' || status === 'ErrImagePull' || status === 'ImagePullBackOff') &&
     containerStatusStateWaiting
   ) {
-    let footerLinks: React.ReactNode;
+    let footerLinks: ReactNode;
     let headerTitle = '';
     if (status === 'CrashLoopBackOff') {
       headerTitle = t('Pod crash loop back-off');

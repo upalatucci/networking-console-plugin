@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { FC, FormEvent } from 'react';
 
 import { Flex, Radio } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
@@ -10,9 +10,9 @@ export enum EditorType {
   YAML = 'yaml',
 }
 
-export const EditorToggle: React.FC<EditorToggleProps> = ({ onChange, value }) => {
+export const EditorToggle: FC<EditorToggleProps> = ({ onChange, value }) => {
   const { t } = useNetworkingTranslation();
-  const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
+  const handleChange = (event: FormEvent<HTMLInputElement>) => {
     onChange(event?.currentTarget?.value as EditorType);
   };
 
