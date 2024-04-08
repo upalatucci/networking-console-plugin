@@ -32,11 +32,11 @@ export const MultiNetworkPolicyModel: K8sModel = {
   apiVersion: 'v1beta1',
   id: 'multinetworkpolicy',
   kind: 'MultiNetworkPolicy',
-  label: 'multi-networkpolicy',
-  // t('multi-networkpolicy')
-  labelKey: 'multi-networkpolicy',
+  // t('MultiNetworkPolicy')
+  label: 'MultiNetworkPolicy',
+  labelKey: 'multi-networkpolicies',
+  // t('MultiNetworkPolicies')
   labelPlural: 'MultiNetworkPolicies',
-  // t('multi-networkpolicies')
   labelPluralKey: 'multi-networkpolicies',
   namespaced: true,
   plural: 'multi-networkpolicies',

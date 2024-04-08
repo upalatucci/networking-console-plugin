@@ -16,6 +16,7 @@ import {
   PageSection,
   PageSectionVariants,
   TextInput,
+  Title,
 } from '@patternfly/react-core';
 import PopoverHelpIcon from '@utils/components/PopoverHelpIcon/PopoverHelpIcon';
 import { ALL_NAMESPACES_KEY, DEFAULT_NAMESPACE } from '@utils/constants';
@@ -23,7 +24,6 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 import { isEmpty, resourcePathFromModel } from '@utils/utils';
 import { generateName } from '@utils/utils/utils';
 
-import NetworkAttachmentDefinitionFormTitle from './components/FormTitle/NetworkAttachmentDefinitionFormTitle';
 import NetworkAttachmentDefinitionTypeSelect from './components/NADTypeSelect/NetworkAttachmentDefinitionTypeSelect';
 import NetworkTypeParameters from './components/NetworkTypeParameters/NetworkTypeParameters';
 import { NetworkAttachmentDefinitionFormInput, NetworkTypeKeysType } from './utils/types';
@@ -64,7 +64,9 @@ const NetworkAttachmentDefinitionForm: FC = () => {
     <Grid span={6}>
       <PageSection variant={PageSectionVariants.light}>
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <NetworkAttachmentDefinitionFormTitle namespace={namespace} />
+          <Title headingLevel="h1">
+            {t('Create {{label}}', { label: NetworkAttachmentDefinitionModel.label })}
+          </Title>
           <FormGroup
             fieldId="name"
             isRequired

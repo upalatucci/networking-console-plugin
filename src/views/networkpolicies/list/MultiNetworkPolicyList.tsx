@@ -1,11 +1,9 @@
 import React, { FC } from 'react';
-import { useNavigate } from 'react-router-dom-v5-compat';
 
-import { modelToGroupVersionKind, modelToRef } from '@kubevirt-ui/kubevirt-api/console';
+import { modelToGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console';
 import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
   ListPageBody,
-  ListPageCreateButton,
   ListPageFilter,
   ListPageHeader,
   useK8sWatchResource,
@@ -19,6 +17,7 @@ import { paginationDefaultValues } from '@utils/hooks/usePagination/utils/consta
 import { MultiNetworkPolicyModel } from '@utils/models';
 import { isEmpty } from '@utils/utils';
 
+import NetworkPolicyCreateDropdown from './components/NetworkPolicyCreateDropdown/NetworkPolicyCreateDropdown';
 import NetworkPolicyEmptyState from './components/NetworkPolicyEmptyState';
 import NetworkPolicyRow from './components/NetworkPolicyRow';
 import useNetworkPolicyColumn from './hooks/useNetworkPolicyColumn';
@@ -31,7 +30,6 @@ type MultiNetworkPolicyListProps = {
 
 const MultiNetworkPolicyList: FC<MultiNetworkPolicyListProps> = ({ namespace }) => {
   const { t } = useNetworkingTranslation();
-  const navigate = useNavigate();
 
   const [multinetworkPolicies, loaded, loadError] = useK8sWatchResource<
     IoK8sApiNetworkingV1NetworkPolicy[]
@@ -49,20 +47,7 @@ const MultiNetworkPolicyList: FC<MultiNetworkPolicyListProps> = ({ namespace }) 
     <>
       <ListPageHeader title={t('MultiNetworkPolicies')}>
         {!isEmpty(data.length) && (
-          <ListPageCreateButton
-            className="list-page-create-button-margin"
-            createAccessReview={{
-              groupVersionKind: modelToGroupVersionKind(MultiNetworkPolicyModel),
-              namespace,
-            }}
-            onClick={() =>
-              navigate(
-                `/k8s/ns/${namespace || 'default'}/${modelToRef(MultiNetworkPolicyModel)}/~new/form`,
-              )
-            }
-          >
-            {t('Create MultiNetworkPolicy')}
-          </ListPageCreateButton>
+          <NetworkPolicyCreateDropdown model={MultiNetworkPolicyModel} namespace={namespace} />
         )}
       </ListPageHeader>
       <ListPageBody>

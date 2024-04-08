@@ -4,6 +4,7 @@ import {
   ResourceListPage,
   ResourceNSNavItem,
   RoutePage,
+  YAMLTemplate,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { ConsolePluginBuildMetadata } from '@openshift-console/dynamic-plugin-sdk-webpack/lib/build-types';
 
@@ -89,6 +90,16 @@ export const NetworkPoliciesExtensions: EncodedExtension[] = [
     },
     type: 'console.page/resource/details',
   } as EncodedExtension<ResourceDetailsPage>,
+  {
+    properties: {
+      model: NetworkPolicyExtensionModel,
+      name: 'default',
+      template: {
+        $codeRef: 'yamlTemplates.NetworkPolicyYAMLTemplates',
+      },
+    },
+    type: 'console.yaml-template',
+  } as EncodedExtension<YAMLTemplate>,
 ];
 
 export const NetworkPoliciesExposedModules: ConsolePluginBuildMetadata['exposedModules'] = {

@@ -1,29 +1,27 @@
 import React, { FC } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom-v5-compat';
+import { useLocation, useParams } from 'react-router-dom-v5-compat';
 
-import { modelToRef, NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
+import { NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
 import {
-  Button,
   EmptyState,
   EmptyStateActions,
   EmptyStateFooter,
   EmptyStateHeader,
 } from '@patternfly/react-core';
-import { useLastNamespacePath } from '@utils/hooks/useLastNamespacePath';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { MultiNetworkPolicyModel } from '@utils/models';
 import { isEmpty } from '@utils/utils';
 
+import NetworkPolicyCreateDropdown from './NetworkPolicyCreateDropdown/NetworkPolicyCreateDropdown';
+
 const NetworkPolicyEmptyState: FC = () => {
   const { t } = useNetworkingTranslation();
-  const lastNamespacePath = useLastNamespacePath();
   const location = useLocation();
+  const { ns: namespace } = useParams();
 
   const networkModel = isEmpty(location.pathname.match(MultiNetworkPolicyModel.kind))
     ? NetworkPolicyModel
     : MultiNetworkPolicyModel;
-
-  const navigate = useNavigate();
 
   return (
     <EmptyState>
@@ -33,13 +31,7 @@ const NetworkPolicyEmptyState: FC = () => {
       />
       <EmptyStateFooter>
         <EmptyStateActions>
-          <Button
-            onClick={() =>
-              navigate(`/k8s/ns/${lastNamespacePath}/${modelToRef(networkModel)}/~new/form`)
-            }
-          >
-            {t('Create {{kind}}', { kind: networkModel.kind })}
-          </Button>
+          <NetworkPolicyCreateDropdown model={MultiNetworkPolicyModel} namespace={namespace} />
         </EmptyStateActions>
       </EmptyStateFooter>
     </EmptyState>
