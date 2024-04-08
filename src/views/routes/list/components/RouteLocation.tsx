@@ -1,9 +1,8 @@
 import React, { FC } from 'react';
 
+import { RouteKind } from '@utils/types';
 import RouteLinkAndCopy from '@views/routes/list/components/RouteLinkAndCopy';
 import { getRouteLabel, isWebRoute } from '@views/routes/list/utils/utils';
-
-import { RouteKind } from '../utils/types';
 
 type RouteLocationProps = {
   route: RouteKind;

@@ -8,12 +8,6 @@ export type IngressStatusProps = {
   wildcardPolicy: string;
 };
 
-export type RouteTarget = {
-  kind: 'Service';
-  name: string;
-  weight: number;
-};
-
 export type ClusterServiceVersionCondition = {
   lastTransitionTime?: string;
   message?: string;

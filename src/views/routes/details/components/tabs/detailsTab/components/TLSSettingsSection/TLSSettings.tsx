@@ -5,8 +5,8 @@ import { EyeIcon, EyeSlashIcon } from '@patternfly/react-icons';
 import { CopyToClipboard } from '@utils/components/CopyToClipboard/CopyToClipboard';
 import { DetailsItem } from '@utils/components/DetailsItem/DetailsItem';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { RouteKind } from '@utils/types';
 import MaskedData from '@views/routes/details/components/tabs/detailsTab/components/TLSSettingsSection/MaskedData';
-import { RouteKind } from '@views/routes/list/utils/types';
 
 type TLSSettingsProps = {
   route: RouteKind;

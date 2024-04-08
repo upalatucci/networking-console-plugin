@@ -2,9 +2,9 @@ import React, { FC } from 'react';
 
 import Title from '@utils/components/Title/Title';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { RouteKind } from '@utils/types';
 import DetailsSectionLeftColumn from '@views/routes/details/components/tabs/detailsTab/components/RouteDetailsSection/DetailsSectionLeftColumn';
 import DetailsSectionRightColumn from '@views/routes/details/components/tabs/detailsTab/components/RouteDetailsSection/DetailsSectionRightColumn';
-import { RouteKind } from '@views/routes/list/utils/types';
 
 type RouteDetailsSectionProps = {
   route: RouteKind;

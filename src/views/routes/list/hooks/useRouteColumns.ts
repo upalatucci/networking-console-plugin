@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { TableColumn, useActiveColumns } from '@openshift-console/dynamic-plugin-sdk';
 import { sortable } from '@patternfly/react-table';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { RouteKind } from '@views/routes/list/utils/types';
+import { RouteKind } from '@utils/types';
 
 export const tableColumnClasses = [
   'pf-v5-u-w-25-on-xl',

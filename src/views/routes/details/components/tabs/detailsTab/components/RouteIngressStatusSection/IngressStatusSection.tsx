@@ -1,8 +1,7 @@
 import React, { FC } from 'react';
-import * as _ from 'lodash';
 
+import { RouteIngress, RouteKind } from '@utils/types';
 import IngressStatus from '@views/routes/details/components/tabs/detailsTab/components/RouteIngressStatusSection/IngressStatus';
-import { RouteIngress, RouteKind } from '@views/routes/list/utils/types';
 
 type IngressStatusSectionProps = {
   route: RouteKind;
@@ -11,8 +10,8 @@ type IngressStatusSectionProps = {
 const IngressStatusSection: FC<IngressStatusSectionProps> = ({ route }) => {
   return (
     <div className="co-m-pane__body">
-      {_.map(route?.status?.ingress, (ingress: RouteIngress) => (
-        <IngressStatus ingress={ingress} route={route} />
+      {route?.status?.ingress.map((ingress: RouteIngress) => (
+        <IngressStatus ingress={ingress} key={ingress.routerName} route={route} />
       ))}
     </div>
   );

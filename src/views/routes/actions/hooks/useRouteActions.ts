@@ -9,7 +9,7 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { asAccessReview, getName, getNamespace } from '@utils/resources/shared';
-import { RouteKind } from '@views/routes/list/utils/types';
+import { RouteKind } from '@utils/types';
 
 type UseRouteActions = (route: RouteKind) => [actions: Action[]];
 

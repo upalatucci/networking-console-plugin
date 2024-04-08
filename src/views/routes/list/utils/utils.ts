@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 
 import { t } from '@utils/hooks/useNetworkingTranslation';
-import { RouteIngress, RouteKind } from '@views/routes/list/utils/types';
+import { RouteIngress, RouteKind } from '@utils/types';
 
 export const routeStatus = (route: RouteKind): string => {
   let atLeastOneAdmitted = false;

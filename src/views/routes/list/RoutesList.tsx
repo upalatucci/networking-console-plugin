@@ -12,9 +12,9 @@ import {
   VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { RouteKind } from '@utils/types';
 import RouteRow from '@views/routes/list/components/RouteRow';
 import useRouteColumns from '@views/routes/list/hooks/useRouteColumns';
-import { RouteKind } from '@views/routes/list/utils/types';
 
 type RoutesListProps = {
   namespace: string;
@@ -42,7 +42,7 @@ const RoutesList: FC<RoutesListProps> = ({ namespace }) => {
             namespace,
           }}
           onClick={() =>
-            navigate(`/k8s/ns/${namespace || 'default'}/${modelToRef(RouteModel)}/~new`)
+            navigate(`/k8s/ns/${namespace || 'default'}/${modelToRef(RouteModel)}/~new/form`)
           }
         >
           {t('Create Route')}

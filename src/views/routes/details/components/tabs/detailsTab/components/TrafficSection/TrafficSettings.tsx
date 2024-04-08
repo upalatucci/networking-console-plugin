@@ -1,9 +1,8 @@
 import React, { FC } from 'react';
-import * as _ from 'lodash';
 
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { RouteKind } from '@utils/types';
 import RouteTargetRow from '@views/routes/details/components/tabs/detailsTab/components/TrafficSection/RouteTargetRow';
-import { RouteKind } from '@views/routes/list/utils/types';
 
 type TrafficSettingsProps = {
   route: RouteKind;
@@ -28,7 +27,7 @@ const TrafficSettings: FC<TrafficSettingsProps> = ({ route }) => {
           </thead>
           <tbody className="pf-v5-c-table__tbody">
             <RouteTargetRow route={route} target={route.spec.to} />
-            {_.map(route.spec.alternateBackends, (alternate, i) => (
+            {route.spec.alternateBackends.map((alternate, i) => (
               <RouteTargetRow key={i} route={route} target={alternate} />
             ))}
           </tbody>

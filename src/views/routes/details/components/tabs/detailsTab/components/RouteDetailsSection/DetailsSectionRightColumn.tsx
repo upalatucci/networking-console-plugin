@@ -2,12 +2,12 @@ import React, { FC } from 'react';
 
 import { DetailsItem } from '@utils/components/DetailsItem/DetailsItem';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { RouteKind } from '@utils/types';
 import CustomRouteHelp from '@views/routes/details/components/tabs/detailsTab/components/RouteDetailsSection/CustomRouteHelp';
 import { IngressStatusProps } from '@views/routes/details/utils/types';
 import { getIngressStatusForHost, showCustomRouteHelp } from '@views/routes/details/utils/utils';
 import RouteLocation from '@views/routes/list/components/RouteLocation';
 import RouteStatus from '@views/routes/list/components/RouteStatus';
-import { RouteKind } from '@views/routes/list/utils/types';
 
 type DetailsSectionRightColumnProps = {
   route: RouteKind;

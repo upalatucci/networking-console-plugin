@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
 import { ExternalLinkWithCopy } from '@utils/components/ExternalLinkWithCopy/ExternalLinkWithCopy';
-import { RouteKind } from '@views/routes/list/utils/types';
+import { RouteKind } from '@utils/types';
 import { getRouteWebURL } from '@views/routes/list/utils/utils';
 
 type RouteLinkAndCopyProps = {
