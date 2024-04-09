@@ -1,7 +1,7 @@
 import { ServiceModel } from '@kubevirt-ui/kubevirt-api/console';
 
 export const ServiceYAMLTemplates = `
-apiVersion: ${ServiceModel.apiGroup}/${ServiceModel.apiVersion}
+apiVersion: ${ServiceModel.apiVersion}
 kind: ${ServiceModel.kind}
 metadata:
   name: exampleasd
