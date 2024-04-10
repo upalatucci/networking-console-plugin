@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import { useParams } from 'react-router-dom-v5-compat';
 
 import { NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
-import { CodeEditor } from '@openshift-console/dynamic-plugin-sdk';
+import { ResourceYAMLEditor } from '@openshift-console/dynamic-plugin-sdk';
 import {
   PageSection,
   PageSectionVariants,
@@ -12,6 +12,7 @@ import {
 } from '@patternfly/react-core';
 import { EditorType } from '@utils/components/SyncedEditor/EditorToggle';
 import { SyncedEditor } from '@utils/components/SyncedEditor/SyncedEditor';
+import { safeYAMLToJS } from '@utils/components/SyncedEditor/yaml';
 import { MultiNetworkPolicyModel, networkPolicyToK8sResource } from '@utils/models';
 
 import useIsMultiNetworkPolicy from './hooks/useIsMultiNetworkPolicy';
@@ -44,7 +45,12 @@ const NetworkPolicyForm: FC = () => {
           setHelpText(type === EditorType.Form ? FORM_HELPER_TEXT : YAM_HELPER_TEXT)
         }
         YAMLEditor={({ initialYAML = '', onChange }) => (
-          <CodeEditor onChange={onChange} value={initialYAML} />
+          <ResourceYAMLEditor
+            create
+            hideHeader
+            initialResource={safeYAMLToJS(initialYAML)}
+            onChange={onChange}
+          />
         )}
       />
     </>

@@ -22,7 +22,7 @@ const NetworkPolicyFormIngress: FC<NetworkPolicyFormIngressProps> = ({
 }) => {
   const { t } = useNetworkingTranslation();
 
-  if (!networkPolicy.ingress.denyAll) return null;
+  if (networkPolicy.ingress.denyAll) return null;
 
   const updateIngressRules = (rules: NetworkPolicyRule[]) =>
     onPolicyChange({
