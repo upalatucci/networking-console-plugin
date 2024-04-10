@@ -42,12 +42,15 @@ const NetworkPolicyConditionalSelector: FC<NetworkPolicyConditionalSelectorProps
         <label>{title}</label>
       </span>
       <Text component="p">{helpText}</Text>
-      {isVisible ? (
+      {isVisible || !isEmpty(values) ? (
         <>
           <Text component="p">{secondHelpText}</Text>
           <LabelSelectorEditor
             labelSelectorPairs={!isEmpty(values) ? values : [['', '']]}
-            onLastItemRemoved={() => setVisible(false)}
+            onLastItemRemoved={() => {
+              setVisible(false);
+              handleSelectorChange([]);
+            }}
             updateParentData={handleSelectorChange}
           />
         </>

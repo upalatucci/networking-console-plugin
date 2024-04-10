@@ -14,7 +14,7 @@ export const getInitialPolicy = (ns: string): NetworkPolicy => ({
     denyAll: false,
     rules: [],
   },
-  name: '',
+  name: 'example',
   namespace: ns,
   podSelector: [['', '']],
 });

@@ -42,10 +42,8 @@ const NetworkPolicyFormSections: FC<NetworkPolicyFormSectionsProps> = ({ formDat
   const { ns: namespace } = useParams();
 
   const createModal = useModal();
-
   const normalizedK8S = networkPolicyNormalizeK8sResource(formData);
-  const converted = networkPolicyFromK8sResource(normalizedK8S);
-  const [networkPolicy, setNetworkPolicy] = useState(converted);
+  const networkPolicy = networkPolicyFromK8sResource(normalizedK8S);
 
   const [inProgress, setInProgress] = useState(false);
   const [error, setError] = useState('');
@@ -63,7 +61,6 @@ const NetworkPolicyFormSections: FC<NetworkPolicyFormSectionsProps> = ({ formDat
   }
 
   const onPolicyChange = (policy: NetworkPolicy) => {
-    setNetworkPolicy(policy);
     onChange(networkPolicyToK8sResource(policy));
   };
 

@@ -57,7 +57,7 @@ const networkPolicyTypeEgress = 'Egress';
 
 const POLICY_FOR_LABEL = 'k8s.v1.cni.cncf.io/policy-for';
 
-interface ConversionError {
+export interface ConversionError {
   error: string;
   kind: 'invalid' | 'unsupported';
 }
