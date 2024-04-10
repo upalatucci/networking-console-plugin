@@ -23,7 +23,8 @@
   },
   "dependencies": {
     "react-hook-form": "^7.51.1",
-    "react-linkify": "^1.0.0-alpha"
+    "react-linkify": "^1.0.0-alpha",
+    "react-tagsinput": "^3.20.3"
   },
   "devDependencies": {
     "@cypress/webpack-preprocessor": "^5.15.5",
