@@ -462,7 +462,7 @@ export const networkPolicyFromK8sResource = (
   }
 
   const policyFor =
-    from?.metadata?.annotations?.[POLICY_FOR_LABEL]?.split(',').map((nad) => nad.trim()) || [];
+    from?.metadata?.annotations?.[POLICY_FOR_LABEL]?.split(',').map((nad) => nad.trim()) || null;
 
   return {
     egress: egressRules,

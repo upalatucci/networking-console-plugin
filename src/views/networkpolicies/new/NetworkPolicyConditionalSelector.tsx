@@ -42,7 +42,7 @@ const NetworkPolicyConditionalSelector: FC<NetworkPolicyConditionalSelectorProps
         <label>{title}</label>
       </span>
       <Text component="p">{helpText}</Text>
-      {isVisible ? (
+      {isVisible || !isEmpty(values) ? (
         <>
           <Text component="p">{secondHelpText}</Text>
           <LabelSelectorEditor

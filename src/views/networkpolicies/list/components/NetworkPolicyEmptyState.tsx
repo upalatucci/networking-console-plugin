@@ -35,7 +35,7 @@ const NetworkPolicyEmptyState: FC = () => {
         <EmptyStateActions>
           <Button
             onClick={() =>
-              navigate(`/k8s/ns/${lastNamespacePath}/${modelToRef(networkModel)}/~new/form`)
+              navigate(`/k8s/${lastNamespacePath}/${modelToRef(networkModel)}/~new/form`)
             }
           >
             {t('Create {{kind}}', { kind: networkModel.kind })}

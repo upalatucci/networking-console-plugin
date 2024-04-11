@@ -28,7 +28,7 @@ const NetworkPolicyFormEgress: FC<NetworkPolicyFormEgressProps> = ({
   const { t } = useNetworkingTranslation();
 
   if (
-    !networkPolicy.egress.denyAll &&
+    networkPolicy.egress.denyAll &&
     networkFeaturesLoaded &&
     networkFeatures.PolicyEgress !== false
   )
