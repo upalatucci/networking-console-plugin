@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
+import NetworkAttachmentDefinitionModel from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
 import { modelToGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console/modelUtils';
 import { useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { QuickStart } from '@patternfly/quickstarts';
@@ -12,10 +13,10 @@ import {
   EmptyStateHeader,
 } from '@patternfly/react-core';
 import { RocketIcon } from '@patternfly/react-icons/dist/esm/icons/rocket-icon';
+import { DEFAULT_NAMESPACE } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { QuickStartModel } from '@utils/models';
-
-import NADCreateDropdown from '../NADCreateDropdown/NADCreateDropdown';
+import { resourcePathFromModel, SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/utils';
 
 type NADListEmptyProps = {
   namespace: string;
@@ -42,7 +43,16 @@ const NADListEmpty: FC<NADListEmptyProps> = ({ namespace }) => {
     <EmptyState>
       <EmptyStateHeader headingLevel="h4" titleText={t('No NetworkAttachmentDefinition found')} />
       <EmptyStateFooter>
-        <NADCreateDropdown namespace={namespace} />
+        <Button
+          onClick={() =>
+            navigate(
+              `${resourcePathFromModel(NetworkAttachmentDefinitionModel, null, namespace || DEFAULT_NAMESPACE)}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}`,
+            )
+          }
+        >
+          {t('Create NetworkArrachmentDefinition')}
+        </Button>
+
         {hasQuickStarts && (
           <EmptyStateActions>
             <Button

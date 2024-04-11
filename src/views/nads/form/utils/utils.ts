@@ -7,6 +7,7 @@ import {
   NetworkAttachmentDefinitionKind,
   RESOURCE_NAME_ANNOTATION,
 } from '@utils/resources/nads/types';
+import { getName } from '@utils/resources/shared';
 import { isEmpty } from '@utils/utils';
 import { networkConsole } from '@utils/utils/utils';
 
@@ -25,7 +26,7 @@ const buildConfig = (
     type: networkType,
   };
 
-  const ipam = parseIPAM(networkTypeData?.ipam);
+  const ipam = safeParser<IPAMConfig>(networkTypeData?.ipam);
   const netAttachDefName = `${namespace}/${name}`;
 
   const specificConfig: Record<NetworkTypeKeys, Partial<NetworkAttachmentDefinitionConfig>> = {
@@ -56,12 +57,12 @@ const buildConfig = (
   return { ...commonConfig, ...specificConfig[networkType] };
 };
 
-const parseIPAM = (ipamString: string | undefined): IPAMConfig => {
+const safeParser = <T extends object>(ipamString: string | undefined): T => {
   try {
     return JSON.parse(ipamString || '{}');
   } catch (e) {
     networkConsole.error('Could not parse IP address management JSON', e);
-    return {};
+    return {} as T;
   }
 };
 
@@ -79,19 +80,47 @@ const getResourceName = (
   return !isEmpty(paramsData?.resourceName) ? `openshift.io/${paramsData?.resourceName}` : null;
 };
 
-export const createNetAttachDef = (
+export const fromNADObjToFormData = (
+  nadObj: NetworkAttachmentDefinitionKind,
+): NetworkAttachmentDefinitionFormInput => {
+  const configParsed = safeParser<NetworkAttachmentDefinitionConfig>(nadObj.spec.config);
+
+  const ipam = JSON.stringify(configParsed?.ipam);
+  return {
+    description: nadObj?.metadata?.annotations?.description,
+    name: getName(nadObj),
+    networkType: configParsed.type,
+    [NetworkTypeKeys.cnvBridgeNetworkType]: {
+      bridge: configParsed?.bridge || null,
+      macspoofchk: configParsed?.macspoofchk,
+      vlanTagNum: configParsed?.vlan?.toString() || '',
+    },
+    [NetworkTypeKeys.ovnKubernetesSecondaryLocalnet]: {
+      bridgeMapping: configParsed?.name,
+      mtu: configParsed?.mtu?.toString() || '',
+      vlanID: configParsed.vlanID?.toString() || '',
+    },
+    [NetworkTypeKeys.sriovNetworkType]: {
+      ipam,
+      resourceName: nadObj?.metadata?.annotations?.[RESOURCE_NAME_ANNOTATION],
+      vlanTagNum: configParsed?.vlan?.toString() || '',
+    },
+  };
+};
+
+export const fromDataToNADObj = (
   formData: NetworkAttachmentDefinitionFormInput,
   namespace: string,
-) => {
+): NetworkAttachmentDefinitionKind => {
   const { description, name, networkType } = formData;
-  const config = JSON.stringify(buildConfig(formData, namespace));
+  const config = JSON.stringify(buildConfig(formData, namespace), null, 4);
   const resourceName = getResourceName(formData, networkType);
   const annotations: NetworkAttachmentDefinitionAnnotations = {
     ...(!isEmpty(resourceName) && { [RESOURCE_NAME_ANNOTATION]: resourceName }),
     ...(!isEmpty(description) && { description: description }),
   };
 
-  const newNetAttachDef: NetworkAttachmentDefinitionKind = {
+  return {
     apiVersion: `${NetworkAttachmentDefinitionModel.apiGroup}/${NetworkAttachmentDefinitionModel.apiVersion}`,
     kind: NetworkAttachmentDefinitionModel.kind,
     metadata: {
@@ -103,6 +132,13 @@ export const createNetAttachDef = (
       config,
     },
   };
-
-  return k8sCreate({ data: newNetAttachDef, model: NetworkAttachmentDefinitionModel });
 };
+
+export const createNetAttachDef = (
+  formData: NetworkAttachmentDefinitionFormInput,
+  namespace: string,
+) =>
+  k8sCreate({
+    data: fromDataToNADObj(formData, namespace),
+    model: NetworkAttachmentDefinitionModel,
+  });
