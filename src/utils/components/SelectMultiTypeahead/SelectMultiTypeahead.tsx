@@ -35,9 +35,9 @@ const SelectMultiTypeahead: FC<SelectMultiTypeaheadProps> = ({
   const onSelect = (value: string) => {
     if (value && value !== NO_RESULTS_VALUE) {
       setSelected(
-        selected.includes(value)
+        selected?.includes(value)
           ? selected.filter((selection) => selection !== value)
-          : [...selected, value],
+          : [...(selected || []), value],
       );
 
       setIsOpen(true);

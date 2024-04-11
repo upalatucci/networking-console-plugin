@@ -129,7 +129,7 @@ const Toggle: FC<ToggleProps> = ({
           value={inputValue}
         >
           <ChipGroup aria-label={t('Current selections')}>
-            {selected.map((selection, index) => (
+            {selected?.map((selection, index) => (
               <Chip
                 key={index}
                 onClick={(ev) => {
