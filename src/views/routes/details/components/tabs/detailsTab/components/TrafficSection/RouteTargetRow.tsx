@@ -2,9 +2,8 @@ import React, { FC } from 'react';
 
 import { ResourceLink } from '@openshift-console/dynamic-plugin-sdk';
 import { getNamespace } from '@utils/resources/shared';
-import { RouteTarget } from '@views/routes/details/utils/types';
+import { RouteKind, RouteTarget } from '@utils/types';
 import { calcTrafficPercentage } from '@views/routes/details/utils/utils';
-import { RouteKind } from '@views/routes/list/utils/types';
 
 type RouteTargetRowProps = {
   route: RouteKind;

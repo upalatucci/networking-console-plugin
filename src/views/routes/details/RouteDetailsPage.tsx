@@ -3,9 +3,9 @@ import React, { FC } from 'react';
 import { modelToGroupVersionKind, RouteModel } from '@kubevirt-ui/kubevirt-api/console';
 import { HorizontalNav, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import Loading from '@utils/components/Loading/Loading';
+import { RouteKind } from '@utils/types';
 import RouteDetailsPageTitle from '@views/routes/details/components/RouteDetailsPageTitle/RouteDetailsPageTitle';
 import useRouteTabs from '@views/routes/details/hooks/useRouteTabs';
-import { RouteKind } from '@views/routes/list/utils/types';
 
 type RouteDetailsPageProps = {
   name: string;

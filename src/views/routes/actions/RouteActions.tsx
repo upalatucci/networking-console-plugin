@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 
 import ActionsDropdown from '@utils/components/ActionsDropdown/ActionsDropdown';
+import { RouteKind } from '@utils/types';
 import useRouteActions from '@views/routes/actions/hooks/useRouteActions';
-import { RouteKind } from '@views/routes/list/utils/types';
 
 type RouteActionsProps = {
   isKebabToggle?: boolean;

@@ -24,7 +24,7 @@ import {
   getNamespace,
   getUID,
 } from '@utils/resources/shared';
-import { RouteKind } from '@views/routes/list/utils/types';
+import { RouteKind } from '@utils/types';
 
 type DetailsSectionLeftColumnProps = { route: RouteKind };
 

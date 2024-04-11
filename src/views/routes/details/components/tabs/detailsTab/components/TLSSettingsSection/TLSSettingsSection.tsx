@@ -2,8 +2,8 @@ import React, { FC } from 'react';
 
 import Title from '@utils/components/Title/Title';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { RouteKind } from '@utils/types';
 import TLSSettings from '@views/routes/details/components/tabs/detailsTab/components/TLSSettingsSection/TLSSettings';
-import { RouteKind } from '@views/routes/list/utils/types';
 
 type TLSSettingsSectionProps = {
   route: RouteKind;

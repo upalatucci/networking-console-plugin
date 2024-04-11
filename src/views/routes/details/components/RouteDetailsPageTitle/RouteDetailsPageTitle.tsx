@@ -6,8 +6,8 @@ import { Breadcrumb, BreadcrumbItem } from '@patternfly/react-core';
 import { useLastNamespacePath } from '@utils/hooks/useLastNamespacePath';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { getName } from '@utils/resources/shared';
+import { RouteKind } from '@utils/types';
 import RouteActions from '@views/routes/actions/RouteActions';
-import { RouteKind } from '@views/routes/list/utils/types';
 
 import './RouteDetailsPageTitle.scss';
 

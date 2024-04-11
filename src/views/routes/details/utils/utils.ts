@@ -1,8 +1,8 @@
 import * as _ from 'lodash';
 
 import { t } from '@utils/hooks/useNetworkingTranslation';
+import { RouteIngress, RouteKind } from '@utils/types';
 import { IngressStatusProps } from '@views/routes/details/utils/types';
-import { RouteIngress, RouteKind } from '@views/routes/list/utils/types';
 
 export const getIngressStatusForHost = (
   hostname: string,

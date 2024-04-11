@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
 import Status from '@openshift-console/dynamic-plugin-sdk/lib/app/components/status/Status';
-import { RouteKind } from '@views/routes/list/utils/types';
+import { RouteKind } from '@utils/types';
 
 import { routeStatus } from '../utils/utils';
 

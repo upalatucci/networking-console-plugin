@@ -9,11 +9,11 @@ import {
   TableData,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { getName, getNamespace } from '@utils/resources/shared';
+import { RouteKind } from '@utils/types';
 import RouteActions from '@views/routes/actions/RouteActions';
 import RouteLocation from '@views/routes/list/components/RouteLocation';
 import RouteStatus from '@views/routes/list/components/RouteStatus';
 import { tableColumnClasses } from '@views/routes/list/hooks/useRouteColumns';
-import { RouteKind } from '@views/routes/list/utils/types';
 
 type RouteRowProps = RowProps<RouteKind>;
 

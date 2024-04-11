@@ -3,6 +3,7 @@ import {
   ResourceDetailsPage,
   ResourceListPage,
   ResourceNSNavItem,
+  RoutePage,
   YAMLTemplate,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { ConsolePluginBuildMetadata } from '@openshift-console/dynamic-plugin-sdk-webpack/lib/build-types';
@@ -51,9 +52,23 @@ export const RoutesExtensions: EncodedExtension[] = [
     },
     type: 'console.page/resource/details',
   } as EncodedExtension<ResourceDetailsPage>,
+  {
+    properties: {
+      component: {
+        $codeRef: 'RouteForm',
+      },
+      exact: true,
+      path: [
+        `/k8s/ns/:ns/${RouteExtensionModel.group}~${RouteExtensionModel.version}~${RouteExtensionModel.kind}/~new/form`,
+      ],
+      perspective: 'admin',
+    },
+    type: 'console.page/route',
+  } as EncodedExtension<RoutePage>,
 ];
 
 export const RoutesExposedModules: ConsolePluginBuildMetadata['exposedModules'] = {
   RouteDetails: './views/routes/details/RouteDetailsPage.tsx',
+  RouteForm: './views/routes/form/RouteForm.tsx',
   RoutesList: './views/routes/list/RoutesList.tsx',
 };

@@ -1,5 +1,7 @@
 import { adjectives, animals, uniqueNamesGenerator } from 'unique-names-generator';
 
+import { ALL_NAMESPACES_KEY, DEFAULT_NAMESPACE } from '@utils/constants';
+
 export const networkConsole = console;
 
 export const isEmpty = (obj) =>
@@ -11,3 +13,6 @@ export const generateName = (prefix: string): string => {
     separator: '-',
   })}`;
 };
+
+export const getValidNamespace = (activeNamespace: string) =>
+  activeNamespace === ALL_NAMESPACES_KEY ? DEFAULT_NAMESPACE : activeNamespace;

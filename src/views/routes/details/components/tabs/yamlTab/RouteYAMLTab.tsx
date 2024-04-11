@@ -2,7 +2,7 @@ import React, { FC, Suspense } from 'react';
 
 import { ResourceYAMLEditor } from '@openshift-console/dynamic-plugin-sdk';
 import Loading from '@utils/components/Loading/Loading';
-import { RouteKind } from '@views/routes/list/utils/types';
+import { RouteKind } from '@utils/types';
 
 type RouteYAMLTabProps = {
   obj: RouteKind;

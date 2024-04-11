@@ -3,10 +3,10 @@ import React, { FC } from 'react';
 import { DetailsItem } from '@utils/components/DetailsItem/DetailsItem';
 import Title from '@utils/components/Title/Title';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { RouteIngress, RouteKind } from '@utils/types';
 import CustomRouteHelp from '@views/routes/details/components/tabs/detailsTab/components/RouteDetailsSection/CustomRouteHelp';
 import Conditions from '@views/routes/details/components/tabs/detailsTab/components/RouteIngressStatusSection/Conditions';
 import { showCustomRouteHelp } from '@views/routes/details/utils/utils';
-import { RouteIngress, RouteKind } from '@views/routes/list/utils/types';
 
 type IngressStatusProps = {
   ingress: RouteIngress;

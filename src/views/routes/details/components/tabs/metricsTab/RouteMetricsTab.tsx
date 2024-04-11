@@ -6,7 +6,7 @@ import Dashboard from '@utils/components/Dashboard/Dashboard';
 import { useIsAdmin } from '@utils/hooks/useIsAdmin';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { getName, getNamespace } from '@utils/resources/shared';
-import { RouteKind } from '@views/routes/list/utils/types';
+import { RouteKind } from '@utils/types';
 
 import { humanizeDecimalBytesPerSec } from '../../../../../../utils/utils/units';
 
