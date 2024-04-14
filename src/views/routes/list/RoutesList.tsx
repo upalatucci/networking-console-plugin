@@ -11,6 +11,7 @@ import {
   useListPageFilter,
   VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
+import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { RouteKind } from '@utils/types';
 import RouteRow from '@views/routes/list/components/RouteRow';
@@ -31,10 +32,18 @@ const RoutesList: FC<RoutesListProps> = ({ namespace }) => {
   });
   const [data, filteredData, onFilterChange] = useListPageFilter(routes);
   const columns = useRouteColumns();
+  const title = t('Routes');
 
   return (
-    <>
-      <ListPageHeader title={t('Routes')}>
+    <ListEmptyState<RouteKind>
+      data={routes}
+      href="https://docs.openshift.com/dedicated/networking/routes/route-configuration.html"
+      kind={RouteModel.kind}
+      link="~new"
+      loaded={loaded}
+      title={title}
+    >
+      <ListPageHeader title={title}>
         <ListPageCreateButton
           className="list-page-create-button-margin"
           createAccessReview={{
@@ -59,7 +68,7 @@ const RoutesList: FC<RoutesListProps> = ({ namespace }) => {
           unfilteredData={data}
         />
       </ListPageBody>
-    </>
+    </ListEmptyState>
   );
 };
 

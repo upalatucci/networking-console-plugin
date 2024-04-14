@@ -16,6 +16,7 @@ import {
   useListPageFilter,
   VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
+import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 import ServiceRow from './components/ServiceRow';
@@ -37,9 +38,17 @@ const ServiceList: FC<ServiceListProps> = ({ namespace }) => {
   });
   const [data, filteredData, onFilterChange] = useListPageFilter(service);
   const columns = useServiceColumn();
+  const title = t('Services');
 
   return (
-    <>
+    <ListEmptyState<IoK8sApiCoreV1Service>
+      data={data}
+      href="#"
+      kind={ServiceModel.kind}
+      link="~new/form"
+      loaded={loaded}
+      title={title}
+    >
       <ListPageHeader title={t('Services')}>
         <ListPageCreateButton
           className="list-page-create-button-margin"
@@ -65,7 +74,7 @@ const ServiceList: FC<ServiceListProps> = ({ namespace }) => {
           unfilteredData={data}
         />
       </ListPageBody>
-    </>
+    </ListEmptyState>
   );
 };
 

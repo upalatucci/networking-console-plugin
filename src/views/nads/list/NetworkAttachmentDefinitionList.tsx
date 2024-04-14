@@ -1,6 +1,8 @@
 import React, { FC } from 'react';
 
-import { NetworkAttachmentDefinitionModelGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
+import NetworkAttachmentDefinitionModel, {
+  NetworkAttachmentDefinitionModelGroupVersionKind,
+} from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
 import {
   ListPageBody,
   ListPageFilter,
@@ -9,6 +11,7 @@ import {
   useListPageFilter,
   VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
+import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
 import { isEmpty } from '@utils/utils/utils';
@@ -34,10 +37,18 @@ const NetworkAttachmentDefinitionList: FC<NetworkAttachmentDefinitionListProps> 
   });
   const [data, filteredData, onFilterChange] = useListPageFilter(nads);
   const columns = useNADsColumns();
+  const title = t('NetworkAttachmentDefinitions');
 
   return (
-    <>
-      <ListPageHeader title={t('NetworkAttachmentDefinitions')}>
+    <ListEmptyState<NetworkAttachmentDefinitionKind>
+      data={data}
+      href="https://docs.openshift.com/dedicated/virt/vm_networking/virt-connecting-vm-to-ovn-secondary-network.html#virt-connecting-vm-to-ovn-secondary-network"
+      kind={NetworkAttachmentDefinitionModel.kind}
+      link="~new/form"
+      loaded={loaded}
+      title={title}
+    >
+      <ListPageHeader title={title}>
         {!isEmpty(nads) && <NADCreateDropdown namespace={namespace} />}
       </ListPageHeader>
       <ListPageBody>
@@ -52,7 +63,7 @@ const NetworkAttachmentDefinitionList: FC<NetworkAttachmentDefinitionListProps> 
           unfilteredData={data}
         />
       </ListPageBody>
-    </>
+    </ListEmptyState>
   );
 };
 

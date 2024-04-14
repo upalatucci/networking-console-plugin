@@ -17,6 +17,7 @@ import {
   VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { Pagination } from '@patternfly/react-core';
+import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import usePagination from '@utils/hooks/usePagination/usePagination';
 import { paginationDefaultValues } from '@utils/hooks/usePagination/utils/constants';
@@ -47,9 +48,17 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
   const { onPaginationChange, pagination } = usePagination();
   const [data, filteredData, onFilterChange] = useListPageFilter(networkPolicies);
   const [columns, activeColumns] = useNetworkPolicyColumn(pagination, data);
+  const title = t('NetworkPolicies');
 
   return (
-    <>
+    <ListEmptyState<IoK8sApiNetworkingV1NetworkPolicy>
+      data={data}
+      href="https://docs.openshift.com/dedicated/networking/network_policy/creating-network-policy.html"
+      kind={NetworkPolicyModel.kind}
+      link="~new/form"
+      loaded={loaded}
+      title={title}
+    >
       <ListPageHeader title={t('NetworkPolicies')}>
         {!isEmpty(data.length) && (
           <ListPageCreateButton
@@ -72,10 +81,10 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
         <div className="list-management-group">
           <ListPageFilter
             columnLayout={{
-              columns: columns?.map(({ additional, id, title }) => ({
+              columns: columns?.map(({ additional, id, title: columnTitle }) => ({
                 additional,
                 id,
-                title,
+                title: columnTitle,
               })),
               id: NetworkPolicyModel.kind,
               selectedColumns: new Set(activeColumns?.map((col) => col?.id)),
@@ -119,7 +128,7 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
           unfilteredData={data}
         />
       </ListPageBody>
-    </>
+    </ListEmptyState>
   );
 };
 
