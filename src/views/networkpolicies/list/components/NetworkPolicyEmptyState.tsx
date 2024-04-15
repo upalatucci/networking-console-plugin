@@ -13,6 +13,7 @@ import { useLastNamespacePath } from '@utils/hooks/useLastNamespacePath';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { MultiNetworkPolicyModel } from '@utils/models';
 import { isEmpty } from '@utils/utils';
+import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/utils/paths';
 
 const NetworkPolicyEmptyState: FC = () => {
   const { t } = useNetworkingTranslation();
@@ -35,7 +36,9 @@ const NetworkPolicyEmptyState: FC = () => {
         <EmptyStateActions>
           <Button
             onClick={() =>
-              navigate(`/k8s/${lastNamespacePath}/${modelToRef(networkModel)}/~new/form`)
+              navigate(
+                `/k8s/${lastNamespacePath}/${modelToRef(networkModel)}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}`,
+              )
             }
           >
             {t('Create {{kind}}', { kind: networkModel.kind })}

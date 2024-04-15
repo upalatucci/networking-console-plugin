@@ -5,6 +5,7 @@ import { NetworkAttachmentDefinitionModelRef } from '@kubevirt-ui/kubevirt-api/c
 import { ListPageCreateDropdown } from '@openshift-console/dynamic-plugin-sdk';
 import { DEFAULT_NAMESPACE } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML } from '@utils/utils/paths';
 
 import { createItems } from './utils/constants';
 
@@ -18,7 +19,7 @@ const NADCreateDropdown: FC<NADCreateDropdownProps> = ({ namespace }) => {
 
   const onCreate = useCallback(
     (type: string) => {
-      const baseURL = `/k8s/ns/${namespace || DEFAULT_NAMESPACE}/${NetworkAttachmentDefinitionModelRef}/~new`;
+      const baseURL = `/k8s/ns/${namespace || DEFAULT_NAMESPACE}/${NetworkAttachmentDefinitionModelRef}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML}`;
 
       if (type === 'form') return navigate(`${baseURL}/form`);
 

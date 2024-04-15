@@ -18,6 +18,10 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import {
+  SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM,
+  SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML,
+} from '@utils/utils/paths';
 
 import ServiceRow from './components/ServiceRow';
 import useServiceColumn from './hooks/useServiceColumn';
@@ -42,10 +46,10 @@ const ServiceList: FC<ServiceListProps> = ({ namespace }) => {
 
   return (
     <ListEmptyState<IoK8sApiCoreV1Service>
+      createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}
       data={data}
-      href="#"
       kind={ServiceModel.kind}
-      link="~new/form"
+      learnMoreLink="#"
       loaded={loaded}
       title={title}
     >
@@ -57,7 +61,9 @@ const ServiceList: FC<ServiceListProps> = ({ namespace }) => {
             namespace,
           }}
           onClick={() =>
-            navigate(`/k8s/ns/${namespace || 'default'}/${modelToRef(ServiceModel)}/~new`)
+            navigate(
+              `/k8s/ns/${namespace || 'default'}/${modelToRef(ServiceModel)}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML}`,
+            )
           }
         >
           {t('Create Service')}

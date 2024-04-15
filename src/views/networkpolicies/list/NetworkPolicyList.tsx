@@ -22,6 +22,7 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 import usePagination from '@utils/hooks/usePagination/usePagination';
 import { paginationDefaultValues } from '@utils/hooks/usePagination/utils/constants';
 import { isEmpty } from '@utils/utils';
+import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/utils/paths';
 
 import NetworkPolicyEmptyState from './components/NetworkPolicyEmptyState';
 import NetworkPolicyRow from './components/NetworkPolicyRow';
@@ -52,10 +53,10 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
 
   return (
     <ListEmptyState<IoK8sApiNetworkingV1NetworkPolicy>
+      createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}
       data={data}
-      href="https://docs.openshift.com/dedicated/networking/network_policy/creating-network-policy.html"
       kind={NetworkPolicyModel.kind}
-      link="~new/form"
+      learnMoreLink="https://docs.openshift.com/dedicated/networking/network_policy/creating-network-policy.html"
       loaded={loaded}
       title={title}
     >
@@ -69,7 +70,7 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
             }}
             onClick={() =>
               navigate(
-                `/k8s/ns/${namespace || 'default'}/${modelToRef(NetworkPolicyModel)}/~new/form`,
+                `/k8s/ns/${namespace || 'default'}/${modelToRef(NetworkPolicyModel)}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}`,
               )
             }
           >

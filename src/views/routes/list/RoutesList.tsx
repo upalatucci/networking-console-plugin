@@ -14,6 +14,10 @@ import {
 import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { RouteKind } from '@utils/types';
+import {
+  SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM,
+  SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML,
+} from '@utils/utils/paths';
 import RouteRow from '@views/routes/list/components/RouteRow';
 import useRouteColumns from '@views/routes/list/hooks/useRouteColumns';
 
@@ -36,10 +40,10 @@ const RoutesList: FC<RoutesListProps> = ({ namespace }) => {
 
   return (
     <ListEmptyState<RouteKind>
+      createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML}
       data={routes}
-      href="https://docs.openshift.com/dedicated/networking/routes/route-configuration.html"
       kind={RouteModel.kind}
-      link="~new"
+      learnMoreLink="https://docs.openshift.com/dedicated/networking/routes/route-configuration.html"
       loaded={loaded}
       title={title}
     >
@@ -51,7 +55,9 @@ const RoutesList: FC<RoutesListProps> = ({ namespace }) => {
             namespace,
           }}
           onClick={() =>
-            navigate(`/k8s/ns/${namespace || 'default'}/${modelToRef(RouteModel)}/~new/form`)
+            navigate(
+              `/k8s/ns/${namespace || 'default'}/${modelToRef(RouteModel)}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}`,
+            )
           }
         >
           {t('Create Route')}
