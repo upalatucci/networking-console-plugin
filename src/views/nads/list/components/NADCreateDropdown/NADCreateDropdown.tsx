@@ -5,7 +5,7 @@ import { NetworkAttachmentDefinitionModelRef } from '@kubevirt-ui/kubevirt-api/c
 import { ListPageCreateDropdown } from '@openshift-console/dynamic-plugin-sdk';
 import { DEFAULT_NAMESPACE } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML } from '@utils/utils/paths';
+import { SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML } from '@utils/utils';
 
 import { createItems } from './utils/constants';
 

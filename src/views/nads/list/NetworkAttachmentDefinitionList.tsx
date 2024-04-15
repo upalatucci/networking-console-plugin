@@ -14,7 +14,7 @@ import {
 import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
-import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/utils/paths';
+import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/utils';
 import { isEmpty } from '@utils/utils/utils';
 
 import NADCreateDropdown from './components/NADCreateDropdown/NADCreateDropdown';

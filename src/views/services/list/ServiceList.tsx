@@ -21,7 +21,7 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 import {
   SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM,
   SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML,
-} from '@utils/utils/paths';
+} from '@utils/utils';
 
 import ServiceRow from './components/ServiceRow';
 import useServiceColumn from './hooks/useServiceColumn';

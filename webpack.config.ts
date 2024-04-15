@@ -116,6 +116,12 @@ const config: Configuration = {
     }),
   ],
   resolve: {
+    alias: {
+      '@console/internal': path.join(
+        __dirname,
+        './node_modules/@openshift-console/dynamic-plugin-sdk/lib',
+      ),
+    },
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
     plugins: [new TsconfigPathsPlugin()],
   },

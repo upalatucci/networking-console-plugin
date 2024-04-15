@@ -22,7 +22,7 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 import usePagination from '@utils/hooks/usePagination/usePagination';
 import { paginationDefaultValues } from '@utils/hooks/usePagination/utils/constants';
 import { isEmpty } from '@utils/utils';
-import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/utils/paths';
+import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/utils';
 
 import NetworkPolicyEmptyState from './components/NetworkPolicyEmptyState';
 import NetworkPolicyRow from './components/NetworkPolicyRow';

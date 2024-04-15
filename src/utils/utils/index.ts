@@ -84,3 +84,6 @@ export const getReference = ({
 
 export const getReferenceForModel = (model: K8sModel): K8sResourceKindReference =>
   getReference({ group: model.apiGroup, kind: model.kind, version: model.apiVersion });
+
+export const SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML = '~new';
+export const SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM = '~new/form';

@@ -13,7 +13,7 @@ import { useLastNamespacePath } from '@utils/hooks/useLastNamespacePath';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { MultiNetworkPolicyModel } from '@utils/models';
 import { isEmpty } from '@utils/utils';
-import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/utils/paths';
+import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/utils';
 
 const NetworkPolicyEmptyState: FC = () => {
   const { t } = useNetworkingTranslation();

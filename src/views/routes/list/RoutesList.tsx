@@ -17,7 +17,7 @@ import { RouteKind } from '@utils/types';
 import {
   SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM,
   SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML,
-} from '@utils/utils/paths';
+} from '@utils/utils';
 import RouteRow from '@views/routes/list/components/RouteRow';
 import useRouteColumns from '@views/routes/list/hooks/useRouteColumns';
 
