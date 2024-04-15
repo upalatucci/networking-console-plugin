@@ -1,11 +1,7 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
-import {
-  modelToGroupVersionKind,
-  modelToRef,
-  ServiceModel,
-} from '@kubevirt-ui/kubevirt-api/console';
+import { modelToGroupVersionKind, ServiceModel } from '@kubevirt-ui/kubevirt-api/console';
 import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
   ListPageBody,
@@ -16,7 +12,14 @@ import {
   useListPageFilter,
   VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
+import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
+import { DEFAULT_NAMESPACE } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import {
+  resourcePathFromModel,
+  SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM,
+  SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML,
+} from '@utils/utils';
 
 import ServiceRow from './components/ServiceRow';
 import useServiceColumn from './hooks/useServiceColumn';
@@ -37,9 +40,17 @@ const ServiceList: FC<ServiceListProps> = ({ namespace }) => {
   });
   const [data, filteredData, onFilterChange] = useListPageFilter(service);
   const columns = useServiceColumn();
+  const title = t('Services');
 
   return (
-    <>
+    <ListEmptyState<IoK8sApiCoreV1Service>
+      createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}
+      data={data}
+      kind={ServiceModel.kind}
+      learnMoreLink="#"
+      loaded={loaded}
+      title={title}
+    >
       <ListPageHeader title={t('Services')}>
         <ListPageCreateButton
           className="list-page-create-button-margin"
@@ -48,7 +59,13 @@ const ServiceList: FC<ServiceListProps> = ({ namespace }) => {
             namespace,
           }}
           onClick={() =>
-            navigate(`/k8s/ns/${namespace || 'default'}/${modelToRef(ServiceModel)}/~new`)
+            navigate(
+              `${resourcePathFromModel(
+                ServiceModel,
+                null,
+                namespace || DEFAULT_NAMESPACE,
+              )}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML}`,
+            )
           }
         >
           {t('Create Service')}
@@ -65,7 +82,7 @@ const ServiceList: FC<ServiceListProps> = ({ namespace }) => {
           unfilteredData={data}
         />
       </ListPageBody>
-    </>
+    </ListEmptyState>
   );
 };
 

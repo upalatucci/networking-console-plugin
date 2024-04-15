@@ -1,11 +1,14 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-env node */
 
+import * as path from 'path';
+
 import { Configuration as WebpackConfiguration } from 'webpack';
 import { Configuration as WebpackDevServerConfiguration } from 'webpack-dev-server';
-import * as path from 'path';
+
 import { ConsoleRemotePlugin } from '@openshift-console/dynamic-plugin-sdk-webpack';
-import { pluginMetadata, extensions } from './plugin-manifest';
+
+import { extensions, pluginMetadata } from './plugin-manifest';
 
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
@@ -15,18 +18,7 @@ interface Configuration extends WebpackConfiguration {
 }
 
 const config: Configuration = {
-  mode: 'development',
   context: path.resolve(__dirname, 'src'),
-  entry: {},
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: '[name]-bundle.js',
-    chunkFilename: '[name]-chunk.js',
-  },
-  resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.jsx'],
-    plugins: [new TsconfigPathsPlugin()],
-  },
   devServer: {
     // Allow bridge running in a container to connect to the plugin dev server.
     allowedHosts: 'all',
@@ -40,8 +32,7 @@ const config: Configuration = {
       writeToDisk: true,
     },
     headers: {
-      'Access-Control-Allow-Headers':
-        'X-Requested-With, Content-Type, Authorization',
+      'Access-Control-Allow-Headers': 'X-Requested-With, Content-Type, Authorization',
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
       'Access-Control-Allow-Origin': '*',
       'Cache-Control': 'no-store',
@@ -53,11 +44,14 @@ const config: Configuration = {
       directory: path.join(__dirname, 'dist'),
     },
   },
+  devtool: 'source-map',
+  entry: {},
+  mode: 'development',
   module: {
     rules: [
       {
-        test: /\.(jsx?|tsx?)$/,
         exclude: /node_modules\/(?!(@kubevirt-ui)\/kubevirt-api).*/,
+        test: /\.(jsx?|tsx?)$/,
         use: [
           {
             loader: 'ts-loader',
@@ -68,31 +62,68 @@ const config: Configuration = {
         ],
       },
       {
-        test: /\.s?(css)$/,
-        use: ['style-loader', 'css-loader'],
+        test: /\.s?css$/,
+        use: [
+          { loader: 'style-loader' },
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
+          {
+            loader: 'resolve-url-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sassOptions: {
+                outputStyle: 'compressed',
+              },
+              sourceMap: true,
+            },
+          },
+        ],
       },
       {
-        test: /\.(png|jpg|jpeg|gif|svg|woff2?|ttf|eot|otf)(\?.*$|$)/,
         loader: 'file-loader',
         options: {
           name: 'assets/[name].[ext]',
         },
+        test: /\.(png|jpg|jpeg|gif|svg|woff2?|ttf|eot|otf)(\?.*$|$)/,
       },
     ],
   },
+  optimization: {
+    chunkIds: 'named',
+    minimize: false,
+  },
+  output: {
+    chunkFilename: '[name]-chunk.js',
+    filename: '[name]-bundle.js',
+    path: path.resolve(__dirname, 'dist'),
+  },
   plugins: [
     new ConsoleRemotePlugin({
-      pluginMetadata,
       extensions,
+      pluginMetadata,
     }),
     new CopyWebpackPlugin({
       patterns: [{ from: path.resolve(__dirname, 'locales'), to: 'locales' }],
     }),
   ],
-  devtool: 'source-map',
-  optimization: {
-    chunkIds: 'named',
-    minimize: false,
+  resolve: {
+    alias: {
+      '@console/internal': path.join(
+        __dirname,
+        './node_modules/@openshift-console/dynamic-plugin-sdk/lib',
+      ),
+    },
+    extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    plugins: [new TsconfigPathsPlugin()],
   },
 };
 

@@ -1,11 +1,7 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
-import {
-  modelToGroupVersionKind,
-  modelToRef,
-  NetworkPolicyModel,
-} from '@kubevirt-ui/kubevirt-api/console';
+import { modelToGroupVersionKind, NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
 import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
   ListPageBody,
@@ -17,10 +13,13 @@ import {
   VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { Pagination } from '@patternfly/react-core';
+import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
+import { DEFAULT_NAMESPACE } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import usePagination from '@utils/hooks/usePagination/usePagination';
 import { paginationDefaultValues } from '@utils/hooks/usePagination/utils/constants';
-import { isEmpty } from '@utils/utils';
+import { isEmpty, resourcePathFromModel } from '@utils/utils';
+import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/utils';
 
 import NetworkPolicyEmptyState from './components/NetworkPolicyEmptyState';
 import NetworkPolicyRow from './components/NetworkPolicyRow';
@@ -47,9 +46,17 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
   const { onPaginationChange, pagination } = usePagination();
   const [data, filteredData, onFilterChange] = useListPageFilter(networkPolicies);
   const [columns, activeColumns] = useNetworkPolicyColumn(pagination, data);
+  const title = t('NetworkPolicies');
 
   return (
-    <>
+    <ListEmptyState<IoK8sApiNetworkingV1NetworkPolicy>
+      createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}
+      data={data}
+      kind={NetworkPolicyModel.kind}
+      learnMoreLink="https://docs.openshift.com/dedicated/networking/network_policy/creating-network-policy.html"
+      loaded={loaded}
+      title={title}
+    >
       <ListPageHeader title={t('NetworkPolicies')}>
         {!isEmpty(data.length) && (
           <ListPageCreateButton
@@ -60,7 +67,11 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
             }}
             onClick={() =>
               navigate(
-                `/k8s/ns/${namespace || 'default'}/${modelToRef(NetworkPolicyModel)}/~new/form`,
+                `${resourcePathFromModel(
+                  NetworkPolicyModel,
+                  null,
+                  namespace || DEFAULT_NAMESPACE,
+                )}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}`,
               )
             }
           >
@@ -72,10 +83,10 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
         <div className="list-management-group">
           <ListPageFilter
             columnLayout={{
-              columns: columns?.map(({ additional, id, title }) => ({
+              columns: columns?.map(({ additional, id, title: columnTitle }) => ({
                 additional,
                 id,
-                title,
+                title: columnTitle,
               })),
               id: NetworkPolicyModel.kind,
               selectedColumns: new Set(activeColumns?.map((col) => col?.id)),
@@ -119,7 +130,7 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
           unfilteredData={data}
         />
       </ListPageBody>
-    </>
+    </ListEmptyState>
   );
 };
 

@@ -6,6 +6,7 @@ import { Flex, FlexItem, Title } from '@patternfly/react-core';
 import { NET_ATTACH_DEF_HEADER_LABEL } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { resourcePathFromModel } from '@utils/utils';
+import { SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML } from '@utils/utils';
 
 type NetworkAttachmentDefinitionFormTitleProps = {
   namespace: string;
@@ -24,7 +25,7 @@ const NetworkAttachmentDefinitionFormTitle: FC<NetworkAttachmentDefinitionFormTi
         <Link
           id="yaml-link"
           replace
-          to={`${resourcePathFromModel(NetworkAttachmentDefinitionModel, null, namespace)}/~new`}
+          to={`${resourcePathFromModel(NetworkAttachmentDefinitionModel, null, namespace)}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML}`}
         >
           {t('Edit YAML')}
         </Link>

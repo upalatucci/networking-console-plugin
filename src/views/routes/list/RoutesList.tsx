@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
-import { modelToGroupVersionKind, modelToRef, RouteModel } from '@kubevirt-ui/kubevirt-api/console';
+import { modelToGroupVersionKind, RouteModel } from '@kubevirt-ui/kubevirt-api/console';
 import {
   ListPageBody,
   ListPageCreateButton,
@@ -11,8 +11,15 @@ import {
   useListPageFilter,
   VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
+import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
+import { DEFAULT_NAMESPACE } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { RouteKind } from '@utils/types';
+import {
+  resourcePathFromModel,
+  SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM,
+  SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML,
+} from '@utils/utils';
 import RouteRow from '@views/routes/list/components/RouteRow';
 import useRouteColumns from '@views/routes/list/hooks/useRouteColumns';
 
@@ -31,10 +38,18 @@ const RoutesList: FC<RoutesListProps> = ({ namespace }) => {
   });
   const [data, filteredData, onFilterChange] = useListPageFilter(routes);
   const columns = useRouteColumns();
+  const title = t('Routes');
 
   return (
-    <>
-      <ListPageHeader title={t('Routes')}>
+    <ListEmptyState<RouteKind>
+      createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML}
+      data={routes}
+      kind={RouteModel.kind}
+      learnMoreLink="https://docs.openshift.com/dedicated/networking/routes/route-configuration.html"
+      loaded={loaded}
+      title={title}
+    >
+      <ListPageHeader title={title}>
         <ListPageCreateButton
           className="list-page-create-button-margin"
           createAccessReview={{
@@ -42,7 +57,13 @@ const RoutesList: FC<RoutesListProps> = ({ namespace }) => {
             namespace,
           }}
           onClick={() =>
-            navigate(`/k8s/ns/${namespace || 'default'}/${modelToRef(RouteModel)}/~new/form`)
+            navigate(
+              `${resourcePathFromModel(
+                RouteModel,
+                null,
+                namespace || DEFAULT_NAMESPACE,
+              )}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}`,
+            )
           }
         >
           {t('Create Route')}
@@ -59,7 +80,7 @@ const RoutesList: FC<RoutesListProps> = ({ namespace }) => {
           unfilteredData={data}
         />
       </ListPageBody>
-    </>
+    </ListEmptyState>
   );
 };
 
