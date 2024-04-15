@@ -1,11 +1,7 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
-import {
-  modelToGroupVersionKind,
-  modelToRef,
-  NetworkPolicyModel,
-} from '@kubevirt-ui/kubevirt-api/console';
+import { modelToGroupVersionKind, NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
 import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
   ListPageBody,
@@ -18,10 +14,11 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import { Pagination } from '@patternfly/react-core';
 import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
+import { DEFAULT_NAMESPACE } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import usePagination from '@utils/hooks/usePagination/usePagination';
 import { paginationDefaultValues } from '@utils/hooks/usePagination/utils/constants';
-import { isEmpty } from '@utils/utils';
+import { isEmpty, resourcePathFromModel } from '@utils/utils';
 import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/utils';
 
 import NetworkPolicyEmptyState from './components/NetworkPolicyEmptyState';
@@ -70,7 +67,11 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
             }}
             onClick={() =>
               navigate(
-                `/k8s/ns/${namespace || 'default'}/${modelToRef(NetworkPolicyModel)}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}`,
+                `${resourcePathFromModel(
+                  NetworkPolicyModel,
+                  null,
+                  namespace || DEFAULT_NAMESPACE,
+                )}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}`,
               )
             }
           >

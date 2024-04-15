@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
-import { modelToGroupVersionKind, modelToRef, RouteModel } from '@kubevirt-ui/kubevirt-api/console';
+import { modelToGroupVersionKind, RouteModel } from '@kubevirt-ui/kubevirt-api/console';
 import {
   ListPageBody,
   ListPageCreateButton,
@@ -12,9 +12,11 @@ import {
   VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
 import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
+import { DEFAULT_NAMESPACE } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { RouteKind } from '@utils/types';
 import {
+  resourcePathFromModel,
   SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM,
   SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML,
 } from '@utils/utils';
@@ -56,7 +58,11 @@ const RoutesList: FC<RoutesListProps> = ({ namespace }) => {
           }}
           onClick={() =>
             navigate(
-              `/k8s/ns/${namespace || 'default'}/${modelToRef(RouteModel)}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}`,
+              `${resourcePathFromModel(
+                RouteModel,
+                null,
+                namespace || DEFAULT_NAMESPACE,
+              )}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}`,
             )
           }
         >

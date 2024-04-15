@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom-v5-compat';
 
-import { modelToRef, NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
+import { NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
 import {
   Button,
   EmptyState,
@@ -9,10 +9,11 @@ import {
   EmptyStateFooter,
   EmptyStateHeader,
 } from '@patternfly/react-core';
+import { DEFAULT_NAMESPACE } from '@utils/constants';
 import { useLastNamespacePath } from '@utils/hooks/useLastNamespacePath';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { MultiNetworkPolicyModel } from '@utils/models';
-import { isEmpty } from '@utils/utils';
+import { isEmpty, resourcePathFromModel } from '@utils/utils';
 import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/utils';
 
 const NetworkPolicyEmptyState: FC = () => {
@@ -37,7 +38,11 @@ const NetworkPolicyEmptyState: FC = () => {
           <Button
             onClick={() =>
               navigate(
-                `/k8s/${lastNamespacePath}/${modelToRef(networkModel)}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}`,
+                `${resourcePathFromModel(
+                  NetworkPolicyModel,
+                  null,
+                  lastNamespacePath || DEFAULT_NAMESPACE,
+                )}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}`,
               )
             }
           >

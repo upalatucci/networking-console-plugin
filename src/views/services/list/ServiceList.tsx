@@ -1,11 +1,7 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
-import {
-  modelToGroupVersionKind,
-  modelToRef,
-  ServiceModel,
-} from '@kubevirt-ui/kubevirt-api/console';
+import { modelToGroupVersionKind, ServiceModel } from '@kubevirt-ui/kubevirt-api/console';
 import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
   ListPageBody,
@@ -17,8 +13,10 @@ import {
   VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
 import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
+import { DEFAULT_NAMESPACE } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import {
+  resourcePathFromModel,
   SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM,
   SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML,
 } from '@utils/utils';
@@ -62,7 +60,11 @@ const ServiceList: FC<ServiceListProps> = ({ namespace }) => {
           }}
           onClick={() =>
             navigate(
-              `/k8s/ns/${namespace || 'default'}/${modelToRef(ServiceModel)}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML}`,
+              `${resourcePathFromModel(
+                ServiceModel,
+                null,
+                namespace || DEFAULT_NAMESPACE,
+              )}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML}`,
             )
           }
         >
