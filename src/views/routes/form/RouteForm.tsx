@@ -20,8 +20,7 @@ import {
 } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { RouteKind } from '@utils/types';
-import { resourcePathFromModel } from '@utils/utils';
-import { getValidNamespace } from '@utils/utils/utils';
+import { getValidNamespace, resourcePathFromModel } from '@utils/utils';
 
 import { HOST_FIELD_ID, NAME_FIELD_ID, PATH_FIELD_ID, SECURITY_FIELD_ID } from './constants';
 import RouteFormActions from './RouteFormActions';

@@ -20,8 +20,8 @@ import {
 import PopoverHelpIcon from '@utils/components/PopoverHelpIcon/PopoverHelpIcon';
 import { ALL_NAMESPACES_KEY, DEFAULT_NAMESPACE } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { isEmpty, resourcePathFromModel } from '@utils/utils';
-import { generateName } from '@utils/utils/utils';
+import { isEmpty } from '@utils/utils';
+import { generateName, resourcePathFromModel } from '@utils/utils';
 
 import NetworkAttachmentDefinitionFormTitle from './components/FormTitle/NetworkAttachmentDefinitionFormTitle';
 import NetworkAttachmentDefinitionTypeSelect from './components/NADTypeSelect/NetworkAttachmentDefinitionTypeSelect';
