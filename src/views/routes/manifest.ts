@@ -7,7 +7,6 @@ import {
   YAMLTemplate,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { ConsolePluginBuildMetadata } from '@openshift-console/dynamic-plugin-sdk-webpack/lib/build-types';
-import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/utils/paths';
 
 const RouteExtensionModel = {
   group: 'route.openshift.io',
@@ -60,7 +59,7 @@ export const RoutesExtensions: EncodedExtension[] = [
       },
       exact: true,
       path: [
-        `/k8s/ns/:ns/${RouteExtensionModel.group}~${RouteExtensionModel.version}~${RouteExtensionModel.kind}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}`,
+        `/k8s/ns/:ns/${RouteExtensionModel.group}~${RouteExtensionModel.version}~${RouteExtensionModel.kind}/~new/form`,
       ],
       perspective: 'admin',
     },

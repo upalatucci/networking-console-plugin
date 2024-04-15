@@ -7,7 +7,6 @@ import {
   YAMLTemplate,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { ConsolePluginBuildMetadata } from '@openshift-console/dynamic-plugin-sdk-webpack/lib/build-types';
-import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/utils/paths';
 
 import { FLAG_KUBEVIRT, FLAG_NET_ATTACH_DEF } from '../../utils/flags/consts';
 
@@ -52,7 +51,7 @@ export const NADsExtensions: EncodedExtension[] = [
         required: [FLAG_NET_ATTACH_DEF],
       },
       path: [
-        `/k8s/ns/:ns/${NetworkAttachmentDefinitionExtensionModel.group}~${NetworkAttachmentDefinitionExtensionModel.version}~${NetworkAttachmentDefinitionExtensionModel.kind}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}`,
+        `/k8s/ns/:ns/${NetworkAttachmentDefinitionExtensionModel.group}~${NetworkAttachmentDefinitionExtensionModel.version}~${NetworkAttachmentDefinitionExtensionModel.kind}/~new/form`,
       ],
       perspective: 'admin',
     },

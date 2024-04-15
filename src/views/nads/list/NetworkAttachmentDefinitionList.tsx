@@ -39,7 +39,6 @@ const NetworkAttachmentDefinitionList: FC<NetworkAttachmentDefinitionListProps> 
   const [data, filteredData, onFilterChange] = useListPageFilter(nads);
   const columns = useNADsColumns();
   const title = t('NetworkAttachmentDefinitions');
-
   return (
     <ListEmptyState<NetworkAttachmentDefinitionKind>
       createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}

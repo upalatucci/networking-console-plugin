@@ -6,7 +6,6 @@ import {
   RoutePage,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { ConsolePluginBuildMetadata } from '@openshift-console/dynamic-plugin-sdk-webpack/lib/build-types';
-import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/utils/paths';
 
 const NetworkPolicyExtensionModel = {
   group: 'networking.k8s.io',
@@ -69,8 +68,8 @@ export const NetworkPoliciesExtensions: EncodedExtension[] = [
       },
       exact: true,
       path: [
-        `/k8s/ns/:ns/${NetworkPolicyExtensionModel.group}~${NetworkPolicyExtensionModel.version}~${NetworkPolicyExtensionModel.kind}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}`,
-        `/k8s/ns/:ns/${MultiNetworkPolicyExtensionModel.group}~${MultiNetworkPolicyExtensionModel.version}~${MultiNetworkPolicyExtensionModel.kind}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}`,
+        `/k8s/ns/:ns/${NetworkPolicyExtensionModel.group}~${NetworkPolicyExtensionModel.version}~${NetworkPolicyExtensionModel.kind}/~new/form`,
+        `/k8s/ns/:ns/${MultiNetworkPolicyExtensionModel.group}~${MultiNetworkPolicyExtensionModel.version}~${MultiNetworkPolicyExtensionModel.kind}/~new/form`,
       ],
       perspective: 'admin',
     },
