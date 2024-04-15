@@ -37,7 +37,7 @@ const NADsRow: FC<NADsRowType> = ({ activeColumnIDs, obj }) => {
         <ResourceLink groupVersionKind={modelToGroupVersionKind(NamespaceModel)} name={namespace} />
       </TableData>
       <TableData activeColumnIDs={activeColumnIDs} id="type">
-        {type || <MutedText text={t('Not available')} />}
+        {type || <MutedText content={t('Not available')} />}
       </TableData>
       <TableData
         activeColumnIDs={activeColumnIDs}

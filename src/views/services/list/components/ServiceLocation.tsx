@@ -1,27 +1,29 @@
 import React, { FC } from 'react';
-import * as _ from 'lodash';
 
 import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+import HostDetails from '@utils/components/HostData/HostDetails';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 type ServiceLocationProps = {
-  s: IoK8sApiCoreV1Service;
+  service: IoK8sApiCoreV1Service;
 };
 
-const ServiceLocation: FC<ServiceLocationProps> = ({ s }) => {
+const ServiceLocation: FC<ServiceLocationProps> = ({ service }) => {
   const { t } = useNetworkingTranslation();
 
-  switch (s.spec.type) {
+  switch (service?.spec?.type) {
     case 'NodePort': {
-      const clusterIP = s.spec.clusterIP ? `${s.spec.clusterIP}:` : '';
+      const clusterIP = service?.spec?.clusterIP ? `${service?.spec?.clusterIP}:` : '';
       return (
         <>
-          {_.map(s.spec.ports, (portObj, i) => {
+          {service?.spec?.ports?.map((portObj) => {
             return (
-              <div className="co-truncate co-select-to-copy" key={i}>
+              <HostDetails
+                key={`${portObj?.name || ''}-${portObj?.port}-${portObj?.nodePort || ''}`}
+              >
                 {clusterIP}
                 {portObj.nodePort}
-              </div>
+              </HostDetails>
             );
           })}
         </>
@@ -29,16 +31,16 @@ const ServiceLocation: FC<ServiceLocationProps> = ({ s }) => {
     }
 
     case 'LoadBalancer': {
-      if (!s.status?.loadBalancer?.ingress?.length) {
+      if (!service?.status?.loadBalancer?.ingress?.length) {
         return <div className="co-truncate">{t('Pending')}</div>;
       }
       return (
         <>
-          {_.map(s.status.loadBalancer.ingress, (ingress, i) => {
+          {service.status.loadBalancer.ingress.map((ingress) => {
             return (
-              <div className="co-truncate co-select-to-copy" key={i}>
-                {ingress.hostname || ingress.ip || '-'}
-              </div>
+              <HostDetails key={`${ingress?.hostname || ''}-${ingress?.ip || ''}`}>
+                {ingress?.hostname || ingress?.ip || '-'}
+              </HostDetails>
             );
           })}
         </>
@@ -48,13 +50,15 @@ const ServiceLocation: FC<ServiceLocationProps> = ({ s }) => {
     case 'ExternalName': {
       return (
         <>
-          {_.map(s.spec.ports, (portObj, i) => {
-            const externalName = s.spec.externalName ? `${s.spec.externalName}:` : '';
+          {service?.spec?.ports?.map((portObj) => {
+            const externalName = service?.spec?.externalName
+              ? `${service?.spec?.externalName}:`
+              : '';
             return (
-              <div className="co-truncate co-select-to-copy" key={i}>
+              <HostDetails key={`${externalName}-${portObj?.port}`}>
                 {externalName}
-                {portObj.port}
-              </div>
+                {portObj?.port}
+              </HostDetails>
             );
           })}
         </>
@@ -62,18 +66,20 @@ const ServiceLocation: FC<ServiceLocationProps> = ({ s }) => {
     }
 
     default: {
-      if (s.spec.clusterIP === 'None') {
+      if (service?.spec?.clusterIP === 'None') {
         return <div className="co-truncate">{t('None')}</div>;
       }
       return (
         <>
-          {_.map(s.spec.ports, (portObj, i) => {
-            const clusterIP = s.spec.clusterIP ? `${s.spec.clusterIP}:` : '';
+          {service?.spec?.ports?.map((portObj) => {
+            const clusterIP = service?.spec?.clusterIP ? `${service?.spec?.clusterIP}:` : '';
             return (
-              <div className="co-truncate co-select-to-copy" key={i}>
+              <HostDetails
+                key={`${portObj?.name || ''}-${portObj?.port}-${portObj?.nodePort || ''}`}
+              >
                 {clusterIP}
-                {portObj.port}
-              </div>
+                {portObj?.port}
+              </HostDetails>
             );
           })}
         </>

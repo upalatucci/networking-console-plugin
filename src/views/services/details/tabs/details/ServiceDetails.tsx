@@ -131,7 +131,7 @@ const ServiceDetails: FC<DetailsProps> = ({ obj: service }) => {
               </dd>
               <dt>{t('Service address')}</dt>
               <dd className="service-ips">
-                <ServiceAddress s={service} />
+                <ServiceAddress service={service} />
               </dd>
               <DetailsItem label={t('Service port mapping')} obj={service} path="spec.ports">
                 <div className="service-ips">

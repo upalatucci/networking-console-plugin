@@ -11,7 +11,7 @@ const NetworkPolicyDetailsRowPodSelector = ({ mainPodSelector, namespace }) => {
 
   return (
     <>
-      <MutedText text={t('Pod selector')} />
+      <MutedText content={t('Pod selector')} />
       {isEmpty(mainPodSelector) ? (
         <Link to={`/search/ns/${namespace}?kind=Pod`}>{`All pods within ${namespace}`}</Link>
       ) : (
