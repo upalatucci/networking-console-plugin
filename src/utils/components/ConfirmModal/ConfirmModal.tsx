@@ -10,7 +10,7 @@ import {
 } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
-import './ConfirmModal.scss';
+import '@styles/modal-action.scss';
 
 export type ConfirmModalProps = {
   btnText: JSX.Element | string;
@@ -31,7 +31,7 @@ const ConfirmModal: FC<ConfirmModalProps> = ({
 
   return (
     <Modal
-      className="ocs-modal networking-confirm-modal"
+      className="ocs-modal networking-modal"
       footer={
         <ActionList className="tabmodal-footer">
           <ActionListItem>

@@ -7,7 +7,11 @@ import {
   useAnnotationsModal,
   useDeleteModal,
   useLabelsModal,
+  useModal,
 } from '@openshift-console/dynamic-plugin-sdk';
+import PodSelectorModal, {
+  PodSelectorModalProps,
+} from '@utils/components/PodSelectorModal/PodSelectorModal';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { asAccessReview, getName, getNamespace } from '@utils/resources/shared';
 
@@ -23,31 +27,42 @@ const useServiceActions: ServiceActionProps = (obj) => {
 
   const objNamespace = getNamespace(obj);
   const objName = getName(obj);
+  const createModal = useModal();
 
   const actions = [
     {
       accessReview: asAccessReview(ServiceModel, obj, 'update'),
+      cta: () =>
+        createModal<PodSelectorModalProps>(PodSelectorModal, {
+          model: ServiceModel,
+          resource: obj,
+        }),
+      id: 'edit-pod-selectors-services',
+      label: t('Edit Pod selector'),
+    },
+    {
+      accessReview: asAccessReview(ServiceModel, obj, 'update'),
       cta: launchLabelsModal,
-      id: 'edit-labels-network-policies',
+      id: 'edit-labels-services',
       label: t('Edit labels'),
     },
     {
       accessReview: asAccessReview(ServiceModel, obj, 'update'),
       cta: launchAnnotationsModal,
-      id: 'edit-annotations-network-policies',
+      id: 'edit-annotations-services',
       label: t('Edit annotations'),
     },
     {
       accessReview: asAccessReview(ServiceModel, obj, 'update'),
       cta: () =>
         history.push(`/k8s/ns/${objNamespace}/${modelToRef(ServiceModel)}/${objName}/yaml`),
-      id: 'edit-network-policies',
+      id: 'edit-services',
       label: t('Edit Service'),
     },
     {
       accessReview: asAccessReview(ServiceModel, obj, 'delete'),
       cta: launchDeleteModal,
-      id: 'delete-network-policy',
+      id: 'delete-services',
       label: t('Delete Service'),
     },
   ];
