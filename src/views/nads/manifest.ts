@@ -44,7 +44,7 @@ export const NADsExtensions: EncodedExtension[] = [
   {
     properties: {
       component: {
-        $codeRef: 'NetworkAttachmentDefinitionsForm',
+        $codeRef: 'NetworkAttachmentDefinitionFormPage',
       },
       exact: true,
       flags: {
@@ -82,7 +82,7 @@ export const NADsExtensions: EncodedExtension[] = [
 ];
 
 export const NADsExposedModules: ConsolePluginBuildMetadata['exposedModules'] = {
+  NetworkAttachmentDefinitionFormPage: './views/nads/form/NetworkAttachmentDefinitionFormPage.tsx',
   NetworkAttachmentDefinitionList: './views/nads/list/NetworkAttachmentDefinitionList.tsx',
-  NetworkAttachmentDefinitionsForm: './views/nads/form/NetworkAttachmentDefinitionForm.tsx',
   NetworkAttachmentDefintionTypeDetails: './views/nads/details/tabs/details/NADTypeDetails.tsx',
 };

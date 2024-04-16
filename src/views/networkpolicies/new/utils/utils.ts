@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { t } from '@utils/hooks/useNetworkingTranslation';
 import { NetworkPolicy, NetworkPolicyPeer, NetworkPolicyRule } from '@utils/models';
+import { generateName } from '@utils/utils/utils';
 
 import { NetworkPolicyEgressIngress, NetworkPolicyPeerType } from './types';
 
@@ -14,7 +15,7 @@ export const getInitialPolicy = (ns: string): NetworkPolicy => ({
     denyAll: false,
     rules: [],
   },
-  name: '',
+  name: generateName('policy'),
   namespace: ns,
   podSelector: [['', '']],
 });

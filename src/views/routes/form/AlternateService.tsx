@@ -97,7 +97,9 @@ const AlternateService: FC<AlternateServiceProps> = ({ field, filteredServices, 
               max={255}
               min={0}
               type="number"
-              {...register(`spec.alternateBackends.${index}.weight` as const)}
+              {...register(`spec.alternateBackends.${index}.weight` as const, {
+                setValueAs: parseInt,
+              })}
             />
             <FormHelperText>
               <HelperText>

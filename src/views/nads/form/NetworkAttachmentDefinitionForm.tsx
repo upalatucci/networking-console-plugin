@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
@@ -20,16 +20,23 @@ import {
 import PopoverHelpIcon from '@utils/components/PopoverHelpIcon/PopoverHelpIcon';
 import { ALL_NAMESPACES_KEY, DEFAULT_NAMESPACE } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
 import { isEmpty, resourcePathFromModel } from '@utils/utils';
-import { generateName } from '@utils/utils/utils';
 
-import NetworkAttachmentDefinitionFormTitle from './components/FormTitle/NetworkAttachmentDefinitionFormTitle';
 import NetworkAttachmentDefinitionTypeSelect from './components/NADTypeSelect/NetworkAttachmentDefinitionTypeSelect';
 import NetworkTypeParameters from './components/NetworkTypeParameters/NetworkTypeParameters';
 import { NetworkAttachmentDefinitionFormInput, NetworkTypeKeysType } from './utils/types';
-import { createNetAttachDef } from './utils/utils';
+import { createNetAttachDef, fromDataToNADObj, fromNADObjToFormData } from './utils/utils';
 
-const NetworkAttachmentDefinitionForm: FC = () => {
+type NetworkAttachmentDefinitionFormProps = {
+  formData: NetworkAttachmentDefinitionKind;
+  onChange: (newFormData: NetworkAttachmentDefinitionKind) => void;
+};
+
+const NetworkAttachmentDefinitionForm: FC<NetworkAttachmentDefinitionFormProps> = ({
+  formData,
+  onChange,
+}) => {
   const { t } = useNetworkingTranslation();
   const navigate = useNavigate();
   const [apiError, setError] = useState<Error>(null);
@@ -43,10 +50,14 @@ const NetworkAttachmentDefinitionForm: FC = () => {
     register,
     watch,
   } = useForm<NetworkAttachmentDefinitionFormInput>({
-    defaultValues: {
-      name: generateName('network'),
-    },
+    defaultValues: fromNADObjToFormData(formData),
   });
+
+  const formInput = watch();
+
+  useEffect(() => {
+    onChange(fromDataToNADObj(formInput, namespace));
+  }, [onChange, formInput, namespace]);
 
   const networkType = watch('networkType') as NetworkTypeKeysType;
 
@@ -64,7 +75,6 @@ const NetworkAttachmentDefinitionForm: FC = () => {
     <Grid span={6}>
       <PageSection variant={PageSectionVariants.light}>
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <NetworkAttachmentDefinitionFormTitle namespace={namespace} />
           <FormGroup
             fieldId="name"
             isRequired

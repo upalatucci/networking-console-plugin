@@ -2,11 +2,12 @@ import React, { FC } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
-import { Button } from '@patternfly/react-core';
+import { Button, ButtonVariant } from '@patternfly/react-core';
 import { PlusCircleIcon } from '@patternfly/react-icons';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { getName } from '@utils/resources/shared';
 import { RouteKind } from '@utils/types';
+import { isEmpty } from '@utils/utils';
 
 import AlternateService from './AlternateService';
 
@@ -37,13 +38,13 @@ const AlternateServicesSection: FC<AlternateServicesSectionProps> = ({ services 
         />
       ))}
 
-      {filteredServices?.length !== 0 && (
+      {!isEmpty(filteredServices) && (
         <Button
           className="pf-m-link--align-left co-create-route__add-service-btn"
           isInline
           onClick={() => append({ kind: 'Service', name: '', weight: 100 })}
           type="button"
-          variant="link"
+          variant={ButtonVariant.link}
         >
           <PlusCircleIcon className="co-icon-space-r" />
           {t('Add alternate Service')}

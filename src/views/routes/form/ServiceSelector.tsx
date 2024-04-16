@@ -41,8 +41,6 @@ const ServiceSelector: FC<ServiceSelectorProps> = ({ namespace }) => {
     (service) => getName(service) === selectedServiceName,
   );
 
-  if (!loaded) return <Loading />;
-
   if (error) return <Alert title={t('Error')}></Alert>;
 
   return (
@@ -66,18 +64,20 @@ const ServiceSelector: FC<ServiceSelectorProps> = ({ namespace }) => {
               }
             >
               <>
-                {(services || []).map((service) => (
-                  <DropdownItem
-                    key={getName(service)}
-                    onClick={() => {
-                      onChange(getName(service));
-                      setValue('spec.port.targetPort', '');
-                    }}
-                    value={getName(service)}
-                  >
-                    <ResourceIcon groupVersionKind={ServiceGroupVersionKind} /> {getName(service)}
-                  </DropdownItem>
-                ))}
+                {!loaded && <Loading />}
+                {loaded &&
+                  (services || []).map((service) => (
+                    <DropdownItem
+                      key={getName(service)}
+                      onClick={() => {
+                        onChange(getName(service));
+                        setValue('spec.port.targetPort', '');
+                      }}
+                      value={getName(service)}
+                    >
+                      <ResourceIcon groupVersionKind={ServiceGroupVersionKind} /> {getName(service)}
+                    </DropdownItem>
+                  ))}
               </>
             </Select>
 

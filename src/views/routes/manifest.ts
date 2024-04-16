@@ -55,7 +55,7 @@ export const RoutesExtensions: EncodedExtension[] = [
   {
     properties: {
       component: {
-        $codeRef: 'RouteForm',
+        $codeRef: 'RouteFormPage',
       },
       exact: true,
       path: [
@@ -69,6 +69,6 @@ export const RoutesExtensions: EncodedExtension[] = [
 
 export const RoutesExposedModules: ConsolePluginBuildMetadata['exposedModules'] = {
   RouteDetails: './views/routes/details/RouteDetailsPage.tsx',
-  RouteForm: './views/routes/form/RouteForm.tsx',
+  RouteFormPage: './views/routes/form/RouteFormPage.tsx',
   RoutesList: './views/routes/list/RoutesList.tsx',
 };

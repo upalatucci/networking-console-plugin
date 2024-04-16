@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
@@ -13,10 +13,7 @@ import {
   HelperTextItem,
   PageSection,
   PageSectionVariants,
-  Text,
   TextInput,
-  TextVariants,
-  Title,
 } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { RouteKind } from '@utils/types';
@@ -27,9 +24,13 @@ import { HOST_FIELD_ID, NAME_FIELD_ID, PATH_FIELD_ID, SECURITY_FIELD_ID } from '
 import RouteFormActions from './RouteFormActions';
 import ServiceSelector from './ServiceSelector';
 import TLSTermination from './TLSTermination';
-import { generateDefaultRoute } from './utils';
 
-const RouteForm: FC = () => {
+type RouteFormProps = {
+  formData: RouteKind;
+  onChange: (newFormData: RouteKind) => void;
+};
+
+const RouteForm: FC<RouteFormProps> = ({ formData, onChange: onFormChange }) => {
   const { t } = useNetworkingTranslation();
   const navigate = useNavigate();
   const [apiError, setError] = useState<Error>(null);
@@ -37,10 +38,16 @@ const RouteForm: FC = () => {
   const namespace = getValidNamespace(activeNamespace);
 
   const methods = useForm<RouteKind>({
-    defaultValues: generateDefaultRoute(namespace),
+    defaultValues: formData,
   });
 
   const { control, handleSubmit, register, watch } = methods;
+
+  const route = watch();
+
+  useEffect(() => {
+    onFormChange(route);
+  }, [onFormChange, route]);
 
   const tls = watch('spec.tls');
 
@@ -58,11 +65,6 @@ const RouteForm: FC = () => {
 
   return (
     <PageSection variant={PageSectionVariants.light}>
-      <Title headingLevel="h2">{t('Create {{label}}', { label: RouteModel.label })}</Title>
-      <Text component={TextVariants.p}>
-        {t('Routing is a way to make your application publicly visible')}
-      </Text>
-
       <FormProvider {...methods}>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <FormGroup fieldId={NAME_FIELD_ID} isRequired label={t('Name')}>
