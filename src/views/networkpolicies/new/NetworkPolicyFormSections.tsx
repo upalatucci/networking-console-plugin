@@ -16,7 +16,7 @@ import {
   networkPolicyNormalizeK8sResource,
   networkPolicyToK8sResource,
 } from '@utils/models/index';
-import { resourcePathFromModel } from '@utils/utils';
+import { resourcePathFromModel } from '@utils/resources/shared';
 
 import NetworkPolicyFormActionButtons from './components/NetworkPolicyFormActionButtons';
 import NetworkPolicyFormAlert from './components/NetworkPolicyFormAlert';

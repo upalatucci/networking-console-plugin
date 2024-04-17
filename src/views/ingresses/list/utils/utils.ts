@@ -2,7 +2,7 @@ import {
   IoK8sApiNetworkingV1Ingress,
   IoK8sApiNetworkingV1IngressRule,
 } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
-import { get, isString } from '@utils/utils/utils';
+import { get, isString } from '@utils/utils';
 
 export const ingressValidHosts = (ingress: IoK8sApiNetworkingV1Ingress) =>
   get(ingress, 'spec.rules', [])

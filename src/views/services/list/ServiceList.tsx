@@ -14,12 +14,12 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
 import { DEFAULT_NAMESPACE } from '@utils/constants';
-import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import {
-  resourcePathFromModel,
   SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM,
   SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML,
-} from '@utils/utils';
+} from '@utils/constants/ui';
+import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { resourcePathFromModel } from '@utils/resources/shared';
 
 import ServiceRow from './components/ServiceRow';
 import useServiceColumn from './hooks/useServiceColumn';

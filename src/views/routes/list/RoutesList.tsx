@@ -13,13 +13,13 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
 import { DEFAULT_NAMESPACE } from '@utils/constants';
-import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { RouteKind } from '@utils/types';
 import {
-  resourcePathFromModel,
   SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM,
   SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML,
-} from '@utils/utils';
+} from '@utils/constants/ui';
+import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { resourcePathFromModel } from '@utils/resources/shared';
+import { RouteKind } from '@utils/types';
 import RouteRow from '@views/routes/list/components/RouteRow';
 import useRouteColumns from '@views/routes/list/hooks/useRouteColumns';
 

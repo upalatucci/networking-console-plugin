@@ -1,6 +1,6 @@
 import { RouteModel } from '@kubevirt-ui/kubevirt-api/console';
 import { RouteKind } from '@utils/types';
-import { generateName } from '@utils/utils/utils';
+import { generateName } from '@utils/utils';
 
 export const generateDefaultRoute = (namespace: string): RouteKind => ({
   apiVersion: `${RouteModel.apiGroup}/${RouteModel.apiVersion}`,

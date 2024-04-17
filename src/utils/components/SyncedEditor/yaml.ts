@@ -1,6 +1,6 @@
 import { dump, load } from 'js-yaml';
 
-import { networkConsole } from '@utils/utils/utils';
+import { networkConsole } from '@utils/utils';
 
 // Safely parse js obj to yaml. Returns fallback (emtpy string by default) on exception.
 export const safeJSToYAML = (js: any, fallback = '', options: any = {}): string => {

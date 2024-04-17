@@ -15,11 +15,12 @@ import {
 import { Pagination } from '@patternfly/react-core';
 import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
 import { DEFAULT_NAMESPACE } from '@utils/constants';
+import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/constants/ui';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import usePagination from '@utils/hooks/usePagination/usePagination';
 import { paginationDefaultValues } from '@utils/hooks/usePagination/utils/constants';
-import { isEmpty, resourcePathFromModel } from '@utils/utils';
-import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/utils';
+import { resourcePathFromModel } from '@utils/resources/shared';
+import { isEmpty } from '@utils/utils';
 
 import NetworkPolicyEmptyState from './components/NetworkPolicyEmptyState';
 import NetworkPolicyRow from './components/NetworkPolicyRow';

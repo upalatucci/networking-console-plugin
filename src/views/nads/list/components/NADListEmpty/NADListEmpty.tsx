@@ -14,9 +14,10 @@ import {
 } from '@patternfly/react-core';
 import { RocketIcon } from '@patternfly/react-icons/dist/esm/icons/rocket-icon';
 import { DEFAULT_NAMESPACE } from '@utils/constants';
+import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/constants/ui';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { QuickStartModel } from '@utils/models';
-import { resourcePathFromModel, SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/utils';
+import { resourcePathFromModel } from '@utils/resources/shared';
 
 type NADListEmptyProps = {
   namespace: string;

@@ -14,10 +14,10 @@ import {
   VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
 import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
+import { SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML } from '@utils/constants/ui';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { getResourceURL } from '@utils/resources/shared';
-import { SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML } from '@utils/utils';
-import { getValidNamespace } from '@utils/utils/utils';
+import { getValidNamespace } from '@utils/utils';
 import useIngressColumns from '@views/ingresses/list/hooks/useIngressColumns';
 
 import IngressTableRow from './components/IngressTableRow';

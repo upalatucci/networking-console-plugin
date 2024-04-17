@@ -1,7 +1,8 @@
 import { K8sModel, K8sResourceCommon, Selector } from '@openshift-console/dynamic-plugin-sdk';
 import { t } from '@utils/hooks/useNetworkingTranslation';
 import { selectorToK8s } from '@utils/models';
-import { isEmpty, resourcePathFromModel } from '@utils/utils';
+import { resourcePathFromModel } from '@utils/resources/shared';
+import { isEmpty } from '@utils/utils';
 
 import {
   allowedSelector,

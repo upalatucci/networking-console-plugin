@@ -21,7 +21,8 @@ import PopoverHelpIcon from '@utils/components/PopoverHelpIcon/PopoverHelpIcon';
 import { ALL_NAMESPACES_KEY, DEFAULT_NAMESPACE } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
-import { isEmpty, resourcePathFromModel } from '@utils/utils';
+import { resourcePathFromModel } from '@utils/resources/shared';
+import { isEmpty } from '@utils/utils';
 
 import NetworkAttachmentDefinitionTypeSelect from './components/NADTypeSelect/NetworkAttachmentDefinitionTypeSelect';
 import NetworkTypeParameters from './components/NetworkTypeParameters/NetworkTypeParameters';

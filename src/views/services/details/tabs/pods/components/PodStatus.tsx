@@ -9,7 +9,7 @@ import {
 import Status from '@openshift-console/dynamic-plugin-sdk/lib/app/components/status/Status';
 import { Button, Divider, Popover, Text, TextContent, TextVariants } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { resourcePathFromModel } from '@utils/utils';
+import { resourcePathFromModel } from '@utils/resources/shared';
 
 import { isContainerCrashLoopBackOff, isWindowsPod, podPhase } from '../utils';
 
