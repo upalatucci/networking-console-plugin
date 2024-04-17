@@ -13,15 +13,16 @@ import {
   useListPageFilter,
   VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
+import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { getResourceURL } from '@utils/resources/shared';
+import { SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML } from '@utils/utils';
 import { getValidNamespace } from '@utils/utils/utils';
 import useIngressColumns from '@views/ingresses/list/hooks/useIngressColumns';
 
 import IngressTableRow from './components/IngressTableRow';
 
 type IngressesListProps = {
-  kind: string;
   namespace: string;
 };
 
@@ -38,10 +39,18 @@ const IngressesList: FC<IngressesListProps> = ({ namespace }) => {
   });
   const [data, filteredData, onFilterChange] = useListPageFilter(ingress);
   const columns = useIngressColumns();
+  const title = t('Ingresses');
 
   return (
-    <>
-      <ListPageHeader title={t('Ingresses')}>
+    <ListEmptyState<IoK8sApiNetworkingV1Ingress>
+      createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML}
+      data={data}
+      kind={IngressModel.kind}
+      learnMoreLink="https://docs.openshift.com/container-platform/4.15/networking/configuring_ingress_cluster_traffic/configuring-ingress-cluster-traffic-ingress-controller.html"
+      loaded={loaded}
+      title={title}
+    >
+      <ListPageHeader title={title}>
         <ListPageCreateButton
           className="list-page-create-button-margin"
           createAccessReview={{
@@ -53,7 +62,7 @@ const IngressesList: FC<IngressesListProps> = ({ namespace }) => {
               getResourceURL({
                 activeNamespace: validNamespace,
                 model: IngressModel,
-                path: '~new',
+                path: SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML,
               }),
             )
           }
@@ -72,7 +81,7 @@ const IngressesList: FC<IngressesListProps> = ({ namespace }) => {
           unfilteredData={data}
         />
       </ListPageBody>
-    </>
+    </ListEmptyState>
   );
 };
 
