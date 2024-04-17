@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { t } from '@utils/hooks/useNetworkingTranslation';
 import { NetworkPolicy, NetworkPolicyPeer, NetworkPolicyRule } from '@utils/models';
-import { generateName } from '@utils/utils/utils';
+import { generateName } from '@utils/utils';
 
 import { NetworkPolicyEgressIngress, NetworkPolicyPeerType } from './types';
 

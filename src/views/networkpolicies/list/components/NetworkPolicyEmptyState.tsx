@@ -10,11 +10,12 @@ import {
   EmptyStateHeader,
 } from '@patternfly/react-core';
 import { DEFAULT_NAMESPACE } from '@utils/constants';
+import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/constants/ui';
 import { useLastNamespacePath } from '@utils/hooks/useLastNamespacePath';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { MultiNetworkPolicyModel } from '@utils/models';
-import { isEmpty, resourcePathFromModel } from '@utils/utils';
-import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/utils';
+import { resourcePathFromModel } from '@utils/resources/shared';
+import { isEmpty } from '@utils/utils';
 
 const NetworkPolicyEmptyState: FC = () => {
   const { t } = useNetworkingTranslation();

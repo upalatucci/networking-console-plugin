@@ -13,7 +13,7 @@ import { EditorType } from '@utils/components/SyncedEditor/EditorToggle';
 import { SyncedEditor } from '@utils/components/SyncedEditor/SyncedEditor';
 import { safeYAMLToJS } from '@utils/components/SyncedEditor/yaml';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { getValidNamespace } from '@utils/utils/utils';
+import { getValidNamespace } from '@utils/utils';
 import { LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY } from '@views/networkpolicies/new/utils/const';
 
 import RouteForm from './RouteForm';

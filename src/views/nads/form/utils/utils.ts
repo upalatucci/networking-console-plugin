@@ -9,7 +9,7 @@ import {
 } from '@utils/resources/nads/types';
 import { getName } from '@utils/resources/shared';
 import { isEmpty } from '@utils/utils';
-import { networkConsole } from '@utils/utils/utils';
+import { networkConsole } from '@utils/utils';
 
 import { NetworkAttachmentDefinitionFormInput, NetworkTypeKeys } from './types';
 

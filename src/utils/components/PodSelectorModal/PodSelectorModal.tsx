@@ -19,12 +19,12 @@ import {
 } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { isEmpty } from '@utils/utils';
+import { get } from '@utils/utils/helpers';
 
 import SelectorInput from './SelectorInput';
 import { arrayify, objectify } from './selectorUtils';
 
 import '@styles/modal-action.scss';
-import { get } from '@utils/utils/utils';
 
 export type PodSelectorModalProps = {
   closeModal?: () => void;
