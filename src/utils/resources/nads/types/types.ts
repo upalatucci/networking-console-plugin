@@ -20,6 +20,7 @@ export type NetworkAttachmentDefinitionPlugin = {
 export type NetworkAttachmentDefinitionConfig = {
   bridge?: string;
   cniVersion: string;
+  excludeSubnets?: string;
   ipam?: IPAMConfig;
   isGateway?: true;
   macspoofchk?: boolean;
@@ -28,6 +29,7 @@ export type NetworkAttachmentDefinitionConfig = {
   netAttachDefName?: string;
   plugins?: NetworkAttachmentDefinitionPlugin[];
   preserveDefaultVlan?: boolean;
+  subnets?: string;
   topology?: string;
   type?: string;
   vlan?: number;

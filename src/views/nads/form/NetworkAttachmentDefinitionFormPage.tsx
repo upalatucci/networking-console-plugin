@@ -8,7 +8,7 @@ import { safeYAMLToJS } from '@utils/components/SyncedEditor/yaml';
 import { NET_ATTACH_DEF_HEADER_LABEL } from '@utils/constants';
 import { LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY } from '@views/networkpolicies/new/utils/const';
 
-import { defaultNAD } from './utils/constants';
+import { generateDefaultNAD } from './utils/constants';
 import NetworkAttachmentDefinitionForm from './NetworkAttachmentDefinitionForm';
 
 const NetworkAttachmentDefinitionFormPage: FC = () => (
@@ -19,7 +19,7 @@ const NetworkAttachmentDefinitionFormPage: FC = () => (
     <SyncedEditor
       displayConversionError
       FormEditor={NetworkAttachmentDefinitionForm}
-      initialData={defaultNAD}
+      initialData={generateDefaultNAD()}
       initialType={EditorType.Form}
       lastViewUserSettingKey={LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY}
       YAMLEditor={({ initialYAML = '', onChange }) => (

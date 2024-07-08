@@ -1,26 +1,20 @@
 import React, { FC } from 'react';
+import { useFormContext } from 'react-hook-form';
 
 import { isEmpty } from '@utils/utils';
 
-import { NetworkTypeKeysType } from '../../utils/types';
+import { NetworkAttachmentDefinitionFormInput, NetworkTypeKeysType } from '../../utils/types';
 
 import { networkTypeComponentMapper } from './utils/constants';
-import { ParametersComponentProps } from './utils/types';
 
-type NetworkTypeParametersProps = {
-  networkType: NetworkTypeKeysType;
-} & ParametersComponentProps;
-
-const NetworkTypeParameters: FC<NetworkTypeParametersProps> = ({
-  control,
-  networkType,
-  register,
-}) => {
+const NetworkTypeParameters: FC = () => {
+  const { watch } = useFormContext<NetworkAttachmentDefinitionFormInput>();
+  const networkType = watch('networkType') as NetworkTypeKeysType;
   const ParametersComponent = networkTypeComponentMapper?.[networkType];
 
   if (isEmpty(networkType) || isEmpty(ParametersComponent)) return null;
 
-  return <ParametersComponent control={control} register={register} />;
+  return <ParametersComponent />;
 };
 
 export default NetworkTypeParameters;

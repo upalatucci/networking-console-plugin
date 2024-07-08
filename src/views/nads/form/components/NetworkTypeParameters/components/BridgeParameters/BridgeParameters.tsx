@@ -1,15 +1,18 @@
 import React, { FC } from 'react';
-import { Controller } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 
 import { Checkbox, FormGroup, TextInput } from '@patternfly/react-core';
 import PopoverHelpIcon from '@utils/components/PopoverHelpIcon/PopoverHelpIcon';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { NetworkTypeKeys } from '@views/nads/form/utils/types';
+import {
+  NetworkAttachmentDefinitionFormInput,
+  NetworkTypeKeys,
+} from '@views/nads/form/utils/types';
 
-import { ParametersComponentProps } from '../../utils/types';
-
-const BridgeParameters: FC<ParametersComponentProps> = ({ control, register }) => {
+const BridgeParameters: FC = () => {
   const { t } = useNetworkingTranslation();
+
+  const { control, register } = useFormContext<NetworkAttachmentDefinitionFormInput>();
   return (
     <>
       <FormGroup isRequired label={t('Bridge name')}>

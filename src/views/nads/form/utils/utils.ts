@@ -28,6 +28,7 @@ const buildConfig = (
 
   const ipam = safeParser<IPAMConfig>(networkTypeData?.ipam);
   const netAttachDefName = `${namespace}/${name}`;
+  const subnets = networkTypeData?.subnets ?? undefined;
 
   const specificConfig: Record<NetworkTypeKeys, Partial<NetworkAttachmentDefinitionConfig>> = {
     [NetworkTypeKeys.cnvBridgeNetworkType]: {
@@ -39,13 +40,16 @@ const buildConfig = (
     },
     [NetworkTypeKeys.ovnKubernetesNetworkType]: {
       netAttachDefName,
+      subnets,
       topology: ovnK8sTopologyKeys.ovnK8sLayer,
     },
     [NetworkTypeKeys.ovnKubernetesSecondaryLocalnet]: {
       cniVersion: '0.4.0',
+      excludeSubnets: networkTypeData?.excludeSubnets ?? undefined,
       mtu: parseInt(networkTypeData?.mtu, 10) || undefined,
       name: networkTypeData?.bridgeMapping,
       netAttachDefName,
+      subnets,
       topology: ovnK8sTopologyKeys.ovnK8sLocalnet,
       type: NetworkTypeKeys.ovnKubernetesNetworkType,
       vlanID: parseInt(networkTypeData?.vlanID, 10) || undefined,
@@ -97,9 +101,14 @@ export const fromNADObjToFormData = (
       macspoofchk: configParsed?.macspoofchk,
       vlanTagNum: configParsed?.vlan?.toString() || '',
     },
+    [NetworkTypeKeys.ovnKubernetesNetworkType]: {
+      subnets: configParsed?.subnets,
+    },
     [NetworkTypeKeys.ovnKubernetesSecondaryLocalnet]: {
       bridgeMapping: configParsed?.name,
+      excludeSubnets: configParsed?.excludeSubnets,
       mtu: configParsed?.mtu?.toString() || '',
+      subnets: configParsed?.subnets,
       vlanID: configParsed.vlanID?.toString() || '',
     },
     [NetworkTypeKeys.sriovNetworkType]: {
