@@ -18,7 +18,7 @@ export const NetworkConfigModel: K8sModel = {
   plural: 'networks',
 };
 
-export const defaultNAD = {
+export const generateDefaultNAD = () => ({
   apiVersion: `${NetworkAttachmentDefinitionModel.apiGroup}/${NetworkAttachmentDefinitionModel.apiVersion}`,
   kind: NetworkAttachmentDefinitionModel.kind,
   metadata: {
@@ -27,4 +27,4 @@ export const defaultNAD = {
   spec: {
     config: '{}',
   },
-};
+});

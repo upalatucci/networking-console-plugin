@@ -1,5 +1,5 @@
 import React, { FC, Ref, useState } from 'react';
-import { Controller } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 
 import SriovNetworkNodePolicyModel from '@kubevirt-ui/kubevirt-api/console/models/SriovNetworkNodePolicyModel';
 import {
@@ -19,12 +19,14 @@ import {
 } from '@patternfly/react-core';
 import PopoverHelpIcon from '@utils/components/PopoverHelpIcon/PopoverHelpIcon';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { NetworkTypeKeys } from '@views/nads/form/utils/types';
+import {
+  NetworkAttachmentDefinitionFormInput,
+  NetworkTypeKeys,
+} from '@views/nads/form/utils/types';
 
-import { ParametersComponentProps } from '../../utils/types';
-
-const SriovParameters: FC<ParametersComponentProps> = ({ control, register }) => {
+const SriovParameters: FC = () => {
   const { t } = useNetworkingTranslation();
+  const { control, register } = useFormContext<NetworkAttachmentDefinitionFormInput>();
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
   const [sriovNetNodePoliciesData] = useK8sWatchResource<K8sResourceKind[]>({

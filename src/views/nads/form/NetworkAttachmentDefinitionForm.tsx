@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
 import NetworkAttachmentDefinitionModel from '@kubevirt-ui/kubevirt-api/console/models/NetworkAttachmentDefinitionModel';
@@ -26,7 +26,7 @@ import { isEmpty } from '@utils/utils';
 
 import NetworkAttachmentDefinitionTypeSelect from './components/NADTypeSelect/NetworkAttachmentDefinitionTypeSelect';
 import NetworkTypeParameters from './components/NetworkTypeParameters/NetworkTypeParameters';
-import { NetworkAttachmentDefinitionFormInput, NetworkTypeKeysType } from './utils/types';
+import { NetworkAttachmentDefinitionFormInput } from './utils/types';
 import { createNetAttachDef, fromDataToNADObj, fromNADObjToFormData } from './utils/utils';
 
 type NetworkAttachmentDefinitionFormProps = {
@@ -44,23 +44,22 @@ const NetworkAttachmentDefinitionForm: FC<NetworkAttachmentDefinitionFormProps> 
   const [activeNamespace] = useActiveNamespace();
   const namespace = ALL_NAMESPACES_KEY === activeNamespace ? DEFAULT_NAMESPACE : activeNamespace;
 
+  const methods = useForm<NetworkAttachmentDefinitionFormInput>({
+    defaultValues: fromNADObjToFormData(formData),
+  });
+
   const {
-    control,
     formState: { isSubmitting, isValid },
     handleSubmit,
     register,
     watch,
-  } = useForm<NetworkAttachmentDefinitionFormInput>({
-    defaultValues: fromNADObjToFormData(formData),
-  });
+  } = methods;
 
   const formInput = watch();
 
   useEffect(() => {
     onChange(fromDataToNADObj(formInput, namespace));
   }, [onChange, formInput, namespace]);
-
-  const networkType = watch('networkType') as NetworkTypeKeysType;
 
   const onSubmit = (data: NetworkAttachmentDefinitionFormInput) => {
     createNetAttachDef(data, namespace)
@@ -75,51 +74,53 @@ const NetworkAttachmentDefinitionForm: FC<NetworkAttachmentDefinitionFormProps> 
   return (
     <Grid span={6}>
       <PageSection variant={PageSectionVariants.light}>
-        <Form onSubmit={handleSubmit(onSubmit)}>
-          <FormGroup
-            fieldId="name"
-            isRequired
-            label={t('Name')}
-            labelIcon={
-              <PopoverHelpIcon
-                bodyContent={t(
-                  'Networks are not project-bound. Using the same name creates a shared NAD.',
-                )}
-              />
-            }
-          >
-            <TextInput {...register('name', { required: true })} />
-          </FormGroup>
-          <FormGroup fieldId="description" label={t('Description')}>
-            <TextInput {...register('description')} />
-          </FormGroup>
-          <NetworkAttachmentDefinitionTypeSelect control={control} />
-          <NetworkTypeParameters control={control} networkType={networkType} register={register} />
-          {!isEmpty(apiError) && (
-            <Alert isInline title={t('Error')} variant={AlertVariant.danger}>
-              {apiError?.message}
-            </Alert>
-          )}
-          <ActionGroup>
-            <Button
-              id="save-changes"
-              isDisabled={!isValid || isSubmitting}
-              isLoading={isSubmitting}
-              type="submit"
-              variant={ButtonVariant.primary}
+        <FormProvider {...methods}>
+          <Form onSubmit={handleSubmit(onSubmit)}>
+            <FormGroup
+              fieldId="name"
+              isRequired
+              label={t('Name')}
+              labelIcon={
+                <PopoverHelpIcon
+                  bodyContent={t(
+                    'Networks are not project-bound. Using the same name creates a shared NAD.',
+                  )}
+                />
+              }
             >
-              {t('Create')}
-            </Button>
-            <Button
-              id="cancel"
-              onClick={() => navigate(-1)}
-              type="button"
-              variant={ButtonVariant.secondary}
-            >
-              {t('Cancel')}
-            </Button>
-          </ActionGroup>
-        </Form>
+              <TextInput {...register('name', { required: true })} />
+            </FormGroup>
+            <FormGroup fieldId="description" label={t('Description')}>
+              <TextInput {...register('description')} />
+            </FormGroup>
+            <NetworkAttachmentDefinitionTypeSelect />
+            <NetworkTypeParameters />
+            {!isEmpty(apiError) && (
+              <Alert isInline title={t('Error')} variant={AlertVariant.danger}>
+                {apiError?.message}
+              </Alert>
+            )}
+            <ActionGroup>
+              <Button
+                id="save-changes"
+                isDisabled={!isValid || isSubmitting}
+                isLoading={isSubmitting}
+                type="submit"
+                variant={ButtonVariant.primary}
+              >
+                {t('Create')}
+              </Button>
+              <Button
+                id="cancel"
+                onClick={() => navigate(-1)}
+                type="reset"
+                variant={ButtonVariant.secondary}
+              >
+                {t('Cancel')}
+              </Button>
+            </ActionGroup>
+          </Form>
+        </FormProvider>
       </PageSection>
     </Grid>
   );

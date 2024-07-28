@@ -1,5 +1,5 @@
 import React, { FC, Ref, useState } from 'react';
-import { Control, Controller } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 
 import {
   Dropdown,
@@ -16,14 +16,9 @@ import { NetworkAttachmentDefinitionFormInput } from '../../utils/types';
 
 import MissingOperatorsAlert from './components/MissingOperatorsAlert';
 
-type NetworkAttachmentDefinitionTypeSelectProps = {
-  control: Control<NetworkAttachmentDefinitionFormInput, any>;
-};
-
-const NetworkAttachmentDefinitionTypeSelect: FC<NetworkAttachmentDefinitionTypeSelectProps> = ({
-  control,
-}) => {
+const NetworkAttachmentDefinitionTypeSelect: FC = () => {
   const { t } = useNetworkingTranslation();
+  const { control } = useFormContext<NetworkAttachmentDefinitionFormInput>();
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
   const networkTypeItems = useNetworkItems();

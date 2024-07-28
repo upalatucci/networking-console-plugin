@@ -29,9 +29,14 @@ export type NetworkAttachmentDefinitionFormInput = {
     macspoofchk?: boolean;
     vlanTagNum?: string;
   };
+  [NetworkTypeKeys.ovnKubernetesNetworkType]?: {
+    subnets?: string;
+  };
   [NetworkTypeKeys.ovnKubernetesSecondaryLocalnet]?: {
     bridgeMapping: string;
+    excludeSubnets?: string;
     mtu?: string;
+    subnets?: string;
     vlanID?: string;
   };
   [NetworkTypeKeys.sriovNetworkType]?: {
