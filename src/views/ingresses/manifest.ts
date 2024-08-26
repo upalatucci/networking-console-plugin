@@ -29,7 +29,7 @@ export const IngressesExtensions: EncodedExtension[] = [
       },
       id: 'ingresses',
       model: IngressExtensionModel,
-      name: 'Ingresses',
+      name: '%plugin__networking-console-plugin~Ingresses%',
       section: 'networking',
     },
     type: 'console.navigation/resource-ns',

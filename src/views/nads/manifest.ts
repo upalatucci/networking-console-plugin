@@ -35,7 +35,7 @@ export const NADsExtensions: EncodedExtension[] = [
       },
       id: 'networkattachmentdefinitions',
       model: NetworkAttachmentDefinitionExtensionModel,
-      name: 'NetworkAttachmentDefinitions',
+      name: '%plugin__networking-console-plugin~NetworkAttachmentDefinitions%',
       section: 'networking',
     },
     type: 'console.navigation/resource-ns',

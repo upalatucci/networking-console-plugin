@@ -29,7 +29,7 @@ export const ServicesExtensions: EncodedExtension[] = [
       },
       id: 'services',
       model: ServiceExtensionModel,
-      name: 'Services',
+      name: '%plugin__networking-console-plugin~Services%',
       section: 'networking',
     },
     type: 'console.navigation/resource-ns',

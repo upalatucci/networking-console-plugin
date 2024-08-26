@@ -56,7 +56,7 @@ export const NetworkPoliciesExtensions: EncodedExtension[] = [
       },
       id: 'networkPolicies',
       model: NetworkPolicyExtensionModel,
-      name: 'NetworkPolicies',
+      name: '%plugin__networking-console-plugin~NetworkPolicies%',
       section: 'networking',
     },
     type: 'console.navigation/resource-ns',

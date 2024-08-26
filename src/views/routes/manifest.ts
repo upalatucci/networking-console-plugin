@@ -30,7 +30,7 @@ export const RoutesExtensions: EncodedExtension[] = [
       },
       id: 'routes',
       model: RouteExtensionModel,
-      name: 'Routes',
+      name: '%plugin__networking-console-plugin~Routes%',
       section: 'networking',
     },
     type: 'console.navigation/resource-ns',
