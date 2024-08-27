@@ -1,2 +1,2 @@
 export const FLAG_NET_ATTACH_DEF = 'NET_ATTACH_DEF';
-export const FLAG_KUBEVIRT = 'KUBEVIRT';
+export const FLAG_KUBEVIRT = 'KUBEVIRT_DYNAMIC';

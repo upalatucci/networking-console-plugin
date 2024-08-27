@@ -40,7 +40,6 @@ export const NADsExtensions: EncodedExtension[] = [
     },
     type: 'console.navigation/resource-ns',
   } as EncodedExtension<ResourceNSNavItem>,
-
   {
     properties: {
       component: {
@@ -48,7 +47,7 @@ export const NADsExtensions: EncodedExtension[] = [
       },
       exact: true,
       flags: {
-        required: [FLAG_NET_ATTACH_DEF],
+        required: [FLAG_NET_ATTACH_DEF, FLAG_KUBEVIRT],
       },
       path: [
         `/k8s/ns/:ns/${NetworkAttachmentDefinitionExtensionModel.group}~${NetworkAttachmentDefinitionExtensionModel.version}~${NetworkAttachmentDefinitionExtensionModel.kind}/~new/form`,
