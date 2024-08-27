@@ -13,10 +13,7 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
 import { DEFAULT_NAMESPACE } from '@utils/constants';
-import {
-  SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM,
-  SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML,
-} from '@utils/constants/ui';
+import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/constants/ui';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { resourcePathFromModel } from '@utils/resources/shared';
 import { RouteKind } from '@utils/types';
@@ -42,7 +39,7 @@ const RoutesList: FC<RoutesListProps> = ({ namespace }) => {
 
   return (
     <ListEmptyState<RouteKind>
-      createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML}
+      createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}
       data={routes}
       kind={RouteModel.kind}
       learnMoreLink="https://docs.openshift.com/dedicated/networking/routes/route-configuration.html"
