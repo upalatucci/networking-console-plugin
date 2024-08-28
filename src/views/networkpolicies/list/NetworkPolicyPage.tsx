@@ -1,18 +1,16 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom-v5-compat';
 
-import { modelToRef, NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
 import { Tab, Tabs, TabTitleText } from '@patternfly/react-core';
-import { useLastNamespacePath } from '@utils/hooks/useLastNamespacePath';
+import { ALL_NAMESPACES } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { MultiNetworkPolicyModel } from '@utils/models';
 
 import useIsMultiEnabled from './hooks/useIsMultiEnabled';
 import { TAB_INDEXES } from './constants';
 import EnableMultiPage from './EnableMultiPage';
 import MultiNetworkPolicyList from './MultiNetworkPolicyList';
 import NetworkPolicyList from './NetworkPolicyList';
-import { getActiveKeyFromPathname } from './utils';
+import { getActiveKeyFromPathname, getNetworkPolicyURLTab } from './utils';
 
 export type NetworkPolicyPageNavProps = {
   namespace: string;
@@ -21,31 +19,20 @@ export type NetworkPolicyPageNavProps = {
 const NetworkPolicyDetailsPage: FC<NetworkPolicyPageNavProps> = ({ namespace }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const lastNamespacePath = useLastNamespacePath();
-  const [activeTabKey, setActiveTabKey] = useState<number | string>(
-    getActiveKeyFromPathname(location?.pathname),
+
+  const locationTabKey = useMemo(
+    () => getActiveKeyFromPathname(location?.pathname),
+    [location?.pathname],
   );
 
   const [isMultiEnabled] = useIsMultiEnabled();
-
-  useEffect(() => {
-    if (activeTabKey === TAB_INDEXES.ENABLE_MULTI) {
-      navigate(`/k8s/${lastNamespacePath}/${modelToRef(NetworkPolicyModel)}/enable-multi`);
-      return;
-    }
-
-    navigate(
-      `/k8s/${lastNamespacePath}/${activeTabKey === TAB_INDEXES.NETWORK ? modelToRef(NetworkPolicyModel) : modelToRef(MultiNetworkPolicyModel)}`,
-    );
-  }, [activeTabKey, lastNamespacePath, location.pathname, navigate]);
-
   const { t } = useNetworkingTranslation();
 
   return (
     <Tabs
-      activeKey={activeTabKey}
+      activeKey={locationTabKey}
       onSelect={(_, tabIndex: number | string) => {
-        setActiveTabKey(tabIndex);
+        navigate(getNetworkPolicyURLTab(tabIndex, namespace || ALL_NAMESPACES));
       }}
     >
       <Tab
