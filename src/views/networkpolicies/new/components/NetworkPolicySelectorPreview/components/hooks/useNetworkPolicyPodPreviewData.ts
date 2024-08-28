@@ -55,8 +55,7 @@ const useNetworkPolicyPodPreviewData: UseNetworkPolicyPodPreviewData = ({
   const [namespaces, loadedNamespaces, namespacesError] = useK8sWatchResource<K8sResourceCommon[]>({
     isList: true,
     kind: NamespaceModel.kind,
-    namespace,
-    selector: safePodSelector,
+    selector: safeNsSelector,
   });
 
   return {
