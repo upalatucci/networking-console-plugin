@@ -14,6 +14,7 @@ import {
   TreeView,
   TreeViewDataItem,
 } from '@patternfly/react-core';
+import Loading from '@utils/components/Loading/Loading';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { isEmpty } from '@utils/utils';
 
@@ -21,6 +22,8 @@ import { maxPreviewPods } from '../utils/const';
 import { matchedNs, podsFilterQuery, resourceListPathFromModel } from '../utils/utils';
 
 import useNetworkPolicyPodPreviewData from './hooks/useNetworkPolicyPodPreviewData';
+
+import './tree-view.css';
 
 type NetworkPolicyPodsPreviewProps = {
   namespace?: string;
@@ -108,6 +111,10 @@ const NetworkPolicyPodsPreview: FC<NetworkPolicyPodsPreviewProps> = ({
     );
   }
 
+  if (!loaded) {
+    return <Loading />;
+  }
+
   return (
     <>
       <div data-test="pods-preview-title">
@@ -119,7 +126,12 @@ const NetworkPolicyPodsPreview: FC<NetworkPolicyPodsPreviewProps> = ({
           t('List of pods')
         )}
       </div>
-      <TreeView data={preview?.pods} data-test="pods-preview-tree" hasGuides />
+      <TreeView
+        className="network-policy-pods-preview"
+        data={preview?.pods}
+        data-test="pods-preview-tree"
+        hasGuides
+      />
       {preview?.total > maxPreviewPods && isEmpty(Object.keys(safeNsSelector.matchLabels)) ? (
         <a
           data-test="pods-preview-footer-link"
@@ -127,14 +139,14 @@ const NetworkPolicyPodsPreview: FC<NetworkPolicyPodsPreviewProps> = ({
           rel="noopener noreferrer"
           target="_blank"
         >
-          {t('View all {{total}} results', {
+          {t('Showing {{shown}} from {{total}} results', {
+            shown: maxPreviewPods,
             total: preview.total,
           })}
         </a>
       ) : (
         <p data-test="pods-preview-footer">
-          {t('Showing {{shown}} from {{total}} results', {
-            shown: maxPreviewPods,
+          {t('View all {{total}} results', {
             total: preview.total,
           })}
         </p>
