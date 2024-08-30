@@ -78,8 +78,8 @@ const RouteForm: FC<RouteFormProps> = ({ formData, onChange: onFormChange }) => 
               </HelperText>
             </FormHelperText>
           </FormGroup>
-          <FormGroup fieldId={HOST_FIELD_ID} isRequired label={t('Hostname')}>
-            <TextInput id={HOST_FIELD_ID} {...register('spec.host', { required: true })} />
+          <FormGroup fieldId={HOST_FIELD_ID} label={t('Hostname')}>
+            <TextInput id={HOST_FIELD_ID} {...register('spec.host', { required: false })} />
             <FormHelperText>
               <HelperText>
                 <HelperTextItem>
@@ -88,8 +88,8 @@ const RouteForm: FC<RouteFormProps> = ({ formData, onChange: onFormChange }) => 
               </HelperText>
             </FormHelperText>
           </FormGroup>
-          <FormGroup fieldId={PATH_FIELD_ID} isRequired label={t('Path')}>
-            <TextInput id={PATH_FIELD_ID} {...register('spec.path', { required: true })} />
+          <FormGroup fieldId={PATH_FIELD_ID} label={t('Path')}>
+            <TextInput id={PATH_FIELD_ID} {...register('spec.path', { required: false })} />
             <FormHelperText>
               <HelperText>
                 <HelperTextItem>
