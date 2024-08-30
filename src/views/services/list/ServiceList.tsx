@@ -47,7 +47,7 @@ const ServiceList: FC<ServiceListProps> = ({ namespace }) => {
       createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}
       data={data}
       kind={ServiceModel.kind}
-      learnMoreLink="#"
+      learnMoreLink="https://kubernetes.io/docs/concepts/services-networking/service/"
       loaded={loaded}
       title={title}
     >

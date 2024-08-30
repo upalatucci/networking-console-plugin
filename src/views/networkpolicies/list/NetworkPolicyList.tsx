@@ -54,7 +54,7 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
       createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}
       data={data}
       kind={NetworkPolicyModel.kind}
-      learnMoreLink="https://docs.openshift.com/dedicated/networking/network_policy/creating-network-policy.html"
+      learnMoreLink="https://kubernetes.io/docs/concepts/services-networking/network-policies/"
       loaded={loaded}
       title={title}
     >
