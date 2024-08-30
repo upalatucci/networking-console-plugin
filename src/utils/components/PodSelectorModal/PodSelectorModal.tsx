@@ -36,7 +36,7 @@ export type PodSelectorModalProps = {
 const PodSelectorModal: FC<PodSelectorModalProps> = ({
   closeModal,
   model,
-  path = '/spec/selector',
+  path = 'spec.selector',
   resource,
 }) => {
   const { t } = useNetworkingTranslation();
