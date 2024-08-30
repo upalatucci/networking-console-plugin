@@ -130,7 +130,7 @@ export const resourcePathFromModel = (
   name?: string,
   namespace = DEFAULT_NAMESPACE,
 ) => {
-  const { crd, namespaced, plural } = model;
+  const { namespaced } = model;
 
   let url = '/k8s/';
 
@@ -142,11 +142,7 @@ export const resourcePathFromModel = (
     url += namespace ? `ns/${namespace}/` : 'all-namespaces/';
   }
 
-  if (crd) {
-    url += `${model.apiGroup}~${model.apiVersion}~${model.kind}`;
-  } else if (plural) {
-    url += plural;
-  }
+  url += `${model.apiGroup}~${model.apiVersion}~${model.kind}`;
 
   if (name) {
     // Some resources have a name that needs to be encoded. For instance,
