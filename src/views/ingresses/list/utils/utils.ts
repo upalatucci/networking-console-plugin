@@ -15,3 +15,17 @@ export const getHostsStr = (ingress: IoK8sApiNetworkingV1Ingress) => {
 
   return hosts?.length ? hostsStr : null;
 };
+
+export const sortIngressesByHosts =
+  (direction: string) => (a: IoK8sApiNetworkingV1Ingress, b: IoK8sApiNetworkingV1Ingress) => {
+    const { first, second } =
+      direction === 'asc' ? { first: a, second: b } : { first: b, second: a };
+
+    const firstHosts = getHostsStr(first);
+    const secondHosts = getHostsStr(second);
+
+    return firstHosts?.localeCompare(secondHosts, undefined, {
+      numeric: true,
+      sensitivity: 'base',
+    });
+  };

@@ -7,6 +7,18 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import { sortable } from '@patternfly/react-table';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { getConfigAsJSON, getType } from '@utils/resources/nads/selectors';
+
+const sortNADTypes = (direction: string) => (a: K8sResourceCommon, b: K8sResourceCommon) => {
+  const { first, second } = direction === 'asc' ? { first: a, second: b } : { first: b, second: a };
+  const firstType = getType(getConfigAsJSON(first));
+  const secondType = getType(getConfigAsJSON(second));
+
+  return firstType?.localeCompare(secondType, undefined, {
+    numeric: true,
+    sensitivity: 'base',
+  });
+};
 
 const useNADsColumns = (): { id: string; title: string }[] => {
   const { t } = useNetworkingTranslation();
@@ -27,6 +39,7 @@ const useNADsColumns = (): { id: string; title: string }[] => {
       },
       {
         id: 'type',
+        sort: (data, direction) => data?.sort(sortNADTypes(direction)),
         title: t('Type'),
         transforms: [sortable],
       },

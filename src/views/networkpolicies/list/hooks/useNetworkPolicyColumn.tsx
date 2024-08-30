@@ -4,6 +4,7 @@ import { TableColumn, useActiveColumns } from '@openshift-console/dynamic-plugin
 import { sortable } from '@patternfly/react-table';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { PaginationState } from '@utils/hooks/usePagination/utils/types';
+import { sortCommonColumnsByPath } from '@utils/utils/sorting';
 
 type UseClusterPreferenceListColumnsValues = [
   columns: TableColumn<IoK8sApiNetworkingV1NetworkPolicy>[],
@@ -34,7 +35,8 @@ const useNetworkPolicyColumn: UseNetworkPolicyListColumns = () => {
     {
       id: 'pod-selector',
       props: { className: 'pf-m-hidden pf-m-visible-on-md' },
-      sort: 'spec.podSelector',
+      sort: (data, direction) =>
+        data?.sort(sortCommonColumnsByPath('spec.podSelector.matchLabels', direction)),
       title: t('Pod selector'),
       transforms: [sortable],
     },
