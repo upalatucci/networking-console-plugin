@@ -27,7 +27,7 @@ const RouteRow: FC<RouteRowProps> = ({ activeColumnIDs, obj: route }) => {
         <ResourceLink
           groupVersionKind={getGroupVersionKindForModel(RouteModel)}
           name={getName(route)}
-          namespace={namespace}
+          namespace={name}
         />
       </TableData>
       <TableData
@@ -35,7 +35,10 @@ const RouteRow: FC<RouteRowProps> = ({ activeColumnIDs, obj: route }) => {
         className={classNames(tableColumnClasses[1], 'co-break-word')}
         id="namespace"
       >
-        <ResourceLink groupVersionKind={getGroupVersionKindForModel(NamespaceModel)} name={name} />
+        <ResourceLink
+          groupVersionKind={getGroupVersionKindForModel(NamespaceModel)}
+          name={namespace}
+        />
       </TableData>
       <TableData activeColumnIDs={activeColumnIDs} className={tableColumnClasses[2]} id="status">
         <RouteStatus route={route} />
@@ -43,11 +46,11 @@ const RouteRow: FC<RouteRowProps> = ({ activeColumnIDs, obj: route }) => {
       <TableData
         activeColumnIDs={activeColumnIDs}
         className={classNames(tableColumnClasses[3], 'co-break-word')}
-        id=""
+        id="location"
       >
         <RouteLocation route={route} />
       </TableData>
-      <TableData activeColumnIDs={activeColumnIDs} className={tableColumnClasses[4]} id="location">
+      <TableData activeColumnIDs={activeColumnIDs} className={tableColumnClasses[4]} id="service">
         <ResourceLink
           groupVersionKind={getGroupVersionKindForModel(ServiceModel)}
           name={route.spec.to.name}

@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 
+import { ServiceModel } from '@kubevirt-ui/kubevirt-api/console';
 import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { TableColumn, useActiveColumns } from '@openshift-console/dynamic-plugin-sdk';
 import { sortable } from '@patternfly/react-table';
@@ -36,21 +37,21 @@ const useServiceColumn = (): { id: string; title: string }[] => {
       {
         id: 'labels',
         props: { className: tableColumnClasses[2] },
-        sortField: 'metadata.labels',
+        sort: 'metadata.labels',
         title: t('Labels'),
         transforms: [sortable],
       },
       {
         id: 'pod-selector',
         props: { className: tableColumnClasses[3] },
-        sortField: 'spec.podSelector',
+        sort: 'spec.selector',
         title: t('Pod selector'),
         transforms: [sortable],
       },
       {
         id: 'location',
         props: { className: tableColumnClasses[4] },
-        sortField: 'spec.clusterIP',
+        sort: 'spec.clusterIP',
         title: t('Location'),
         transforms: [sortable],
       },
@@ -64,7 +65,7 @@ const useServiceColumn = (): { id: string; title: string }[] => {
   );
 
   const [activeColumns] = useActiveColumns<IoK8sApiCoreV1Service>({
-    columnManagementID: '',
+    columnManagementID: ServiceModel.kind,
     columns,
     showNamespaceOverride: false,
   });
