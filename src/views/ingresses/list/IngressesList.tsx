@@ -46,7 +46,7 @@ const IngressesList: FC<IngressesListProps> = ({ namespace }) => {
       createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML}
       data={data}
       kind={IngressModel.kind}
-      learnMoreLink="https://docs.openshift.com/container-platform/4.15/networking/configuring_ingress_cluster_traffic/configuring-ingress-cluster-traffic-ingress-controller.html"
+      learnMoreLink="https://kubernetes.io/docs/concepts/services-networking/ingress/"
       loaded={loaded}
       title={title}
     >
