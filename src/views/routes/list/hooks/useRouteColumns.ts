@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 
+import { RouteModel } from '@kubevirt-ui/kubevirt-api/console';
 import { TableColumn, useActiveColumns } from '@openshift-console/dynamic-plugin-sdk';
 import { sortable } from '@patternfly/react-table';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
@@ -24,14 +25,14 @@ const useRouteColumns: UseRouteColumns = () => {
       {
         id: 'name',
         props: { className: tableColumnClasses[0] },
-        sortField: 'metadata.name',
+        sort: 'metadata.name',
         title: t('Name'),
         transforms: [sortable],
       },
       {
         id: 'namespace',
         props: { className: tableColumnClasses[1] },
-        sortField: 'metadata.namespace',
+        sort: 'metadata.namespace',
         title: t('Namespace'),
         transforms: [sortable],
       },
@@ -43,14 +44,14 @@ const useRouteColumns: UseRouteColumns = () => {
       {
         id: 'location',
         props: { className: tableColumnClasses[3] },
-        sortField: 'spec.host',
+        sort: 'spec.host',
         title: t('Location'),
         transforms: [sortable],
       },
       {
         id: 'service',
         props: { className: tableColumnClasses[4] },
-        sortField: 'spec.to.name',
+        sort: 'spec.to.name',
         title: t('Service'),
         transforms: [sortable],
       },
@@ -64,7 +65,7 @@ const useRouteColumns: UseRouteColumns = () => {
   );
 
   const [activeColumns] = useActiveColumns<RouteKind>({
-    columnManagementID: '',
+    columnManagementID: RouteModel.kind,
     columns,
     showNamespaceOverride: false,
   });
