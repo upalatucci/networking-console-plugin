@@ -49,7 +49,7 @@ const NetworkAttachmentDefinitionList: FC<NetworkAttachmentDefinitionListProps> 
       createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}
       data={data}
       kind={NetworkAttachmentDefinitionModel.kind}
-      learnMoreLink="https://docs.openshift.com/dedicated/virt/vm_networking/virt-connecting-vm-to-ovn-secondary-network.html#virt-connecting-vm-to-ovn-secondary-network"
+      learnMoreLink="https://docs.openshift.com/container-platform/4.16/networking/multiple_networks/configuring-multi-network-policy.html"
       loaded={loaded}
       title={title}
     >
