@@ -124,7 +124,7 @@ const Toggle: FC<ToggleProps> = ({
           onChange={onTextInputChange}
           onClick={onToggleClick}
           onKeyDown={onInputKeyDown}
-          placeholder={placeholder}
+          placeholder={isEmpty(selected) ? placeholder : null}
           role="combobox"
           value={inputValue}
         >
