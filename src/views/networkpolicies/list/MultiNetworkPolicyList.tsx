@@ -54,6 +54,7 @@ const MultiNetworkPolicyList: FC<MultiNetworkPolicyListProps> = ({ namespace }) 
     <ListEmptyState<IoK8sApiNetworkingV1NetworkPolicy>
       createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}
       data={data}
+      error={loadError}
       kind={MultiNetworkPolicyModel.kind}
       learnMoreLink="https://docs.openshift.com/container-platform/4.16/networking/multiple_networks/configuring-multi-network-policy.html"
       loaded={loaded}

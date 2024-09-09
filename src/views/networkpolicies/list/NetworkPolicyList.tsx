@@ -53,6 +53,7 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
     <ListEmptyState<IoK8sApiNetworkingV1NetworkPolicy>
       createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}
       data={data}
+      error={loadError}
       kind={NetworkPolicyModel.kind}
       learnMoreLink="https://kubernetes.io/docs/concepts/services-networking/network-policies/"
       loaded={loaded}
