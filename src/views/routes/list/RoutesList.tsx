@@ -41,6 +41,7 @@ const RoutesList: FC<RoutesListProps> = ({ namespace }) => {
     <ListEmptyState<RouteKind>
       createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}
       data={routes}
+      error={loadError}
       kind={RouteModel.kind}
       learnMoreLink="https://docs.redhat.com/en/documentation/openshift_container_platform/4.16/html/networking/configuring-routes"
       loaded={loaded}

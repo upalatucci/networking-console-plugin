@@ -45,6 +45,7 @@ const IngressesList: FC<IngressesListProps> = ({ namespace }) => {
     <ListEmptyState<IoK8sApiNetworkingV1Ingress>
       createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML}
       data={data}
+      error={loadError}
       kind={IngressModel.kind}
       learnMoreLink="https://kubernetes.io/docs/concepts/services-networking/ingress/"
       loaded={loaded}

@@ -48,6 +48,7 @@ const NetworkAttachmentDefinitionList: FC<NetworkAttachmentDefinitionListProps> 
     <ListEmptyState<NetworkAttachmentDefinitionKind>
       createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}
       data={data}
+      error={loadError}
       kind={NetworkAttachmentDefinitionModel.kind}
       learnMoreLink="https://docs.openshift.com/container-platform/4.16/networking/multiple_networks/configuring-multi-network-policy.html"
       loaded={loaded}

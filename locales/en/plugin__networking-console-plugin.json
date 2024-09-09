@@ -126,6 +126,7 @@
   "Egress rules": "Egress rules",
   "Enable {{kind}}": "Enable {{kind}}",
   "Error": "Error",
+  "Error details": "Error details",
   "Example: 100": "Example: 100",
   "Exceptions": "Exceptions",
   "Exclude": "Exclude",
@@ -221,6 +222,7 @@
   "Percent": "Percent",
   "Phase": "Phase",
   "Physical network name. A bridge mapping must be configured on cluster nodes to map between physical network names and Open vSwitch bridges.": "Physical network name. A bridge mapping must be configured on cluster nodes to map between physical network names and Open vSwitch bridges.",
+  "Please <2>try again</2>.": "Please <2>try again</2>.",
   "Pod crash loop back-off": "Pod crash loop back-off",
   "Pod port or name": "Pod port or name",
   "Pod selector": "Pod selector",
@@ -249,6 +251,7 @@
   "Remove peer": "Remove peer",
   "Remove port": "Remove port",
   "Resource name": "Resource name",
+  "Restricted Access": "Restricted Access",
   "Reveal": "Reveal",
   "Route details": "Route details",
   "Router canonical hostname": "Router canonical hostname",
@@ -333,5 +336,6 @@
   "with exceptions": "with exceptions",
   "YAML": "YAML",
   "YAML view": "YAML view",
+  "You don't have access to this section due to cluster policy.": "You don't have access to this section due to cluster policy.",
   "You don't have permission to perform this action": "You don't have permission to perform this action"
 }
