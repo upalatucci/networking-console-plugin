@@ -11,6 +11,7 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 import {
   checkNetworkPolicyValidity,
   isNetworkPolicyConversionError,
+  MultiNetworkPolicyModel,
   NetworkPolicy,
   networkPolicyFromK8sResource,
   networkPolicyNormalizeK8sResource,
@@ -64,7 +65,7 @@ const NetworkPolicyFormSections: FC<NetworkPolicyFormSectionsProps> = ({ formDat
 
   const onPolicyChange = (policy: NetworkPolicy) => {
     setNetworkPolicy(policy);
-    onChange(networkPolicyToK8sResource(policy));
+    onChange(networkPolicyToK8sResource(policy, isMultiCreateForm));
   };
 
   const removeAll = (msg: string, execute: () => void) => {
@@ -87,14 +88,14 @@ const NetworkPolicyFormSections: FC<NetworkPolicyFormSectionsProps> = ({ formDat
       setError(invalid.error);
       return;
     }
-    const policy = networkPolicyToK8sResource(networkPolicy);
+    const policy = networkPolicyToK8sResource(networkPolicy, isMultiCreateForm);
+
+    const model = isMultiCreateForm ? MultiNetworkPolicyModel : NetworkPolicyModel;
     try {
       setInProgress(true);
-      await k8sCreate({ data: policy, model: NetworkPolicyModel });
+      await k8sCreate({ data: policy, model });
       setInProgress(false);
-      navigate(
-        resourcePathFromModel(NetworkPolicyModel, networkPolicy.name, networkPolicy.namespace),
-      );
+      navigate(resourcePathFromModel(model, networkPolicy.name, networkPolicy.namespace));
     } catch (err) {
       setError(err.message);
       setInProgress(false);

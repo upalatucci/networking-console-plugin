@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 
+import { NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
 import {
   IoK8sApiNetworkingV1NetworkPolicy,
   IoK8sApiNetworkingV1NetworkPolicyIngressRule,
@@ -11,6 +12,8 @@ import {
   NetworkPolicyPort as K8SPort,
 } from '@utils/resources/networkpolicies/types';
 import { NetworkPolicyEgressIngress } from '@views/networkpolicies/new/utils/types';
+
+import { MultiNetworkPolicyModel } from '.';
 
 // Reference: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#networkpolicyspec-v1-networking-k8s-io
 
@@ -155,12 +158,16 @@ const ruleToK8s = (
 
 export const networkPolicyToK8sResource = (
   from: NetworkPolicy,
+  isMultiNetworkPolicy: boolean,
 ): IoK8sApiNetworkingV1NetworkPolicy => {
   const podSelector = selectorToK8s(from.podSelector);
   const policyTypes: string[] = [];
+
+  const model = isMultiNetworkPolicy ? MultiNetworkPolicyModel : NetworkPolicyModel;
+
   const res: IoK8sApiNetworkingV1NetworkPolicy = {
-    apiVersion: 'networking.k8s.io/v1',
-    kind: 'NetworkPolicy',
+    apiVersion: `${model.apiGroup}/${model.apiVersion}`,
+    kind: model.kind,
     metadata: {
       name: from.name,
       namespace: from.namespace,
