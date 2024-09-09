@@ -25,7 +25,7 @@ const NetworkPolicyForm: FC = () => {
   const [helpText, setHelpText] = useState<string>(FORM_HELPER_TEXT);
   const isMultiCreateForm = useIsMultiNetworkPolicy();
 
-  const k8sObj = networkPolicyToK8sResource(getInitialPolicy(ns));
+  const k8sObj = networkPolicyToK8sResource(getInitialPolicy(ns), isMultiCreateForm);
 
   return (
     <>

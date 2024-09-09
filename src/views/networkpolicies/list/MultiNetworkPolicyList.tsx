@@ -55,7 +55,7 @@ const MultiNetworkPolicyList: FC<MultiNetworkPolicyListProps> = ({ namespace }) 
       createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}
       data={data}
       kind={MultiNetworkPolicyModel.kind}
-      learnMoreLink="https://docs.openshift.com/dedicated/networking/network_policy/creating-network-policy.html"
+      learnMoreLink="https://docs.openshift.com/container-platform/4.16/networking/multiple_networks/configuring-multi-network-policy.html"
       loaded={loaded}
       title={title}
     >
