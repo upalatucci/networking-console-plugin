@@ -29,13 +29,18 @@ const ConfirmModal: FC<ConfirmModalProps> = ({
 }) => {
   const { t } = useNetworkingTranslation();
 
+  const submit = () => {
+    executeFn();
+    closeModal();
+  };
+
   return (
     <Modal
       className="ocs-modal networking-modal"
       footer={
         <ActionList className="tabmodal-footer">
           <ActionListItem>
-            <Button onClick={executeFn} variant={ButtonVariant.primary}>
+            <Button onClick={submit} variant={ButtonVariant.primary}>
               {btnText || t('Confirm')}
             </Button>
           </ActionListItem>
