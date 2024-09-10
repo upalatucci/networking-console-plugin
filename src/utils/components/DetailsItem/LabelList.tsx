@@ -46,7 +46,7 @@ type LabelListProps = {
 export const LabelList: FC<LabelListProps> = ({ expand = true, groupVersionKind, labels }) => {
   const { t } = useNetworkingTranslation();
 
-  const list = Object.entries(labels || []).map(([label, key]) => (
+  const list = Object.entries(labels || []).map(([key, label]) => (
     <Label expand={expand} groupVersionKind={groupVersionKind} key={key} name={key} value={label} />
   ));
 
