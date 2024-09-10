@@ -18,7 +18,6 @@ import { tableColumnClasses } from '@views/routes/list/hooks/useRouteColumns';
 type RouteRowProps = RowProps<RouteKind>;
 
 const RouteRow: FC<RouteRowProps> = ({ activeColumnIDs, obj: route }) => {
-  const name = getName(route);
   const namespace = getNamespace(route);
 
   return (
@@ -27,7 +26,7 @@ const RouteRow: FC<RouteRowProps> = ({ activeColumnIDs, obj: route }) => {
         <ResourceLink
           groupVersionKind={getGroupVersionKindForModel(RouteModel)}
           name={getName(route)}
-          namespace={name}
+          namespace={getNamespace(route)}
         />
       </TableData>
       <TableData
