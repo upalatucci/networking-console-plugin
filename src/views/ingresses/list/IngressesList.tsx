@@ -35,7 +35,7 @@ const IngressesList: FC<IngressesListProps> = ({ namespace }) => {
   const [ingress, loaded, loadError] = useK8sWatchResource<IoK8sApiNetworkingV1Ingress[]>({
     groupVersionKind: modelToGroupVersionKind(IngressModel),
     isList: true,
-    namespace: validNamespace,
+    namespace,
   });
   const [data, filteredData, onFilterChange] = useListPageFilter(ingress);
   const columns = useIngressColumns();
