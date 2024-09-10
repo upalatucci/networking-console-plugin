@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { NamespaceModel, PodModel } from '@kubevirt-ui/kubevirt-api/console';
+import { PodModel, ProjectModel } from '@kubevirt-ui/kubevirt-api/console';
 import { IoK8sApiCoreV1Pod } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
   K8sResourceCommon,
@@ -54,7 +54,7 @@ const useNetworkPolicyPodPreviewData: UseNetworkPolicyPodPreviewData = ({
 
   const [namespaces, loadedNamespaces, namespacesError] = useK8sWatchResource<K8sResourceCommon[]>({
     isList: true,
-    kind: NamespaceModel.kind,
+    kind: ProjectModel.kind,
     selector: safeNsSelector,
   });
 
