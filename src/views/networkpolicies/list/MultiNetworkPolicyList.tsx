@@ -96,6 +96,7 @@ const MultiNetworkPolicyList: FC<MultiNetworkPolicyListProps> = ({ namespace }) 
               type: '',
             }}
             data={data}
+            hideLabelFilter
             loaded={loaded}
             onFilterChange={(...args) => {
               onFilterChange(...args);
