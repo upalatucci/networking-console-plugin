@@ -53,7 +53,7 @@ const NetworkPolicyDetailsPage: FC<NetworkPolicyPageNavProps> = ({ namespace }) 
           eventKey={TAB_INDEXES.ENABLE_MULTI}
           title={<TabTitleText>{t('MultiNetworkPolicies')}</TabTitleText>}
         >
-          <EnableMultiPage />
+          <EnableMultiPage namespace={namespace} />
         </Tab>
       )}
     </Tabs>
