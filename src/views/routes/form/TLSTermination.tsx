@@ -111,6 +111,7 @@ const TLSTermination: FC = () => {
               <FormGroup fieldId={CERTIFICATE_FIELD_ID} label={t('Certificate')}>
                 <FileUpload
                   id={CERTIFICATE_FIELD_ID}
+                  onClearClick={() => onChange({ ...value, certificate: '' })}
                   onDataChange={(event, data) => onChange({ ...value, certificate: data })}
                   onFileInputChange={(event, data) => onChange({ ...value, certificate: data })}
                   onTextChange={(event, data) => onChange({ ...value, certificate: data })}
@@ -122,6 +123,7 @@ const TLSTermination: FC = () => {
               <FormGroup fieldId={KEY_FIELD_ID} label={t('Private key')}>
                 <FileUpload
                   id={KEY_FIELD_ID}
+                  onClearClick={() => onChange({ ...value, key: '' })}
                   onDataChange={(event, data) => onChange({ ...value, key: data })}
                   onFileInputChange={(event, data) => onChange({ ...value, key: data })}
                   onTextChange={(event, data) => onChange({ ...value, key: data })}
@@ -132,6 +134,7 @@ const TLSTermination: FC = () => {
               <FormGroup fieldId={CA_CERTIFICATE_FIELD_ID} label={t('CA certificate')}>
                 <FileUpload
                   id={CA_CERTIFICATE_FIELD_ID}
+                  onClearClick={() => onChange({ ...value, caCertificate: '' })}
                   onDataChange={(event, data) => onChange({ ...value, caCertificate: data })}
                   onFileInputChange={(event, data) => onChange({ ...value, caCertificate: data })}
                   onTextChange={(event, data) => onChange({ ...value, caCertificate: data })}
