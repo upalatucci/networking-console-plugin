@@ -13,6 +13,7 @@
   "{{path}} should not be empty.": "{{path}} should not be empty.",
   "{{value}} at {{date}}": "{{value}} at {{date}}",
   "<0>OpenShift Virtualization Operator</0> or <3>SR-IOV Network Operator </3>needs to be installed on the cluster, in order to pick the Network Type.": "<0>OpenShift Virtualization Operator</0> or <3>SR-IOV Network Operator </3>needs to be installed on the cluster, in order to pick the Network Type.",
+  "404: Page Not Found": "404: Page Not Found",
   "A number between 0 and 255 that depicts relative weight compared with other targets.": "A number between 0 and 255 that depicts relative weight compared with other targets.",
   "A unique name for the Route within the project": "A unique name for the Route within the project",
   "Accessible outside the cluster": "Accessible outside the cluster",

@@ -7,7 +7,7 @@ import {
   K8sModel,
   useK8sWatchResource,
 } from '@openshift-console/dynamic-plugin-sdk';
-import Loading from '@utils/components/Loading/Loading';
+import StatusBox from '@utils/components/StatusBox/StatusBox';
 
 import NetworkPolicyPageTitle from './components/NetworkPolicyDetailsPageTitle';
 import { useNetworkPolicyTabs } from './hooks/useNetworkPolicyTabs';
@@ -19,22 +19,18 @@ export type NetworkPolicyPageNavProps = {
 };
 
 const NetworkPolicyDetailsPage: FC<NetworkPolicyPageNavProps> = ({ kindObj, name, namespace }) => {
-  const [networkPolicy, loaded] = useK8sWatchResource<IoK8sApiNetworkingV1NetworkPolicy>({
+  const [networkPolicy, loaded, error] = useK8sWatchResource<IoK8sApiNetworkingV1NetworkPolicy>({
     groupVersionKind: modelToGroupVersionKind(kindObj),
     name,
     namespace,
   });
   const pages = useNetworkPolicyTabs();
 
-  if (!loaded) {
-    return <Loading />;
-  }
-
   return (
-    <>
+    <StatusBox error={error} loaded={loaded}>
       <NetworkPolicyPageTitle networkPolicy={networkPolicy} />
       <HorizontalNav pages={pages} resource={networkPolicy} />
-    </>
+    </StatusBox>
   );
 };
 
