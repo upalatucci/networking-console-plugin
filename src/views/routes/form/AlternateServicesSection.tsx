@@ -20,7 +20,7 @@ const AlternateServicesSection: FC<AlternateServicesSectionProps> = ({ services 
 
   const { control, watch } = useFormContext<RouteKind>();
 
-  const { append, fields } = useFieldArray({ control, name: 'spec.alternateBackends' });
+  const { append, fields, remove } = useFieldArray({ control, name: 'spec.alternateBackends' });
 
   const selectedServiceNames = watch('spec.alternateBackends')?.map((field) => field.name) || [];
   const filteredServices = (services || []).filter(
@@ -35,6 +35,7 @@ const AlternateServicesSection: FC<AlternateServicesSectionProps> = ({ services 
           filteredServices={filteredServices}
           index={index}
           key={field.id}
+          remove={remove}
         />
       ))}
 
