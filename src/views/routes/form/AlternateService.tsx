@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Controller, FieldArrayWithId, useFieldArray, useFormContext } from 'react-hook-form';
+import { Controller, FieldArrayWithId, useFormContext } from 'react-hook-form';
 
 import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { ResourceIcon } from '@openshift-console/dynamic-plugin-sdk';
@@ -28,14 +28,18 @@ type AlternateServiceProps = {
   field: FieldArrayWithId<RouteKind, 'spec.alternateBackends', 'id'>;
   filteredServices: IoK8sApiCoreV1Service[];
   index: number;
+  remove: (index: number) => void;
 };
 
-const AlternateService: FC<AlternateServiceProps> = ({ field, filteredServices, index }) => {
+const AlternateService: FC<AlternateServiceProps> = ({
+  field,
+  filteredServices,
+  index,
+  remove,
+}) => {
   const { t } = useNetworkingTranslation();
 
   const { control, register } = useFormContext<RouteKind>();
-
-  const { remove } = useFieldArray({ control, name: 'spec.alternateBackends' });
 
   return (
     <Controller
