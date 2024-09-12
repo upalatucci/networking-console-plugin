@@ -8,6 +8,7 @@ import {
   Timestamp,
   useAccessReview,
   useAnnotationsModal,
+  useLabelsModal,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { DetailsItem } from '@utils/components/DetailsItem/DetailsItem';
 import { LabelList } from '@utils/components/DetailsItem/LabelList';
@@ -30,6 +31,7 @@ type IngressDetailsSectionProps = {
 const IngressDetailsSection: FC<IngressDetailsSectionProps> = ({ ingress }) => {
   const { t } = useNetworkingTranslation();
   const annotationsModalLauncher = useAnnotationsModal(ingress);
+  const labelsModalLauncher = useLabelsModal(ingress);
 
   const [canUpdate] = useAccessReview({
     group: IngressModel?.apiGroup,
@@ -59,7 +61,7 @@ const IngressDetailsSection: FC<IngressDetailsSectionProps> = ({ ingress }) => {
         editAsGroup
         label={t('Labels')}
         obj={ingress}
-        onEdit={annotationsModalLauncher}
+        onEdit={labelsModalLauncher}
         path="metadata.labels"
         valueClassName="details-item__value--labels"
       >
@@ -67,6 +69,17 @@ const IngressDetailsSection: FC<IngressDetailsSectionProps> = ({ ingress }) => {
           groupVersionKind={getGroupVersionKindForModel(IngressModel)}
           labels={getLabels(ingress)}
         />
+      </DetailsItem>
+      <DetailsItem
+        canEdit={canUpdate}
+        label={t('Annotations')}
+        obj={ingress}
+        onEdit={annotationsModalLauncher}
+        path="metadata.annotations"
+      >
+        {t('{{count}} annotation', {
+          count: Object.keys(ingress?.metadata?.annotations || {}).length,
+        })}
       </DetailsItem>
       <DetailsItem label={t('TLS certificate')}>
         <TLSCert ingress={ingress} />
