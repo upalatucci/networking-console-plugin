@@ -49,6 +49,7 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
   const [columns, activeColumns] = useNetworkPolicyColumn(pagination, data);
   const title = t('NetworkPolicies');
 
+  const paginatedData = filteredData?.slice(pagination.startIndex, pagination.endIndex);
   return (
     <ListEmptyState<IoK8sApiNetworkingV1NetworkPolicy>
       createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}
@@ -106,10 +107,10 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
               });
             }}
           />
-          {loaded && !isEmpty(data.length) && (
+          {loaded && !isEmpty(filteredData) && (
             <Pagination
               isLastFullPageShown
-              itemCount={data.length}
+              itemCount={filteredData.length}
               onPerPageSelect={(_e, perPage, page, startIndex, endIndex) =>
                 onPaginationChange({ endIndex, page, perPage, startIndex })
               }
@@ -124,7 +125,7 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
         </div>
         <VirtualizedTable<IoK8sApiNetworkingV1NetworkPolicy>
           columns={activeColumns}
-          data={filteredData}
+          data={paginatedData}
           loaded={loaded}
           loadError={loadError}
           NoDataEmptyMsg={NetworkPolicyEmptyState}
