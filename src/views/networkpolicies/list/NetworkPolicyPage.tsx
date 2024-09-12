@@ -16,7 +16,7 @@ export type NetworkPolicyPageNavProps = {
   namespace: string;
 };
 
-const NetworkPolicyDetailsPage: FC<NetworkPolicyPageNavProps> = ({ namespace }) => {
+const NetworkPolicyPage: FC<NetworkPolicyPageNavProps> = ({ namespace }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -24,7 +24,6 @@ const NetworkPolicyDetailsPage: FC<NetworkPolicyPageNavProps> = ({ namespace }) 
     () => getActiveKeyFromPathname(location?.pathname),
     [location?.pathname],
   );
-
   const [isMultiEnabled] = useIsMultiEnabled();
   const { t } = useNetworkingTranslation();
 
@@ -34,6 +33,7 @@ const NetworkPolicyDetailsPage: FC<NetworkPolicyPageNavProps> = ({ namespace }) 
       onSelect={(_, tabIndex: number | string) => {
         navigate(getNetworkPolicyURLTab(tabIndex, namespace || ALL_NAMESPACES));
       }}
+      unmountOnExit
     >
       <Tab
         eventKey={TAB_INDEXES.NETWORK}
@@ -60,4 +60,4 @@ const NetworkPolicyDetailsPage: FC<NetworkPolicyPageNavProps> = ({ namespace }) 
   );
 };
 
-export default NetworkPolicyDetailsPage;
+export default NetworkPolicyPage;
