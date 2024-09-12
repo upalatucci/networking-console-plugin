@@ -32,16 +32,15 @@ const IngressDetailsSection: FC<IngressDetailsSectionProps> = ({ ingress }) => {
   const { t } = useNetworkingTranslation();
   const annotationsModalLauncher = useAnnotationsModal(ingress);
   const labelsModalLauncher = useLabelsModal(ingress);
+  const ingressNamespace = getNamespace(ingress);
 
   const [canUpdate] = useAccessReview({
     group: IngressModel?.apiGroup,
     name: getName(ingress),
-    namespace: getNamespace(ingress),
+    namespace: ingressNamespace,
     resource: IngressModel?.plural,
     verb: 'patch',
   });
-
-  const ingressNamespace = getNamespace(ingress);
 
   return (
     <>
@@ -50,8 +49,7 @@ const IngressDetailsSection: FC<IngressDetailsSectionProps> = ({ ingress }) => {
         <DetailsItem label={t('Namespace')} obj={ingress} path="metadata.namespace">
           <ResourceLink
             groupVersionKind={getGroupVersionKindForModel(NamespaceModel)}
-            name={getName(ingress)}
-            namespace={ingressNamespace}
+            name={ingressNamespace}
             title={getUID(ingress)}
           />
         </DetailsItem>
