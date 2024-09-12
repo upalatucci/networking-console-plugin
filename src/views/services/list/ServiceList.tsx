@@ -38,6 +38,7 @@ const ServiceList: FC<ServiceListProps> = ({ namespace }) => {
     isList: true,
     namespace,
   });
+
   const [data, filteredData, onFilterChange] = useListPageFilter(service);
   const columns = useServiceColumn();
   const title = t('Services');
@@ -46,6 +47,7 @@ const ServiceList: FC<ServiceListProps> = ({ namespace }) => {
     <ListEmptyState<IoK8sApiCoreV1Service>
       createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}
       data={data}
+      error={loadError}
       kind={ServiceModel.kind}
       learnMoreLink="https://kubernetes.io/docs/concepts/services-networking/service/"
       loaded={loaded}
