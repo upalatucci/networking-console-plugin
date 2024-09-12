@@ -18,12 +18,15 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 import { isEmpty } from '@utils/utils';
 
 import ExternalLink from '../ExternalLink/ExternalLink';
-import Loading from '../Loading/Loading';
+
+import ListErrorState from './ListErrorState';
+import ListSkeleton from './ListSkeleton';
 
 type ListEmptyStateProps<T> = {
   children: ReactNode;
   createButtonlink: string;
   data: T[];
+  error: any;
   kind: string;
   learnMoreLink: string;
   loaded: boolean;
@@ -34,6 +37,7 @@ const ListEmptyState = <T extends K8sResourceCommon>({
   children,
   createButtonlink,
   data,
+  error,
   kind,
   learnMoreLink,
   loaded,
@@ -42,7 +46,16 @@ const ListEmptyState = <T extends K8sResourceCommon>({
   const { t } = useNetworkingTranslation();
   const navigate = useNavigate();
   const params = useParams();
-  if (!loaded) return <Loading />;
+
+  if (error) return <ListErrorState error={error} title={title} />;
+
+  if (!loaded)
+    return (
+      <>
+        <ListPageHeader title={title} />
+        <ListSkeleton />
+      </>
+    );
 
   if (isEmpty(data))
     return (
