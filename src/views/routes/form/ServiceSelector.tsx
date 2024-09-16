@@ -5,6 +5,7 @@ import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/mode
 import { ResourceIcon, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import {
   Alert,
+  AlertVariant,
   DropdownItem,
   FormGroup,
   FormHelperText,
@@ -41,7 +42,12 @@ const ServiceSelector: FC<ServiceSelectorProps> = ({ namespace }) => {
     (service) => getName(service) === selectedServiceName,
   );
 
-  if (error) return <Alert title={t('Error')}></Alert>;
+  if (error)
+    return (
+      <Alert title={t('Error')} variant={AlertVariant.danger}>
+        {error.message}
+      </Alert>
+    );
 
   return (
     <>
