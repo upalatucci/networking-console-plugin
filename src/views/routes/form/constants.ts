@@ -2,11 +2,13 @@ import { modelToGroupVersionKind, ServiceModel } from '@kubevirt-ui/kubevirt-api
 import { t } from '@utils/hooks/useNetworkingTranslation';
 
 export const PASSTHROUGH = 'passthrough';
+export const RE_ENCRYPT = 'reencrypt';
+export const EDGE = 'edge';
 
 export const terminationTypes = {
-  edge: t('Edge'),
+  [EDGE]: t('Edge'),
   [PASSTHROUGH]: t('Passthrough'),
-  reencrypt: t('Re-encrypt'),
+  [RE_ENCRYPT]: t('Re-encrypt'),
 };
 
 export const insecureTrafficTypes = {
@@ -33,4 +35,5 @@ export const TLS_TERMINATION_FIELD_ID = 'tls-termination';
 export const TLS_TERMINATION_POLICY_FIELD_ID = 'tls-insecureEdgeTerminationPolicy';
 export const CERTIFICATE_FIELD_ID = 'certificate';
 export const CA_CERTIFICATE_FIELD_ID = 'ca-certificate';
+export const DESTINATION_CA_CERT_FIELD_ID = 'destination-ca-certificate';
 export const KEY_FIELD_ID = 'key';
