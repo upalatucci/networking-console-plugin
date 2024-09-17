@@ -6,6 +6,8 @@ import { sortable } from '@patternfly/react-table';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { RouteKind } from '@utils/types';
 
+import { sortRoutesByLocation } from '../utils/utils';
+
 export const tableColumnClasses = [
   'pf-v5-u-w-25-on-xl',
   'pf-m-hidden pf-m-visible-on-md',
@@ -44,7 +46,7 @@ const useRouteColumns: UseRouteColumns = () => {
       {
         id: 'location',
         props: { className: tableColumnClasses[3] },
-        sort: 'spec.host',
+        sort: (data, direction) => data?.sort(sortRoutesByLocation(direction)),
         title: t('Location'),
         transforms: [sortable],
       },
