@@ -5,6 +5,7 @@ import { IoK8sApiNetworkingV1Ingress } from '@kubevirt-ui/kubevirt-api/kubernete
 import { TableColumn, useActiveColumns } from '@openshift-console/dynamic-plugin-sdk';
 import { sortable } from '@patternfly/react-table';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { objectColumnSorting } from '@utils/utils/sorting';
 import { tableColumnClasses } from '@views/services/list/hooks/useServiceColumn';
 
 import { sortIngressesByHosts } from '../utils/utils';
@@ -33,7 +34,7 @@ const useIngressColumns: UseIngressColumns = () => {
       {
         id: 'labels',
         props: { className: tableColumnClasses[2] },
-        sort: 'metadata.labels',
+        sort: (data, direction) => objectColumnSorting(data, direction, null, 'metadata.labels'),
         title: t('Labels'),
         transforms: [sortable],
       },
