@@ -14,3 +14,23 @@ export const sortCommonColumnsByPath = (path: string, direction: string) => (a, 
       sensitivity: 'base',
     });
 };
+
+export const columnSorting = <T>(
+  data: T[],
+  direction: string,
+  pagination: { [key: string]: any },
+  path: string,
+) => {
+  const { endIndex, startIndex } = pagination;
+  const predicate = (a: T, b: T) => {
+    const { first, second } =
+      direction === 'asc' ? { first: a, second: b } : { first: b, second: a };
+    return getValueByPath(first, path)
+      ?.toString()
+      ?.localeCompare(getValueByPath(second, path)?.toString(), undefined, {
+        numeric: true,
+        sensitivity: 'base',
+      });
+  };
+  return data?.sort(predicate)?.slice(startIndex, endIndex);
+};
