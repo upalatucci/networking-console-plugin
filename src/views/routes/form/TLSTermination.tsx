@@ -15,14 +15,17 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 import {
   CA_CERTIFICATE_FIELD_ID,
   CERTIFICATE_FIELD_ID,
+  DESTINATION_CA_CERT_FIELD_ID,
   insecureTrafficTypes,
   KEY_FIELD_ID,
   PASSTHROUGH,
   passthroughInsecureTrafficTypes,
+  RE_ENCRYPT,
   terminationTypes,
   TLS_TERMINATION_FIELD_ID,
   TLS_TERMINATION_POLICY_FIELD_ID,
 } from './constants';
+import { omitCertificatesOnTypeChange } from './utils';
 
 const TLSTermination: FC = () => {
   const { t } = useNetworkingTranslation();
@@ -49,7 +52,11 @@ const TLSTermination: FC = () => {
                   <DropdownItem
                     key={type}
                     onClick={() =>
-                      onChange({ ...value, insecureEdgeTerminationPolicy: '', termination: type })
+                      onChange({
+                        ...omitCertificatesOnTypeChange(value, type),
+                        insecureEdgeTerminationPolicy: '',
+                        termination: type,
+                      })
                     }
                     value={type}
                   >
@@ -142,6 +149,29 @@ const TLSTermination: FC = () => {
                   value={value?.caCertificate}
                 />
               </FormGroup>
+
+              {terminationType === RE_ENCRYPT && (
+                <FormGroup
+                  fieldId={DESTINATION_CA_CERT_FIELD_ID}
+                  label={t('Destination CA certificate')}
+                >
+                  <FileUpload
+                    id={DESTINATION_CA_CERT_FIELD_ID}
+                    onClearClick={() => onChange({ ...value, destinationCACertificate: '' })}
+                    onDataChange={(event, data) =>
+                      onChange({ ...value, destinationCACertificate: data })
+                    }
+                    onFileInputChange={(event, data) =>
+                      onChange({ ...value, destinationCACertificate: data })
+                    }
+                    onTextChange={(event, data) =>
+                      onChange({ ...value, destinationCACertificate: data })
+                    }
+                    type="text"
+                    value={value?.destinationCACertificate}
+                  />
+                </FormGroup>
+              )}
             </>
           )}
           rules={{ required: false }}
