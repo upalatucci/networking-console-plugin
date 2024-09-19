@@ -47,7 +47,7 @@ const MultiNetworkPolicyList: FC<MultiNetworkPolicyListProps> = ({ namespace }) 
 
   const { onPaginationChange, pagination } = usePagination();
   const [data, filteredData, onFilterChange] = useListPageFilter(multinetworkPolicies);
-  const [columns, activeColumns] = useNetworkPolicyColumn(pagination, data);
+  const [columns, activeColumns] = useNetworkPolicyColumn(pagination, filteredData);
   const title = t('MultiNetworkPolicies');
 
   const paginatedData = filteredData?.slice(pagination.startIndex, pagination.endIndex);
