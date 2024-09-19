@@ -38,10 +38,10 @@ const LabelSelectorEditor: FC<LabelSelectorEditorProps> = ({
     <>
       <div className="row pairs-list__heading">
         <div className="col-xs-5 text-secondary text-uppercase" id="editor-label-header">
-          {t('Label')}
+          {t('Key')}
         </div>
         <div className="col-xs-5 text-secondary text-uppercase" id="editor-selector-header">
-          {t('Selector')}
+          {t('Value')}
         </div>
         <div className="col-xs-1 co-empty__header" />
       </div>
