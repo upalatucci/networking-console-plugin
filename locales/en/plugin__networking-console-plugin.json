@@ -302,7 +302,7 @@
   "This NetworkPolicy cannot be displayed in form. Please switch to the YAML editor.": "This NetworkPolicy cannot be displayed in form. Please switch to the YAML editor.",
   "This route splits traffic across multiple services.": "This route splits traffic across multiple services.",
   "TLS certificate": "TLS certificate",
-  "TLS certificates for edge and re-encrypt termination. If not specified, the router&apos;s default certificate is used.": "TLS certificates for edge and re-encrypt termination. If not specified, the router&apos;s default certificate is used.",
+  "TLS certificates for edge and re-encrypt termination. If not specified, the router's default certificate is used.": "TLS certificates for edge and re-encrypt termination. If not specified, the router's default certificate is used.",
   "TLS is not enabled": "TLS is not enabled",
   "TLS Settings": "TLS Settings",
   "TLS termination": "TLS termination",
