@@ -1,36 +1,38 @@
 import React, { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { FormGroup, Grid, GridItem, TextInput, ValidatedOptions } from '@patternfly/react-core';
-import FormGroupHelperText from '@utils/components/FormGroupHelperText/FormGroupHelperText';
-import { handleBlur } from '@utils/components/FormGroupHelperText/utils/utils';
+import {
+  FormGroup,
+  /*Grid, GridItem,*/ TextInput /*ValidatedOptions*/,
+} from '@patternfly/react-core';
+// import FormGroupHelperText from '@utils/components/FormGroupHelperText/FormGroupHelperText';
+// import { handleBlur } from '@utils/components/FormGroupHelperText/utils/utils';
 import PopoverHelpIcon from '@utils/components/PopoverHelpIcon/PopoverHelpIcon';
-import TechPreview from '@utils/components/TechPreview/TechPreview';
+// import TechPreview from '@utils/components/TechPreview/TechPreview';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import {
   NetworkAttachmentDefinitionFormInput,
   NetworkTypeKeys,
 } from '@views/nads/form/utils/types';
 
-import { validateIpOrSubnets, validateSubnets } from '../../utils/utils';
-import SubnetsHelperText from '../SubnetsHelperText/SubnetsHelperText';
-
+// import { validateIpOrSubnets,validateSubnets } from '../../utils/utils';
+// import SubnetsHelperText from '../SubnetsHelperText/SubnetsHelperText';
 import './OVNK8sSecondaryLocalnetParameters.scss';
 
 const OVNK8sSecondaryLocalnetParameters: FC = () => {
   const { t } = useNetworkingTranslation();
 
   const {
-    clearErrors,
-    formState: { errors },
+    // clearErrors,
+    // formState: { errors },
     register,
-    setError,
+    // setError,
   } = useFormContext<NetworkAttachmentDefinitionFormInput>();
 
   const baseId = NetworkTypeKeys.ovnKubernetesSecondaryLocalnet;
 
-  const excludeSubnetsError = errors?.[baseId]?.excludeSubnets;
-  const subnetsError = errors?.[baseId]?.subnets;
+  // const excludeSubnetsError = errors?.[baseId]?.excludeSubnets;
+  // const subnetsError = errors?.[baseId]?.subnets;
 
   return (
     <>
@@ -57,7 +59,7 @@ const OVNK8sSecondaryLocalnetParameters: FC = () => {
       <FormGroup label={t('VLAN')}>
         <TextInput {...register(`${baseId}.vlanID`)} />
       </FormGroup>
-      <FormGroup label={t('Subnets')} labelIcon={<TechPreview />}>
+      {/* <FormGroup label={t('Subnets')} labelIcon={<TechPreview />}>
         <TextInput
           {...register(`${baseId}.subnets`, {
             onBlur: (event) =>
@@ -106,7 +108,7 @@ const OVNK8sSecondaryLocalnetParameters: FC = () => {
             </FormGroupHelperText>
           </GridItem>
         </Grid>
-      </FormGroup>
+      </FormGroup> */}
     </>
   );
 };
