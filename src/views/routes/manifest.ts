@@ -65,9 +65,20 @@ export const RoutesExtensions: EncodedExtension[] = [
     },
     type: 'console.page/route',
   } as EncodedExtension<RoutePage>,
+  {
+    properties: {
+      component: {
+        $codeRef: 'EditRoute',
+      },
+      exact: true,
+      path: ['/k8s/ns/:namespace/route.openshift.io~v1~Route/:name/form'],
+    },
+    type: 'console.page/route',
+  } as EncodedExtension<RoutePage>,
 ];
 
 export const RoutesExposedModules: ConsolePluginBuildMetadata['exposedModules'] = {
+  EditRoute: './views/routes/details/EditRoute.tsx',
   RouteDetails: './views/routes/details/RouteDetailsPage.tsx',
   RouteFormPage: './views/routes/form/RouteFormPage.tsx',
   RoutesList: './views/routes/list/RoutesList.tsx',
