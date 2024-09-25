@@ -1,12 +1,14 @@
+import { useCallback } from 'react';
+
 import { NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
 import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { TableColumn, useActiveColumns } from '@openshift-console/dynamic-plugin-sdk';
 import { sortable } from '@patternfly/react-table';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { PaginationState } from '@utils/hooks/usePagination/utils/types';
-import { sortCommonColumnsByPath } from '@utils/utils/sorting';
+import { columnSorting } from '@utils/utils/sorting';
 
-type UseClusterPreferenceListColumnsValues = [
+type UseNetworkPolicyListColumnsValues = [
   columns: TableColumn<IoK8sApiNetworkingV1NetworkPolicy>[],
   activeColumns: TableColumn<IoK8sApiNetworkingV1NetworkPolicy>[],
 ];
@@ -14,29 +16,33 @@ type UseClusterPreferenceListColumnsValues = [
 type UseNetworkPolicyListColumns = (
   pagination: PaginationState,
   data: IoK8sApiNetworkingV1NetworkPolicy[],
-) => UseClusterPreferenceListColumnsValues;
+) => UseNetworkPolicyListColumnsValues;
 
-const useNetworkPolicyColumn: UseNetworkPolicyListColumns = () => {
+const useNetworkPolicyColumn: UseNetworkPolicyListColumns = (pagination, data) => {
   const { t } = useNetworkingTranslation();
+
+  const sorting = useCallback(
+    (direction, path) => columnSorting(data, direction, pagination, path),
+    [data, pagination],
+  );
 
   const columns: TableColumn<IoK8sApiNetworkingV1NetworkPolicy>[] = [
     {
       id: 'name',
-      sort: 'metadata.name',
+      sort: (_, direction) => sorting(direction, 'metadata.name'),
       title: t('Name'),
       transforms: [sortable],
     },
     {
       id: 'namespace',
-      sort: 'metadata.namespace',
+      sort: (_, direction) => sorting(direction, 'metadata.namespace'),
       title: t('Namespace'),
       transforms: [sortable],
     },
     {
       id: 'pod-selector',
       props: { className: 'pf-m-hidden pf-m-visible-on-md' },
-      sort: (data, direction) =>
-        data?.sort(sortCommonColumnsByPath('spec.podSelector.matchLabels', direction)),
+      sort: (_, direction) => sorting(direction, 'spec.podSelector.matchLabels'),
       title: t('Pod selector'),
       transforms: [sortable],
     },
