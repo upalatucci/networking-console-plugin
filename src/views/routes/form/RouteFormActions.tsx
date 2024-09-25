@@ -8,9 +8,10 @@ import { isEmpty } from '@utils/utils';
 
 type RouteFormActionsProps = {
   apiError: Error;
+  isCreationForm?: boolean;
 };
 
-const RouteFormActions: FC<RouteFormActionsProps> = ({ apiError }) => {
+const RouteFormActions: FC<RouteFormActionsProps> = ({ apiError, isCreationForm }) => {
   const { t } = useNetworkingTranslation();
   const navigate = useNavigate();
   const {
@@ -32,7 +33,7 @@ const RouteFormActions: FC<RouteFormActionsProps> = ({ apiError }) => {
           type="submit"
           variant={ButtonVariant.primary}
         >
-          {t('Create')}
+          {isCreationForm ? t('Create') : t('Edit')}
         </Button>
         <Button
           id="cancel"

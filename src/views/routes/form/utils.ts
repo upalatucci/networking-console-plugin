@@ -13,7 +13,6 @@ export const generateDefaultRoute = (namespace: string): RouteKind => ({
   },
   spec: {
     path: '/',
-    tls: null,
     to: {
       kind: 'Service',
       name: '',

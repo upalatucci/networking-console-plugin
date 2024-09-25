@@ -114,6 +114,7 @@
   "Edge": "Edge",
   "Edit": "Edit",
   "Edit {{kind}}": "Edit {{kind}}",
+  "Edit {{label}}": "Edit {{label}}",
   "Edit annotations": "Edit annotations",
   "Edit Ingress": "Edit Ingress",
   "Edit labels": "Edit labels",
