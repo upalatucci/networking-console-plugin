@@ -1,6 +1,7 @@
 import React, { FC, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom-v5-compat';
 
+import { ListPageHeader } from '@openshift-console/dynamic-plugin-sdk';
 import { Tab, Tabs, TabTitleText } from '@patternfly/react-core';
 import { ALL_NAMESPACES } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
@@ -28,35 +29,42 @@ const NetworkPolicyPage: FC<NetworkPolicyPageNavProps> = ({ namespace }) => {
   const { t } = useNetworkingTranslation();
 
   return (
-    <Tabs
-      activeKey={locationTabKey}
-      onSelect={(_, tabIndex: number | string) => {
-        navigate(getNetworkPolicyURLTab(tabIndex, namespace || ALL_NAMESPACES));
-      }}
-      unmountOnExit
-    >
-      <Tab
-        eventKey={TAB_INDEXES.NETWORK}
-        title={<TabTitleText>{t('NetworkPolicies')}</TabTitleText>}
+    <>
+      <ListPageHeader
+        title={
+          locationTabKey === TAB_INDEXES.NETWORK ? t('NetworkPolicies') : t('MultiNetworkPolicies')
+        }
+      ></ListPageHeader>
+      <Tabs
+        activeKey={locationTabKey}
+        onSelect={(_, tabIndex: number | string) => {
+          navigate(getNetworkPolicyURLTab(tabIndex, namespace || ALL_NAMESPACES));
+        }}
+        unmountOnExit
       >
-        <NetworkPolicyList namespace={namespace} />
-      </Tab>
-      {isMultiEnabled ? (
         <Tab
-          eventKey={TAB_INDEXES.MULTI_NETWORK}
-          title={<TabTitleText>{t('MultiNetworkPolicies')}</TabTitleText>}
+          eventKey={TAB_INDEXES.NETWORK}
+          title={<TabTitleText>{t('NetworkPolicies')}</TabTitleText>}
         >
-          <MultiNetworkPolicyList namespace={namespace} />
+          <NetworkPolicyList namespace={namespace} />
         </Tab>
-      ) : (
-        <Tab
-          eventKey={TAB_INDEXES.ENABLE_MULTI}
-          title={<TabTitleText>{t('MultiNetworkPolicies')}</TabTitleText>}
-        >
-          <EnableMultiPage namespace={namespace} />
-        </Tab>
-      )}
-    </Tabs>
+        {isMultiEnabled ? (
+          <Tab
+            eventKey={TAB_INDEXES.MULTI_NETWORK}
+            title={<TabTitleText>{t('MultiNetworkPolicies')}</TabTitleText>}
+          >
+            <MultiNetworkPolicyList namespace={namespace} />
+          </Tab>
+        ) : (
+          <Tab
+            eventKey={TAB_INDEXES.ENABLE_MULTI}
+            title={<TabTitleText>{t('MultiNetworkPolicies')}</TabTitleText>}
+          >
+            <EnableMultiPage namespace={namespace} />
+          </Tab>
+        )}
+      </Tabs>
+    </>
   );
 };
 

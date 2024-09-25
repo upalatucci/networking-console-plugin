@@ -30,7 +30,7 @@ type ListEmptyStateProps<T> = {
   kind: string;
   learnMoreLink: string;
   loaded: boolean;
-  title: string;
+  title?: string;
 };
 
 const ListEmptyState = <T extends K8sResourceCommon>({
@@ -52,7 +52,7 @@ const ListEmptyState = <T extends K8sResourceCommon>({
   if (!loaded)
     return (
       <>
-        <ListPageHeader title={title} />
+        {title && <ListPageHeader title={title} />}
         <ListSkeleton />
       </>
     );
@@ -60,7 +60,7 @@ const ListEmptyState = <T extends K8sResourceCommon>({
   if (isEmpty(data))
     return (
       <>
-        <ListPageHeader title={title} />
+        {title && <ListPageHeader title={title} />}
         <EmptyState>
           <EmptyStateHeader
             headingLevel="h4"

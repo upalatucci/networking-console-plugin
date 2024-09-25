@@ -7,7 +7,6 @@ import {
   ListPageBody,
   ListPageCreateButton,
   ListPageFilter,
-  ListPageHeader,
   useK8sWatchResource,
   useListPageFilter,
   VirtualizedTable,
@@ -47,7 +46,6 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
   const { onPaginationChange, pagination } = usePagination();
   const [data, filteredData, onFilterChange] = useListPageFilter(networkPolicies);
   const [columns, activeColumns] = useNetworkPolicyColumn(pagination, filteredData);
-  const title = t('NetworkPolicies');
 
   return (
     <ListEmptyState<IoK8sApiNetworkingV1NetworkPolicy>
@@ -57,30 +55,27 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
       kind={NetworkPolicyModel.kind}
       learnMoreLink="https://kubernetes.io/docs/concepts/services-networking/network-policies/"
       loaded={loaded}
-      title={title}
     >
-      <ListPageHeader title={t('NetworkPolicies')}>
-        {!isEmpty(data.length) && (
-          <ListPageCreateButton
-            className="list-page-create-button-margin"
-            createAccessReview={{
-              groupVersionKind: modelToGroupVersionKind(NetworkPolicyModel),
-              namespace,
-            }}
-            onClick={() =>
-              navigate(
-                `${resourcePathFromModel(
-                  NetworkPolicyModel,
-                  null,
-                  namespace || DEFAULT_NAMESPACE,
-                )}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}`,
-              )
-            }
-          >
-            {t('Create NetworkPolicy')}
-          </ListPageCreateButton>
-        )}
-      </ListPageHeader>
+      {!isEmpty(data.length) && (
+        <ListPageCreateButton
+          className="list-page-create-button-margin"
+          createAccessReview={{
+            groupVersionKind: modelToGroupVersionKind(NetworkPolicyModel),
+            namespace,
+          }}
+          onClick={() =>
+            navigate(
+              `${resourcePathFromModel(
+                NetworkPolicyModel,
+                null,
+                namespace || DEFAULT_NAMESPACE,
+              )}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}`,
+            )
+          }
+        >
+          {t('Create NetworkPolicy')}
+        </ListPageCreateButton>
+      )}
       <ListPageBody>
         <div className="list-management-group">
           <ListPageFilter
