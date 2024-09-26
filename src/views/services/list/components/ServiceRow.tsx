@@ -55,7 +55,7 @@ const ServiceRow: FC<ServiceRowType> = ({ activeColumnIDs, obj }) => {
           <Selector namespace={obj.metadata.namespace} selector={obj.spec.selector} />
         )}
       </TableData>
-      <TableData activeColumnIDs={activeColumnIDs} className={tableColumnClasses[2]} id="labels">
+      <TableData activeColumnIDs={activeColumnIDs} className={tableColumnClasses[4]} id="labels">
         <ServiceLocation service={obj} />
       </TableData>
       <TableData activeColumnIDs={activeColumnIDs} id="">

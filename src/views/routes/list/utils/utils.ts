@@ -78,3 +78,12 @@ export const getRouteLabel = (route: RouteKind): string => {
   }
   return label;
 };
+
+export const sortRoutesByLocation = (direction: string) => (a: RouteKind, b: RouteKind) => {
+  const { first, second } = direction === 'asc' ? { first: a, second: b } : { first: b, second: a };
+
+  const firstValue = getRouteLabel(first);
+  const secondValue = getRouteLabel(second);
+
+  return firstValue?.localeCompare(secondValue);
+};

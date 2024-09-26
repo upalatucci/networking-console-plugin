@@ -6,7 +6,7 @@ import { TableColumn, useActiveColumns } from '@openshift-console/dynamic-plugin
 import { sortable } from '@patternfly/react-table';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { PaginationState } from '@utils/hooks/usePagination/utils/types';
-import { columnSorting } from '@utils/utils/sorting';
+import { columnSorting, objectColumnSorting } from '@utils/utils/sorting';
 
 type UseNetworkPolicyListColumnsValues = [
   columns: TableColumn<IoK8sApiNetworkingV1NetworkPolicy>[],
@@ -26,6 +26,11 @@ const useNetworkPolicyColumn: UseNetworkPolicyListColumns = (pagination, data) =
     [data, pagination],
   );
 
+  const sortingObjects = useCallback(
+    (direction, path) => objectColumnSorting(data, direction, pagination, path),
+    [data, pagination],
+  );
+
   const columns: TableColumn<IoK8sApiNetworkingV1NetworkPolicy>[] = [
     {
       id: 'name',
@@ -42,7 +47,7 @@ const useNetworkPolicyColumn: UseNetworkPolicyListColumns = (pagination, data) =
     {
       id: 'pod-selector',
       props: { className: 'pf-m-hidden pf-m-visible-on-md' },
-      sort: (_, direction) => sorting(direction, 'spec.podSelector.matchLabels'),
+      sort: (_, direction) => sortingObjects(direction, 'spec.podSelector.matchLabels'),
       title: t('Pod selector'),
       transforms: [sortable],
     },
