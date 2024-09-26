@@ -111,7 +111,7 @@ const TLSTermination: FC = () => {
 
               <Text component={TextVariants.p}>
                 {t(
-                  'TLS certificates for edge and re-encrypt termination. If not specified, the router&apos;s default certificate is used.',
+                  "TLS certificates for edge and re-encrypt termination. If not specified, the router's default certificate is used.",
                 )}
               </Text>
 
