@@ -40,7 +40,7 @@ const useRouteActions: UseRouteActions = (route) => {
     {
       accessReview: asAccessReview(RouteModel, route, 'update'),
       cta: () =>
-        history.push(`/k8s/ns/${routeNamespace}/${modelToRef(RouteModel)}/${routeName}/yaml`),
+        history.push(`/k8s/ns/${routeNamespace}/${modelToRef(RouteModel)}/${routeName}/form`),
       id: 'edit-routes',
       label: t('Edit Route'),
     },

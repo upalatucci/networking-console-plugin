@@ -3,7 +3,7 @@ import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { RouteModel } from '@kubevirt-ui/kubevirt-api/console';
-import { k8sCreate, useActiveNamespace } from '@openshift-console/dynamic-plugin-sdk';
+import { k8sCreate, k8sUpdate, useActiveNamespace } from '@openshift-console/dynamic-plugin-sdk';
 import {
   Checkbox,
   Form,
@@ -16,7 +16,7 @@ import {
   TextInput,
 } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { resourcePathFromModel } from '@utils/resources/shared';
+import { getName, getNamespace, resourcePathFromModel } from '@utils/resources/shared';
 import { RouteKind } from '@utils/types';
 import { getValidNamespace } from '@utils/utils';
 
@@ -24,6 +24,7 @@ import { HOST_FIELD_ID, NAME_FIELD_ID, PATH_FIELD_ID, SECURITY_FIELD_ID } from '
 import RouteFormActions from './RouteFormActions';
 import ServiceSelector from './ServiceSelector';
 import TLSTermination from './TLSTermination';
+import useIsCreationForm from './useIsCreationForm';
 
 type RouteFormProps = {
   formData: RouteKind;
@@ -36,6 +37,8 @@ const RouteForm: FC<RouteFormProps> = ({ formData, onChange: onFormChange }) => 
   const [apiError, setError] = useState<Error>(null);
   const [activeNamespace] = useActiveNamespace();
   const namespace = getValidNamespace(activeNamespace);
+
+  const isCreationForm = useIsCreationForm();
 
   const methods = useForm<RouteKind>({
     defaultValues: formData,
@@ -54,7 +57,11 @@ const RouteForm: FC<RouteFormProps> = ({ formData, onChange: onFormChange }) => 
   const isSecured = Boolean(tls);
 
   const onSubmit = (data: RouteKind) => {
-    k8sCreate({ data, model: RouteModel })
+    const k8sPromise = isCreationForm
+      ? k8sCreate({ data, model: RouteModel })
+      : k8sUpdate({ data, model: RouteModel, name: getName(data), ns: getNamespace(data) });
+
+    k8sPromise
       .then(() => {
         navigate(resourcePathFromModel(RouteModel, data?.metadata?.name, namespace));
       })
@@ -68,7 +75,11 @@ const RouteForm: FC<RouteFormProps> = ({ formData, onChange: onFormChange }) => 
       <FormProvider {...methods}>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <FormGroup fieldId={NAME_FIELD_ID} isRequired label={t('Name')}>
-            <TextInput id={NAME_FIELD_ID} {...register('metadata.name', { required: true })} />
+            <TextInput
+              id={NAME_FIELD_ID}
+              {...register('metadata.name', { required: true })}
+              isDisabled={!isCreationForm}
+            />
 
             <FormHelperText>
               <HelperText>
@@ -103,7 +114,6 @@ const RouteForm: FC<RouteFormProps> = ({ formData, onChange: onFormChange }) => 
           <FormGroup fieldId={SECURITY_FIELD_ID} label={t('Security')}>
             <Controller
               control={control}
-              defaultValue={true as never}
               name={'spec.tls'}
               render={({ field: { onChange, value } }) => (
                 <Checkbox
@@ -128,7 +138,7 @@ const RouteForm: FC<RouteFormProps> = ({ formData, onChange: onFormChange }) => 
 
           {isSecured && <TLSTermination />}
 
-          <RouteFormActions apiError={apiError} />
+          <RouteFormActions apiError={apiError} isCreationForm={isCreationForm} />
         </Form>
       </FormProvider>
     </PageSection>
