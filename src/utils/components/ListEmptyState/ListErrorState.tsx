@@ -30,7 +30,7 @@ const ListErrorState: FC<ListErrorStateProps> = ({ error, title }) => {
   if (error?.response?.status === 403)
     return (
       <>
-        <ListPageHeader title={title} />
+        {title && <ListPageHeader title={title} />}
         <EmptyState className="list-error-state-root">
           <EmptyStateHeader
             headingLevel="h4"
@@ -52,7 +52,7 @@ const ListErrorState: FC<ListErrorStateProps> = ({ error, title }) => {
 
   return (
     <>
-      <ListPageHeader title={title} />
+      {title && <ListPageHeader title={title} />}
       <EmptyState className="list-error-state-root">
         <EmptyStateBody>
           <span className="error-text-body">{error?.message}</span>
