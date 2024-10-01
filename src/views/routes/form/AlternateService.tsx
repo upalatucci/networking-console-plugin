@@ -7,12 +7,11 @@ import {
   Button,
   DropdownItem,
   FormGroup,
-  FormHelperText,
-  HelperText,
-  HelperTextItem,
   TextInput,
+  ValidatedOptions,
 } from '@patternfly/react-core';
 import { MinusCircleIcon } from '@patternfly/react-icons';
+import FormGroupHelperText from '@utils/components/FormGroupHelperText/FormGroupHelperText';
 import Select from '@utils/components/Select/Select';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { getName } from '@utils/resources/shared';
@@ -39,7 +38,11 @@ const AlternateService: FC<AlternateServiceProps> = ({
 }) => {
   const { t } = useNetworkingTranslation();
 
-  const { control, register } = useFormContext<RouteKind>();
+  const {
+    control,
+    formState: { errors },
+    register,
+  } = useFormContext<RouteKind>();
 
   return (
     <Controller
@@ -85,11 +88,15 @@ const AlternateService: FC<AlternateServiceProps> = ({
               </>
             </Select>
 
-            <FormHelperText>
-              <HelperText>
-                <HelperTextItem>{t('Alternate Service to route to.')}</HelperTextItem>
-              </HelperText>
-            </FormHelperText>
+            <FormGroupHelperText
+              validated={
+                errors?.spec?.alternateBackends?.[index]?.name
+                  ? ValidatedOptions.error
+                  : ValidatedOptions.default
+              }
+            >
+              {t('Alternate Service to route to.')}
+            </FormGroupHelperText>
           </FormGroup>
           <FormGroup
             fieldId={`${AS_WEIGHT_PREFIX_FIELD_ID}${field.id}`}
@@ -105,15 +112,17 @@ const AlternateService: FC<AlternateServiceProps> = ({
                 setValueAs: parseInt,
               })}
             />
-            <FormHelperText>
-              <HelperText>
-                <HelperTextItem>
-                  {t(
-                    'A number between 0 and 255 that depicts relative weight compared with other targets.',
-                  )}
-                </HelperTextItem>
-              </HelperText>
-            </FormHelperText>
+            <FormGroupHelperText
+              validated={
+                errors?.spec?.alternateBackends?.[index]?.weight
+                  ? ValidatedOptions.error
+                  : ValidatedOptions.default
+              }
+            >
+              {t(
+                'A number between 0 and 255 that depicts relative weight compared with other targets.',
+              )}
+            </FormGroupHelperText>
           </FormGroup>
         </>
       )}

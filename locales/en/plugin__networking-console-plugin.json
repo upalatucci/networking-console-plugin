@@ -280,6 +280,7 @@
   "Service port mapping": "Service port mapping",
   "Service routing": "Service routing",
   "Service to route to.": "Service to route to.",
+  "Service weight": "Service weight",
   "Services": "Services",
   "Session affinity": "Session affinity",
   "Show a preview of the <2>affected pods</2> that this egress rule will apply to.": "Show a preview of the <2>affected pods</2> that this egress rule will apply to.",

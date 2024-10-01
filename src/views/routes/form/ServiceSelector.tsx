@@ -8,17 +8,23 @@ import {
   AlertVariant,
   DropdownItem,
   FormGroup,
-  FormHelperText,
-  HelperText,
-  HelperTextItem,
+  TextInput,
+  ValidatedOptions,
 } from '@patternfly/react-core';
+import FormGroupHelperText from '@utils/components/FormGroupHelperText/FormGroupHelperText';
 import Loading from '@utils/components/Loading/Loading';
 import Select from '@utils/components/Select/Select';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { getName } from '@utils/resources/shared';
+import { RouteKind } from '@utils/types';
 
 import AlternateService from './AlternateServicesSection';
-import { SERVICE_FIELD_ID, ServiceGroupVersionKind } from './constants';
+import {
+  DEFAULT_SERVICE_WEIGHT,
+  SERVICE_FIELD_ID,
+  SERVICE_WEIGHT_FIELD_ID,
+  ServiceGroupVersionKind,
+} from './constants';
 import TargetPort from './Targetport';
 
 type ServiceSelectorProps = {
@@ -26,7 +32,13 @@ type ServiceSelectorProps = {
 };
 
 const ServiceSelector: FC<ServiceSelectorProps> = ({ namespace }) => {
-  const { control, setValue, watch } = useFormContext();
+  const {
+    control,
+    formState: { errors },
+    register,
+    setValue,
+    watch,
+  } = useFormContext<RouteKind>();
 
   const selectedServiceName = watch('spec.to.name');
 
@@ -55,44 +67,74 @@ const ServiceSelector: FC<ServiceSelectorProps> = ({ namespace }) => {
         control={control}
         name="spec.to.name"
         render={({ field: { onChange, value } }) => (
-          <FormGroup fieldId={SERVICE_FIELD_ID} isRequired label={t('Service')}>
-            <Select
-              id={SERVICE_FIELD_ID}
-              selected={value}
-              toggleContent={
-                value ? (
-                  <>
-                    <ResourceIcon groupVersionKind={ServiceGroupVersionKind} /> {value}
-                  </>
-                ) : (
-                  t('Select a Service')
-                )
-              }
-            >
-              <>
-                {!loaded && <Loading />}
-                {loaded &&
-                  (services || []).map((service) => (
-                    <DropdownItem
-                      key={getName(service)}
-                      onClick={() => {
-                        onChange(getName(service));
-                        setValue('spec.port.targetPort', '');
-                      }}
-                      value={getName(service)}
-                    >
-                      <ResourceIcon groupVersionKind={ServiceGroupVersionKind} /> {getName(service)}
-                    </DropdownItem>
-                  ))}
-              </>
-            </Select>
+          <>
+            <FormGroup fieldId={SERVICE_FIELD_ID} isRequired label={t('Service')}>
+              <Select
+                id={SERVICE_FIELD_ID}
+                selected={value}
+                toggleContent={
+                  value ? (
+                    <>
+                      <ResourceIcon groupVersionKind={ServiceGroupVersionKind} /> {value}
+                    </>
+                  ) : (
+                    t('Select a Service')
+                  )
+                }
+              >
+                <>
+                  {!loaded && <Loading />}
+                  {loaded &&
+                    (services || []).map((service) => (
+                      <DropdownItem
+                        key={getName(service)}
+                        onClick={() => {
+                          onChange(getName(service));
+                          setValue('spec.port.targetPort', '');
+                        }}
+                        value={getName(service)}
+                      >
+                        <ResourceIcon groupVersionKind={ServiceGroupVersionKind} />{' '}
+                        {getName(service)}
+                      </DropdownItem>
+                    ))}
+                </>
+              </Select>
 
-            <FormHelperText>
-              <HelperText>
-                <HelperTextItem>{t('Service to route to.')}</HelperTextItem>
-              </HelperText>
-            </FormHelperText>
-          </FormGroup>
+              <FormGroupHelperText
+                validated={
+                  errors?.spec?.to?.name ? ValidatedOptions.error : ValidatedOptions.default
+                }
+              >
+                {t('Service to route to.')}
+              </FormGroupHelperText>
+            </FormGroup>
+            <FormGroup fieldId={SERVICE_WEIGHT_FIELD_ID} label={t('Service weight')}>
+              <TextInput
+                defaultValue={DEFAULT_SERVICE_WEIGHT}
+                id={SERVICE_WEIGHT_FIELD_ID}
+                max={255}
+                min={0}
+                type="number"
+                {...register('spec.to.weight', {
+                  max: 255,
+                  min: 0,
+                  required: false,
+                  setValueAs: parseInt,
+                })}
+              />
+
+              <FormGroupHelperText
+                validated={
+                  errors?.spec?.to?.weight ? ValidatedOptions.error : ValidatedOptions.default
+                }
+              >
+                {t(
+                  'A number between 0 and 255 that depicts relative weight compared with other targets.',
+                )}
+              </FormGroupHelperText>
+            </FormGroup>
+          </>
         )}
         rules={{ required: true }}
       />

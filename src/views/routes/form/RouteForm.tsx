@@ -8,13 +8,12 @@ import {
   Checkbox,
   Form,
   FormGroup,
-  FormHelperText,
-  HelperText,
-  HelperTextItem,
   PageSection,
   PageSectionVariants,
   TextInput,
+  ValidatedOptions,
 } from '@patternfly/react-core';
+import FormGroupHelperText from '@utils/components/FormGroupHelperText/FormGroupHelperText';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { getName, getNamespace, resourcePathFromModel } from '@utils/resources/shared';
 import { RouteKind } from '@utils/types';
@@ -44,7 +43,13 @@ const RouteForm: FC<RouteFormProps> = ({ formData, onChange: onFormChange }) => 
     defaultValues: formData,
   });
 
-  const { control, handleSubmit, register, watch } = methods;
+  const {
+    control,
+    formState: { errors },
+    handleSubmit,
+    register,
+    watch,
+  } = methods;
 
   const route = watch();
 
@@ -81,33 +86,27 @@ const RouteForm: FC<RouteFormProps> = ({ formData, onChange: onFormChange }) => 
               isDisabled={!isCreationForm}
             />
 
-            <FormHelperText>
-              <HelperText>
-                <HelperTextItem>
-                  {t('A unique name for the Route within the project')}
-                </HelperTextItem>
-              </HelperText>
-            </FormHelperText>
+            <FormGroupHelperText
+              validated={errors?.metadata?.name ? ValidatedOptions.error : ValidatedOptions.default}
+            >
+              {t('A unique name for the Route within the project')}
+            </FormGroupHelperText>
           </FormGroup>
           <FormGroup fieldId={HOST_FIELD_ID} label={t('Hostname')}>
             <TextInput id={HOST_FIELD_ID} {...register('spec.host', { required: false })} />
-            <FormHelperText>
-              <HelperText>
-                <HelperTextItem>
-                  {t('Public hostname for the Route. If not specified, a hostname is generated.')}
-                </HelperTextItem>
-              </HelperText>
-            </FormHelperText>
+            <FormGroupHelperText
+              validated={errors?.spec?.host ? ValidatedOptions.error : ValidatedOptions.default}
+            >
+              {t('Public hostname for the Route. If not specified, a hostname is generated.')}
+            </FormGroupHelperText>
           </FormGroup>
           <FormGroup fieldId={PATH_FIELD_ID} label={t('Path')}>
             <TextInput id={PATH_FIELD_ID} {...register('spec.path', { required: false })} />
-            <FormHelperText>
-              <HelperText>
-                <HelperTextItem>
-                  {t('Path that the router watches to route traffic to the service.')}
-                </HelperTextItem>
-              </HelperText>
-            </FormHelperText>
+            <FormGroupHelperText
+              validated={errors?.spec?.path ? ValidatedOptions.error : ValidatedOptions.default}
+            >
+              {t('Path that the router watches to route traffic to the service.')}
+            </FormGroupHelperText>
           </FormGroup>
           <ServiceSelector namespace={namespace} />
 
@@ -124,16 +123,13 @@ const RouteForm: FC<RouteFormProps> = ({ formData, onChange: onFormChange }) => 
                 />
               )}
             />
-
-            <FormHelperText>
-              <HelperText>
-                <HelperTextItem>
-                  {t(
-                    'Routes can be secured using several TLS termination types for serving certificates.',
-                  )}
-                </HelperTextItem>
-              </HelperText>
-            </FormHelperText>
+            <FormGroupHelperText
+              validated={errors?.spec?.tls ? ValidatedOptions.error : ValidatedOptions.default}
+            >
+              {t(
+                'Routes can be secured using several TLS termination types for serving certificates.',
+              )}
+            </FormGroupHelperText>
           </FormGroup>
 
           {isSecured && <TLSTermination />}

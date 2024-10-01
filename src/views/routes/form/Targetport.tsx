@@ -2,15 +2,11 @@ import React, { FC } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import { IoK8sApiCoreV1Service } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
-import {
-  DropdownItem,
-  FormGroup,
-  FormHelperText,
-  HelperText,
-  HelperTextItem,
-} from '@patternfly/react-core';
+import { DropdownItem, FormGroup, ValidatedOptions } from '@patternfly/react-core';
+import FormGroupHelperText from '@utils/components/FormGroupHelperText/FormGroupHelperText';
 import Select from '@utils/components/Select/Select';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { RouteKind } from '@utils/types';
 
 type TargetPortProps = {
   service: IoK8sApiCoreV1Service;
@@ -19,7 +15,11 @@ type TargetPortProps = {
 const TargetPort: FC<TargetPortProps> = ({ service }) => {
   const { t } = useNetworkingTranslation();
 
-  const { control, watch } = useFormContext();
+  const {
+    control,
+    formState: { errors },
+    watch,
+  } = useFormContext<RouteKind>();
   const selectedTargetPort = watch('spec.port.targetPort');
 
   const ports = service?.spec?.ports;
@@ -65,11 +65,13 @@ const TargetPort: FC<TargetPortProps> = ({ service }) => {
             </>
           </Select>
 
-          <FormHelperText>
-            <HelperText>
-              <HelperTextItem>{t('Target port for traffic')}</HelperTextItem>
-            </HelperText>
-          </FormHelperText>
+          <FormGroupHelperText
+            validated={
+              errors?.spec?.port?.targetPort ? ValidatedOptions.error : ValidatedOptions.default
+            }
+          >
+            {t('Target port for traffic')}
+          </FormGroupHelperText>
         </FormGroup>
       )}
       rules={{ required: true }}
