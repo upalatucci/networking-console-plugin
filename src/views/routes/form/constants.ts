@@ -27,7 +27,10 @@ export const ServiceGroupVersionKind = modelToGroupVersionKind(ServiceModel);
 export const NAME_FIELD_ID = 'name';
 export const HOST_FIELD_ID = 'host';
 export const PATH_FIELD_ID = 'path';
-export const SERVICE_FIELD_ID = 'host';
+export const SERVICE_FIELD_ID = 'service';
+export const SERVICE_WEIGHT_FIELD_ID = 'service-weight';
+
+export const DEFAULT_SERVICE_WEIGHT = 100;
 export const SECURITY_FIELD_ID = 'security';
 export const AS_PREFIX_FIELD_ID = 'alternate-service-';
 export const AS_WEIGHT_PREFIX_FIELD_ID = 'alternate-service-weight-';
