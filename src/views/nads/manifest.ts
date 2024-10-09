@@ -52,7 +52,6 @@ export const NADsExtensions: EncodedExtension[] = [
       path: [
         `/k8s/ns/:ns/${NetworkAttachmentDefinitionExtensionModel.group}~${NetworkAttachmentDefinitionExtensionModel.version}~${NetworkAttachmentDefinitionExtensionModel.kind}/~new/form`,
       ],
-      perspective: 'admin',
     },
     type: 'console.page/route',
   } as EncodedExtension<RoutePage>,

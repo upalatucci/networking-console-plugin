@@ -44,7 +44,6 @@ export const NetworkPoliciesExtensions: EncodedExtension[] = [
         `/k8s/ns/:ns/${NetworkPolicyExtensionModel.group}~${NetworkPolicyExtensionModel.version}~${NetworkPolicyExtensionModel.kind}/enable-multi`,
         `/k8s/all-namespaces/${NetworkPolicyExtensionModel.group}~${NetworkPolicyExtensionModel.version}~${NetworkPolicyExtensionModel.kind}/enable-multi`,
       ],
-      perspective: 'admin',
     },
     type: 'console.page/route',
   } as EncodedExtension<RoutePage>,
