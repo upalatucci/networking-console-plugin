@@ -61,7 +61,6 @@ export const RoutesExtensions: EncodedExtension[] = [
       path: [
         `/k8s/ns/:ns/${RouteExtensionModel.group}~${RouteExtensionModel.version}~${RouteExtensionModel.kind}/~new/form`,
       ],
-      perspective: 'admin',
     },
     type: 'console.page/route',
   } as EncodedExtension<RoutePage>,
