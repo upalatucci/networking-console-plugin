@@ -19,9 +19,9 @@ import {
 import PopoverHelpIcon from '@utils/components/PopoverHelpIcon/PopoverHelpIcon';
 import { ALL_NAMESPACES_KEY, DEFAULT_NAMESPACE } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { UserDefinedNetworkModel } from '@utils/models';
 import { resourcePathFromModel } from '@utils/resources/shared';
 import { UserDefinedNetworkKind } from '@utils/resources/udns/types';
-import UserDefinedNetworkModel from '@utils/resources/udns/utils';
 import { isEmpty } from '@utils/utils';
 
 import UserDefinedNetworkLayerParameters from './components/UDNLayerParameters';

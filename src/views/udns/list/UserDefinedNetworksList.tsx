@@ -12,11 +12,8 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { UserDefinedNetworkModel, UserDefinedNetworkModelGroupVersionKind } from '@utils/models';
 import { UserDefinedNetworkKind } from '@utils/resources/udns/types';
-import {
-  UserDefinedNetworkModel,
-  UserDefinedNetworkModelGroupVersionKind,
-} from '@utils/resources/udns/utils';
 
 import UserDefinedNetworkCreateModal from './components/UserDefinedNetworkCreateModal';
 import UserDefinedNetworkRow from './components/UserDefinedNetworkRow';

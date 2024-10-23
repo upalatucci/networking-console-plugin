@@ -5,8 +5,8 @@ import { k8sCreate, useActiveNamespace } from '@openshift-console/dynamic-plugin
 import { Button, ButtonVariant, Modal, ModalVariant } from '@patternfly/react-core';
 import { ALL_NAMESPACES_KEY } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { UserDefinedNetworkModel } from '@utils/models';
 import { resourcePathFromModel } from '@utils/resources/shared';
-import UserDefinedNetworkModel from '@utils/resources/udns/utils';
 
 import UserDefinedNetworkCreateForm from './UserDefinedNetworkCreateForm';
 import { createUDN } from './utils';

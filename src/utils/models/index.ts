@@ -1,4 +1,5 @@
 export * from './network-policy';
+import { modelToGroupVersionKind, modelToRef } from '@kubevirt-ui/kubevirt-api/console';
 import { K8sModel } from '@openshift-console/dynamic-plugin-sdk';
 import { t } from '@utils/hooks/useNetworkingTranslation';
 
@@ -55,3 +56,42 @@ export const NetworkOperatorModel: K8sModel = {
   namespaced: false,
   plural: 'networks',
 };
+
+export const UserDefinedNetworkModel: K8sModel = {
+  abbr: 'UDN',
+  apiGroup: 'k8s.ovn.org',
+  apiVersion: 'v1',
+  crd: true,
+  id: 'userdefinednetwork',
+  kind: 'UserDefinedNetwork',
+  label: 'userdefinednetwork',
+  labelKey: t('UserDefinedNetwork'),
+  labelPlural: 'UserDefinedNetworks',
+  labelPluralKey: t('UserDefinedNetworks'),
+  namespaced: true,
+  plural: 'userdefinednetworks',
+};
+
+export const UserDefinedNetworkModelGroupVersionKind =
+  modelToGroupVersionKind(UserDefinedNetworkModel);
+export const UserDefinedNetworkModelRef = modelToRef(UserDefinedNetworkModel);
+
+export const ClusterUserDefinedNetworkModel: K8sModel = {
+  abbr: 'CUDN',
+  apiGroup: 'k8s.ovn.org',
+  apiVersion: 'v1',
+  crd: true,
+  id: 'clusteruserdefinednetwork',
+  kind: 'ClusterUserDefinedNetwork',
+  label: 'clusteruserdefinednetwork',
+  labelKey: t('ClusterUserDefinedNetwork'),
+  labelPlural: 'ClusterUserDefinedNetworks',
+  labelPluralKey: t('ClusterUserDefinedNetworks'),
+  namespaced: false,
+  plural: 'clusteruserdefinednetworks',
+};
+
+export const ClusterUserDefinedNetworkModelGroupVersionKind = modelToGroupVersionKind(
+  ClusterUserDefinedNetworkModel,
+);
+export const ClusterUserDefinedNetworkModelRef = modelToRef(ClusterUserDefinedNetworkModel);
