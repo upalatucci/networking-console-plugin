@@ -24,6 +24,10 @@ import {
   UserDefinedNetworkKind,
   UserDefinedNetworkLayer3Subnet,
 } from '@utils/resources/udns/types';
+import { TopologyKeys } from '@views/udns/form/utils/types';
+
+import UDNLayer2Details from './UDNLayer2Details';
+import UDNLayer3Details from './UDNLayer3Details';
 
 const UDNLayerDetails: FC<DetailsItemComponentProps<UserDefinedNetworkKind>> = ({ obj: udn }) => {
   const { t } = useNetworkingTranslation();
@@ -82,77 +86,23 @@ const UDNLayerDetails: FC<DetailsItemComponentProps<UserDefinedNetworkKind>> = (
 
   const getContent = () => {
     switch (getTopology(udn)) {
-      case 'Layer2':
+      case TopologyKeys.Layer2:
         return (
-          <>
-            <DetailsItem
-              defaultValue={getEmptyText()}
-              label={t('IPAMLifecycle')}
-              obj={udn}
-              path="spec.layer2.ipamLifecycle"
-            />
-            <DetailsItem
-              defaultValue={getEmptyText()}
-              label={t('MTU')}
-              obj={udn}
-              path="spec.layer2.mtu"
-            />
-            <DetailsItem
-              defaultValue={getEmptyText()}
-              label={t('Role')}
-              obj={udn}
-              path="spec.layer2.role"
-            />
-            <DetailsItem
-              defaultValue={getEmptyText()}
-              label={t('Subnets')}
-              obj={udn}
-              path="spec.layer2.subnets"
-            >
-              {getList(getLayer2Subnets(udn).map((sn) => getTextListItem(sn)))}
-            </DetailsItem>
-            <DetailsItem
-              defaultValue={getEmptyText()}
-              label={t('JoinSubnets')}
-              obj={udn}
-              path="spec.layer2.joinSubnets"
-            >
-              {getList(getLayer2JoinSubnets(udn).map((jsn) => getTextListItem(jsn)))}
-            </DetailsItem>
-          </>
+          <UDNLayer2Details
+            emptyText={getEmptyText()}
+            joinSubnets={getList(getLayer2JoinSubnets(udn).map((jsn) => getTextListItem(jsn)))}
+            subnets={getList(getLayer2Subnets(udn).map((sn) => getTextListItem(sn)))}
+            udn={udn}
+          />
         );
-      case 'Layer3':
+      case TopologyKeys.Layer3:
         return (
-          <>
-            <DetailsItem
-              defaultValue={getEmptyText()}
-              label={t('MTU')}
-              obj={udn}
-              path="spec.layer3.mtu"
-            />
-            <DetailsItem
-              defaultValue={getEmptyText()}
-              label={t('Role')}
-              obj={udn}
-              path="spec.layer3.role"
-            />
-            <DetailsItem
-              defaultValue={getEmptyText()}
-              label={t('Subnets')}
-              obj={udn}
-              path="spec.layer3.subnets"
-            >
-              {getList(getLayer3Subnets(udn).map((sn, i) => getLayer3SubnetListItem(sn, i)))}
-            </DetailsItem>
-            <DetailsItem
-              defaultValue={getEmptyText()}
-              label={t('JoinSubnets')}
-              obj={udn}
-              path="spec.layer3.joinSubnets"
-            >
-              {getList(getLayer3JoinSubnets(udn).map((jsn) => getTextListItem(jsn)))}
-            </DetailsItem>
-          </>
+          <UDNLayer3Details
+            emptyText={getEmptyText()}
+            joinSubnets={getList(getLayer3JoinSubnets(udn).map((jsn) => getTextListItem(jsn)))}
+            subnets={getList(getLayer3Subnets(udn).map((sn, i) => getLayer3SubnetListItem(sn, i)))}
+            udn={udn}
+          />
         );
       default:
         return <></>;

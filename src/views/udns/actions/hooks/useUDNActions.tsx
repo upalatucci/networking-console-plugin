@@ -2,27 +2,25 @@ import { useNavigate } from 'react-router-dom-v5-compat';
 
 import {
   Action,
+  useActiveNamespace,
   useAnnotationsModal,
   useDeleteModal,
   useLabelsModal,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { asAccessReview, getName, getNamespace } from '@utils/resources/shared';
+import { asAccessReview, getResourceURL } from '@utils/resources/shared';
 import { UserDefinedNetworkKind } from '@utils/resources/udns/types';
-import { UserDefinedNetworkModel, UserDefinedNetworkModelRef } from '@utils/resources/udns/utils';
+import { UserDefinedNetworkModel } from '@utils/resources/udns/utils';
 
 type UDNActionsProps = (obj: UserDefinedNetworkKind) => [actions: Action[]];
 
 const useUDNActions: UDNActionsProps = (obj) => {
   const { t } = useNetworkingTranslation();
-
+  const [activeNamespace] = useActiveNamespace();
   const navigate = useNavigate();
   const launchDeleteModal = useDeleteModal(obj);
   const launchLabelsModal = useLabelsModal(obj);
   const launchAnnotationsModal = useAnnotationsModal(obj);
-
-  const objNamespace = getNamespace(obj);
-  const objName = getName(obj);
 
   const actions = [
     {
@@ -39,7 +37,15 @@ const useUDNActions: UDNActionsProps = (obj) => {
     },
     {
       accessReview: asAccessReview(UserDefinedNetworkModel, obj, 'update'),
-      cta: () => navigate(`/k8s/ns/${objNamespace}/${UserDefinedNetworkModelRef}/${objName}/yaml`),
+      cta: () =>
+        navigate(
+          getResourceURL({
+            activeNamespace,
+            model: UserDefinedNetworkModel,
+            path: 'yaml',
+            resource: obj,
+          }),
+        ),
       id: 'edit-udn',
       label: t('EditUserDefinedNetwork'),
     },

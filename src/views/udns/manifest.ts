@@ -3,6 +3,7 @@ import {
   DetailsItem,
   ResourceListPage,
   ResourceNSNavItem,
+  RoutePage,
   YAMLTemplate,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { ConsolePluginBuildMetadata } from '@openshift-console/dynamic-plugin-sdk-webpack/lib/build-types';
@@ -65,7 +66,7 @@ export const UserDefinedNetworksExtensions: EncodedExtension[] = [
     },
     type: 'console.resource/details-item',
   } as EncodedExtension<DetailsItem>,
-  /*{
+  {
     properties: {
       component: {
         $codeRef: 'UserDefinedNetworkFormPage',
@@ -74,25 +75,15 @@ export const UserDefinedNetworksExtensions: EncodedExtension[] = [
       path: [
         `/k8s/ns/:ns/${UserDefinedNetworkExtensionModel.group}~${UserDefinedNetworkExtensionModel.version}~${UserDefinedNetworkExtensionModel.kind}/~new/form`,
       ],
+      perspective: 'admin',
     },
     type: 'console.page/route',
   } as EncodedExtension<RoutePage>,
-  {
-    properties: {
-      component: {
-        $codeRef: 'EditUserDefinedNetwork',
-      },
-      exact: true,
-      path: ['/k8s/ns/:namespace/route.openshift.io~v1~UserDefinedNetwork/:name/form'],
-    },
-    type: 'console.page/route',
-  } as EncodedExtension<RoutePage>,*/
 ];
 
 export const UserDefinedNetworksExposedModules: ConsolePluginBuildMetadata['exposedModules'] = {
-  // EditUserDefinedNetwork: './views/udns/details/EditUserDefinedNetwork.tsx',
+  UserDefinedNetworkFormPage: './views/udns/form/UserDefinedNetworkFormPage.tsx',
   UserDefinedNetworkLayerDetails: './views/udns/details/tabs/details/UDNLayerDetails.tsx',
-  // UserDefinedNetworkFormPage: './views/udns/form/UserDefinedNetworkFormPage.tsx',
   UserDefinedNetworksList: './views/udns/list/UserDefinedNetworksList.tsx',
   UserDefinedNetworkTopologyDetails: './views/udns/details/tabs/details/UDNTopologyDetails.tsx',
 };
