@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
 
 import ActionsDropdown from '@utils/components/ActionsDropdown/ActionsDropdown';
-import { UserDefinedNetworkKind } from '@utils/resources/udns/types';
+import { ClusterUserDefinedNetworkKind, UserDefinedNetworkKind } from '@utils/resources/udns/types';
 
 import useUDNActions from './hooks/useUDNActions';
 
 type UDNActionsProps = {
-  obj: UserDefinedNetworkKind;
+  obj: ClusterUserDefinedNetworkKind | UserDefinedNetworkKind;
 };
 
 const UDNActions: FC<UDNActionsProps> = ({ obj }) => {

@@ -8,6 +8,12 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import { ConsolePluginBuildMetadata } from '@openshift-console/dynamic-plugin-sdk-webpack/lib/build-types';
 
+const ClusterUserDefinedNetworkExtensionModel = {
+  group: 'k8s.ovn.org',
+  kind: 'ClusterUserDefinedNetwork',
+  version: 'v1',
+};
+
 const UserDefinedNetworkExtensionModel = {
   group: 'k8s.ovn.org',
   kind: 'UserDefinedNetwork',
@@ -15,6 +21,13 @@ const UserDefinedNetworkExtensionModel = {
 };
 
 export const UserDefinedNetworksExtensions: EncodedExtension[] = [
+  {
+    properties: {
+      component: { $codeRef: 'UserDefinedNetworksList' },
+      model: ClusterUserDefinedNetworkExtensionModel,
+    },
+    type: 'console.page/resource/list',
+  } as EncodedExtension<ResourceListPage>,
   {
     properties: {
       component: { $codeRef: 'UserDefinedNetworksList' },
@@ -35,6 +48,16 @@ export const UserDefinedNetworksExtensions: EncodedExtension[] = [
     },
     type: 'console.navigation/resource-ns',
   } as EncodedExtension<ResourceNSNavItem>,
+  {
+    properties: {
+      model: ClusterUserDefinedNetworkExtensionModel,
+      name: 'default',
+      template: {
+        $codeRef: 'yamlTemplates.ClusterUserDefinedNetworksYAMLTemplates',
+      },
+    },
+    type: 'console.yaml-template',
+  } as EncodedExtension<YAMLTemplate>,
   {
     properties: {
       model: UserDefinedNetworkExtensionModel,
@@ -66,6 +89,19 @@ export const UserDefinedNetworksExtensions: EncodedExtension[] = [
     },
     type: 'console.resource/details-item',
   } as EncodedExtension<DetailsItem>,
+  {
+    properties: {
+      component: {
+        $codeRef: 'UserDefinedNetworkFormPage',
+      },
+      exact: true,
+      path: [
+        `/k8s/cluster/${ClusterUserDefinedNetworkExtensionModel.group}~${ClusterUserDefinedNetworkExtensionModel.version}~${ClusterUserDefinedNetworkExtensionModel.kind}/~new/form`,
+      ],
+      perspective: 'admin',
+    },
+    type: 'console.page/route',
+  } as EncodedExtension<RoutePage>,
   {
     properties: {
       component: {
