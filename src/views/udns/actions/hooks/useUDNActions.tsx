@@ -8,14 +8,17 @@ import {
   useLabelsModal,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { UserDefinedNetworkModel } from '@utils/models';
 import { asAccessReview, getResourceURL } from '@utils/resources/shared';
-import { UserDefinedNetworkKind } from '@utils/resources/udns/types';
+import { getModel } from '@utils/resources/udns/selectors';
+import { ClusterUserDefinedNetworkKind, UserDefinedNetworkKind } from '@utils/resources/udns/types';
 
-type UDNActionsProps = (obj: UserDefinedNetworkKind) => [actions: Action[]];
+type UDNActionsProps = (
+  obj: ClusterUserDefinedNetworkKind | UserDefinedNetworkKind,
+) => [actions: Action[]];
 
 const useUDNActions: UDNActionsProps = (obj) => {
   const { t } = useNetworkingTranslation();
+  const model = getModel(obj);
   const [activeNamespace] = useActiveNamespace();
   const navigate = useNavigate();
   const launchDeleteModal = useDeleteModal(obj);
@@ -24,36 +27,36 @@ const useUDNActions: UDNActionsProps = (obj) => {
 
   const actions = [
     {
-      accessReview: asAccessReview(UserDefinedNetworkModel, obj, 'update'),
+      accessReview: asAccessReview(model, obj, 'update'),
       cta: launchLabelsModal,
       id: 'edit-labels-udn',
       label: t('Edit labels'),
     },
     {
-      accessReview: asAccessReview(UserDefinedNetworkModel, obj, 'update'),
+      accessReview: asAccessReview(model, obj, 'update'),
       cta: launchAnnotationsModal,
       id: 'edit-annotations-udn',
       label: t('Edit annotations'),
     },
     {
-      accessReview: asAccessReview(UserDefinedNetworkModel, obj, 'update'),
+      accessReview: asAccessReview(model, obj, 'update'),
       cta: () =>
         navigate(
           getResourceURL({
             activeNamespace,
-            model: UserDefinedNetworkModel,
+            model: model,
             path: 'yaml',
             resource: obj,
           }),
         ),
       id: 'edit-udn',
-      label: t('EditUserDefinedNetwork'),
+      label: t('Edit {{kind}}', { kind: model.kind }),
     },
     {
-      accessReview: asAccessReview(UserDefinedNetworkModel, obj, 'delete'),
+      accessReview: asAccessReview(model, obj, 'delete'),
       cta: launchDeleteModal,
       id: 'delete-udn',
-      label: t('DeleteUserDefinedNetwork'),
+      label: t('Delete {{kind}}', { kind: model.kind }),
     },
   ];
 

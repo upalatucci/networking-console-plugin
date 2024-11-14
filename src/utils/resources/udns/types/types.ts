@@ -1,4 +1,4 @@
-import { K8sResourceKind } from '@openshift-console/dynamic-plugin-sdk';
+import { K8sResourceKind, Selector } from '@openshift-console/dynamic-plugin-sdk';
 
 export type UserDefinedNetworkAnnotations = {
   description?: string;
@@ -31,11 +31,20 @@ export type UserDefinedNetworkLayer3 = {
   subnets?: UserDefinedNetworkLayer3Subnet[];
 };
 
+export type ClusterUserDefinedNetworkSpec = {
+  namespaceSelector?: Selector;
+  network?: UserDefinedNetworkSpec;
+};
+
 export type UserDefinedNetworkSpec = {
   layer2?: UserDefinedNetworkLayer2;
   layer3?: UserDefinedNetworkLayer3;
   topology: string;
 };
+
+export type ClusterUserDefinedNetworkKind = {
+  spec?: ClusterUserDefinedNetworkSpec;
+} & K8sResourceKind;
 
 export type UserDefinedNetworkKind = {
   spec?: UserDefinedNetworkSpec;
