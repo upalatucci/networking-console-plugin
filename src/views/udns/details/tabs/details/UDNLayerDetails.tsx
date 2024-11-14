@@ -21,6 +21,7 @@ import {
   getTopology,
 } from '@utils/resources/udns/selectors';
 import {
+  ClusterUserDefinedNetworkKind,
   UserDefinedNetworkKind,
   UserDefinedNetworkLayer3Subnet,
 } from '@utils/resources/udns/types';
@@ -29,8 +30,11 @@ import { TopologyKeys } from '@views/udns/form/utils/types';
 import UDNLayer2Details from './UDNLayer2Details';
 import UDNLayer3Details from './UDNLayer3Details';
 
-const UDNLayerDetails: FC<DetailsItemComponentProps<UserDefinedNetworkKind>> = ({ obj: udn }) => {
+const UDNLayerDetails: FC<
+  DetailsItemComponentProps<ClusterUserDefinedNetworkKind | UserDefinedNetworkKind>
+> = ({ obj }) => {
   const { t } = useNetworkingTranslation();
+  const layer3Path = obj.spec?.network ? 'spec.network.layer3' : 'spec.layer3';
 
   const getEmptyText = () => {
     return <MutedText content={t('Not available')} />;
@@ -44,16 +48,16 @@ const UDNLayerDetails: FC<DetailsItemComponentProps<UserDefinedNetworkKind>> = (
             <DetailsItem
               defaultValue={getEmptyText()}
               label={t('CIDR')}
-              obj={udn}
-              path={`spec.layer3.subnets[${i}].cidr`}
+              obj={obj}
+              path={`${layer3Path}.subnets[${i}].cidr`}
             />
           </FlexItem>
           <FlexItem flex={{ default: 'flex_1' }}>
             <DetailsItem
               defaultValue={getEmptyText()}
               label={t('HostSubnet')}
-              obj={udn}
-              path={`spec.layer3.subnets[${i}].hostSubnet`}
+              obj={obj}
+              path={`${layer3Path}.subnets[${i}].hostSubnet`}
             />
           </FlexItem>
         </Flex>
@@ -85,23 +89,23 @@ const UDNLayerDetails: FC<DetailsItemComponentProps<UserDefinedNetworkKind>> = (
   };
 
   const getContent = () => {
-    switch (getTopology(udn)) {
+    switch (getTopology(obj)) {
       case TopologyKeys.Layer2:
         return (
           <UDNLayer2Details
             emptyText={getEmptyText()}
-            joinSubnets={getList(getLayer2JoinSubnets(udn).map((jsn) => getTextListItem(jsn)))}
-            subnets={getList(getLayer2Subnets(udn).map((sn) => getTextListItem(sn)))}
-            udn={udn}
+            joinSubnets={getList(getLayer2JoinSubnets(obj).map((jsn) => getTextListItem(jsn)))}
+            obj={obj}
+            subnets={getList(getLayer2Subnets(obj).map((sn) => getTextListItem(sn)))}
           />
         );
       case TopologyKeys.Layer3:
         return (
           <UDNLayer3Details
             emptyText={getEmptyText()}
-            joinSubnets={getList(getLayer3JoinSubnets(udn).map((jsn) => getTextListItem(jsn)))}
-            subnets={getList(getLayer3Subnets(udn).map((sn, i) => getLayer3SubnetListItem(sn, i)))}
-            udn={udn}
+            joinSubnets={getList(getLayer3JoinSubnets(obj).map((jsn) => getTextListItem(jsn)))}
+            obj={obj}
+            subnets={getList(getLayer3Subnets(obj).map((sn, i) => getLayer3SubnetListItem(sn, i)))}
           />
         );
       default:

@@ -72,6 +72,27 @@ export const UserDefinedNetworksExtensions: EncodedExtension[] = [
     properties: {
       column: 'right',
       component: { $codeRef: 'UserDefinedNetworkTopologyDetails' },
+      id: 'cudn-topology-detail-item',
+      model: ClusterUserDefinedNetworkExtensionModel,
+      path: 'spec.network.topology',
+      title: 'Topology',
+    },
+    type: 'console.resource/details-item',
+  } as EncodedExtension<DetailsItem>,
+  {
+    properties: {
+      column: 'right',
+      component: { $codeRef: 'UserDefinedNetworkLayerDetails' },
+      id: 'cudn-layer-detail-item',
+      model: ClusterUserDefinedNetworkExtensionModel,
+      title: 'Layer configuration',
+    },
+    type: 'console.resource/details-item',
+  } as EncodedExtension<DetailsItem>,
+  {
+    properties: {
+      column: 'right',
+      component: { $codeRef: 'UserDefinedNetworkTopologyDetails' },
       id: 'udn-topology-detail-item',
       model: UserDefinedNetworkExtensionModel,
       path: 'spec.topology',
