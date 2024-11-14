@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import { useNavigate } from 'react-router-dom-v5-compat';
 
 import {
   ListPageBody,
@@ -8,19 +7,18 @@ import {
   ListPageHeader,
   useK8sWatchResource,
   useListPageFilter,
+  useModal,
   VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
 import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
-import { DEFAULT_NAMESPACE } from '@utils/constants';
-import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/constants/ui';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { resourcePathFromModel } from '@utils/resources/shared';
 import { UserDefinedNetworkKind } from '@utils/resources/udns/types';
 import {
   UserDefinedNetworkModel,
   UserDefinedNetworkModelGroupVersionKind,
 } from '@utils/resources/udns/utils';
 
+import UserDefinedNetworkCreateModal from './components/UserDefinedNetworkCreateModal';
 import UserDefinedNetworkRow from './components/UserDefinedNetworkRow';
 import useUDNColumns from './hooks/useUDNColumns';
 
@@ -30,8 +28,8 @@ type UserDefinedNetworksListProps = {
 
 const UserDefinedNetworksList: FC<UserDefinedNetworksListProps> = ({ namespace }) => {
   const { t } = useNetworkingTranslation();
-  const navigate = useNavigate();
 
+  const createModal = useModal();
   const [udns, loaded, loadError] = useK8sWatchResource<UserDefinedNetworkKind[]>({
     groupVersionKind: UserDefinedNetworkModelGroupVersionKind,
     isList: true,
@@ -44,12 +42,12 @@ const UserDefinedNetworksList: FC<UserDefinedNetworksListProps> = ({ namespace }
 
   return (
     <ListEmptyState<UserDefinedNetworkKind>
-      createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}
       data={data}
       error={loadError}
       kind={UserDefinedNetworkModel.kind}
       learnMoreLink="https://docs.openshift.com/container-platform/4.17/networking/multiple_networks/understanding-user-defined-network.html"
       loaded={loaded}
+      onCreate={() => createModal(UserDefinedNetworkCreateModal, {})}
       title={title}
     >
       <ListPageHeader title={title}>
@@ -59,15 +57,7 @@ const UserDefinedNetworksList: FC<UserDefinedNetworksListProps> = ({ namespace }
             groupVersionKind: UserDefinedNetworkModelGroupVersionKind,
             namespace,
           }}
-          onClick={() =>
-            navigate(
-              `${resourcePathFromModel(
-                UserDefinedNetworkModel,
-                null,
-                namespace || DEFAULT_NAMESPACE,
-              )}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}`,
-            )
-          }
+          onClick={() => createModal(UserDefinedNetworkCreateModal, {})}
         >
           {t('Create UserDefinedNetwork')}
         </ListPageCreateButton>
