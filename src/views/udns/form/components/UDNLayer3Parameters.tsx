@@ -5,11 +5,15 @@ import {
   Dropdown,
   DropdownItem,
   DropdownList,
+  Flex,
+  FlexItem,
   FormGroup,
   MenuToggle,
   MenuToggleElement,
+  Popover,
   TextInput,
 } from '@patternfly/react-core';
+import FormGroupHelperText from '@utils/components/FormGroupHelperText/FormGroupHelperText';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { UserDefinedNetworkRole } from '@utils/resources/udns/types';
 
@@ -24,13 +28,47 @@ const Layer3Parameters: FC = () => {
   const { control, register } = useFormContext<UserDefinedNetworkFormInput>();
   return (
     <>
-      <FormGroup label={t('MTU')}>
+      <FormGroup
+        label={
+          <Popover
+            bodyContent={t(
+              'MTU is optional, if not provided, the globally configured value in OVN-Kubernetes (defaults to 1400) is used for the network.',
+            )}
+          >
+            <label className="pf-v5-c-form__label">{t('MTU')}</label>
+          </Popover>
+        }
+      >
         <TextInput
           type="number"
           {...register(`${TopologyKeys.Layer3}.mtu`, { max: 65536, min: 0, required: false })}
         />
+        <FormGroupHelperText>
+          {t('MTU is the maximum transmission unit for a network.')}
+        </FormGroupHelperText>
       </FormGroup>
-      <FormGroup label={t('Role')}>
+      <FormGroup
+        label={
+          <Popover
+            bodyContent={
+              <Flex direction={{ default: 'column' }}>
+                <FlexItem>
+                  {` - ${t(
+                    'Primary network is automatically assigned to every pod created in the same namespace.',
+                  )}`}
+                </FlexItem>
+                <FlexItem>
+                  {` - ${t(
+                    'Secondary network is only assigned to pods that use k8s.v1.cni.cncf.io/networks annotation to select given network.',
+                  )}`}
+                </FlexItem>
+              </Flex>
+            }
+          >
+            <label className="pf-v5-c-form__label">{t('Role')}</label>
+          </Popover>
+        }
+      >
         <Controller
           control={control}
           name={`${TopologyKeys.Layer3}.role`}
@@ -71,6 +109,9 @@ const Layer3Parameters: FC = () => {
           )}
           rules={{ required: true }}
         />
+        <FormGroupHelperText>
+          {t('Role describes the network role in the pod.')}
+        </FormGroupHelperText>
       </FormGroup>
       <Controller
         control={control}
@@ -80,7 +121,24 @@ const Layer3Parameters: FC = () => {
             description={t('Subnets are used for the pod network across the cluster.')}
             onSubnetsChange={onChange}
             subnets={value || [{ cidr: '' }]}
-            title={t('Subnets')}
+            title={
+              <Popover
+                bodyContent={
+                  <Flex direction={{ default: 'column' }}>
+                    <FlexItem>
+                      {t(
+                        'Dual-stack clusters may set 2 subnets (one for each IP family), otherwise only 1 subnet is allowed.',
+                      )}
+                    </FlexItem>
+                    <FlexItem>
+                      {t('Given subnet is split into smaller subnets for every node.')}
+                    </FlexItem>
+                  </Flex>
+                }
+              >
+                <label className="pf-v5-c-form__label">{t('Subnets')}</label>
+              </Popover>
+            }
             withHostSubnet
           />
         )}
@@ -94,7 +152,31 @@ const Layer3Parameters: FC = () => {
             description={t('JoinSubnets are used inside the OVN network topology.')}
             onSubnetsChange={onChange}
             subnets={value || []}
-            title={t('JoinSubnets')}
+            title={
+              <Popover
+                bodyContent={
+                  <Flex direction={{ default: 'column' }}>
+                    <FlexItem>
+                      {t(
+                        'Dual-stack clusters may set 2 subnets (one for each IP family), otherwise only 1 subnet is allowed.',
+                      )}
+                    </FlexItem>
+                    <FlexItem>
+                      {t(
+                        'This field is only allowed for "Primary" network. It is not recommended to set this field without explicit need and understanding of the OVN network topology.',
+                      )}
+                    </FlexItem>
+                    <FlexItem>
+                      {t(
+                        'When omitted, the platform will choose a reasonable default which is subject to change over time.',
+                      )}
+                    </FlexItem>
+                  </Flex>
+                }
+              >
+                <label className="pf-v5-c-form__label">{t('JoinSubnets')}</label>
+              </Popover>
+            }
           />
         )}
         rules={{ required: false }}

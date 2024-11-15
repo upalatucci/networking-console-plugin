@@ -5,10 +5,14 @@ import {
   Dropdown,
   DropdownItem,
   DropdownList,
+  Flex,
+  FlexItem,
   FormGroup,
   MenuToggle,
   MenuToggleElement,
+  Popover,
 } from '@patternfly/react-core';
+import FormGroupHelperText from '@utils/components/FormGroupHelperText/FormGroupHelperText';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 import { TopologyKeys, UserDefinedNetworkFormInput } from '../utils/types';
@@ -17,14 +21,34 @@ const UserDefinedNetworkTopologySelect: FC = () => {
   const { t } = useNetworkingTranslation();
   const { control } = useFormContext<UserDefinedNetworkFormInput>();
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
-  const topologyTitle = t('Topology');
 
   return (
     <Controller
       control={control}
       name="topology"
       render={({ field: { onChange, value } }) => (
-        <FormGroup fieldId="basic-settings-topology" isRequired label={topologyTitle}>
+        <FormGroup
+          fieldId="basic-settings-topology"
+          isRequired
+          label={
+            <Popover
+              bodyContent={
+                <Flex direction={{ default: 'column' }}>
+                  <FlexItem>
+                    {` - ${t(
+                      'Layer3 topology creates a layer 2 segment per node, each with a different subnet. Layer 3 routing is used to interconnect node subnets.',
+                    )}`}
+                  </FlexItem>
+                  <FlexItem>
+                    {` - ${t('Layer2 topology creates one logical switch shared by all nodes.')}`}
+                  </FlexItem>
+                </Flex>
+              }
+            >
+              <label className="pf-v5-c-form__label">{t('Topology')}</label>
+            </Popover>
+          }
+        >
           <Dropdown
             id="topology"
             isOpen={isDropdownOpen}
@@ -39,7 +63,7 @@ const UserDefinedNetworkTopologySelect: FC = () => {
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 ref={toggleRef}
               >
-                {TopologyKeys[value] || topologyTitle}
+                {TopologyKeys[value] || t('Topology')}
               </MenuToggle>
             )}
           >
@@ -57,6 +81,9 @@ const UserDefinedNetworkTopologySelect: FC = () => {
               ))}
             </DropdownList>
           </Dropdown>
+          <FormGroupHelperText>
+            {t('Topology describes network configuration.')}
+          </FormGroupHelperText>
         </FormGroup>
       )}
       rules={{ required: true }}
