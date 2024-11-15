@@ -17,10 +17,10 @@ import {
 } from '@utils/resources/udns/types';
 
 type UDNSubnetsProps = {
-  description: string;
+  description: React.ReactNode;
   onSubnetsChange: (subnets: UserDefinedNetworkSubnet[]) => void;
   subnets: UserDefinedNetworkSubnet[];
-  title: string;
+  title: React.ReactNode;
   withHostSubnet?: boolean;
 };
 
