@@ -36,23 +36,15 @@ const RoutesList: FC<RoutesListProps> = ({ namespace }) => {
     namespace,
   });
 
-  const routes = routesFetch.map((route, index) => {
-    if (index % 2 === 0) {
-      route.status.ingress = null;
-    }
-
-    return route;
-  });
-
   const routeFilters = useRouteFilters();
-  const [data, filteredData, onFilterChange] = useListPageFilter(routes, routeFilters);
+  const [data, filteredData, onFilterChange] = useListPageFilter(routesFetch, routeFilters);
   const columns = useRouteColumns();
   const title = t('Routes');
 
   return (
     <ListEmptyState<RouteKind>
       createButtonlink={SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}
-      data={routes}
+      data={routesFetch}
       error={loadError}
       kind={RouteModel.kind}
       learnMoreLink="https://docs.redhat.com/en/documentation/openshift_container_platform/4.16/html/networking/configuring-routes"
