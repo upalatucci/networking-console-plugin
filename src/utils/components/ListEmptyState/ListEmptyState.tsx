@@ -24,12 +24,13 @@ import ListSkeleton from './ListSkeleton';
 
 type ListEmptyStateProps<T> = {
   children: ReactNode;
-  createButtonlink: string;
+  createButtonlink?: string;
   data: T[];
   error: any;
   kind: string;
   learnMoreLink: string;
   loaded: boolean;
+  onCreate?: () => void;
   title?: string;
 };
 
@@ -41,6 +42,7 @@ const ListEmptyState = <T extends K8sResourceCommon>({
   kind,
   learnMoreLink,
   loaded,
+  onCreate,
   title,
 }: ListEmptyStateProps<T>) => {
   const { t } = useNetworkingTranslation();
@@ -75,12 +77,15 @@ const ListEmptyState = <T extends K8sResourceCommon>({
           <EmptyStateFooter>
             <EmptyStateActions>
               <Button
-                onClick={() =>
-                  navigate(
-                    params?.ns
-                      ? createButtonlink
-                      : `/k8s/ns/default/${params.plural}/${createButtonlink}`,
-                  )
+                onClick={
+                  onCreate
+                    ? onCreate
+                    : () =>
+                        navigate(
+                          params?.ns
+                            ? createButtonlink
+                            : `/k8s/ns/default/${params.plural}/${createButtonlink}`,
+                        )
                 }
                 variant={ButtonVariant.primary}
               >
