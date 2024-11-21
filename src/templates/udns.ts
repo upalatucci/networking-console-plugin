@@ -1,4 +1,4 @@
-import { UserDefinedNetworkModel } from '@utils/resources/udns/utils';
+import { UserDefinedNetworkModel } from '@utils/models';
 
 export const UserDefinedNetworksYAMLTemplates = `
 apiVersion: ${UserDefinedNetworkModel.apiGroup}/${UserDefinedNetworkModel.apiVersion}

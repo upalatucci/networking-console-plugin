@@ -8,9 +8,9 @@ import {
   useLabelsModal,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { UserDefinedNetworkModel } from '@utils/models';
 import { asAccessReview, getResourceURL } from '@utils/resources/shared';
 import { UserDefinedNetworkKind } from '@utils/resources/udns/types';
-import { UserDefinedNetworkModel } from '@utils/resources/udns/utils';
 
 type UDNActionsProps = (obj: UserDefinedNetworkKind) => [actions: Action[]];
 

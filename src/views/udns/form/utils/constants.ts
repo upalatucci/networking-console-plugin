@@ -1,5 +1,5 @@
+import { UserDefinedNetworkModel } from '@utils/models';
 import { UserDefinedNetworkKind, UserDefinedNetworkRole } from '@utils/resources/udns/types';
-import UserDefinedNetworkModel from '@utils/resources/udns/utils';
 import { generateName } from '@utils/utils';
 
 export const LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY =

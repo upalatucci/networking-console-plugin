@@ -1,13 +1,13 @@
 import { FC } from 'react';
 
 import { k8sCreate } from '@openshift-console/dynamic-plugin-sdk';
+import { UserDefinedNetworkModel } from '@utils/models';
 import { getName } from '@utils/resources/shared';
 import {
   UserDefinedNetworkAnnotations,
   UserDefinedNetworkKind,
   UserDefinedNetworkRole,
 } from '@utils/resources/udns/types';
-import UserDefinedNetworkModel from '@utils/resources/udns/utils';
 import { isEmpty } from '@utils/utils';
 
 import Layer2Parameters from '../components/UDNLayer2Parameters';
