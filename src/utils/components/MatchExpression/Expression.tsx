@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { ChangeEvent, FC, Ref, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { MatchExpression, Operator } from '@openshift-console/dynamic-plugin-sdk';
@@ -23,7 +23,7 @@ export type ExpressionProps = {
   onClickRemove: () => void;
 };
 
-export const Expression: React.FC<ExpressionProps> = ({
+export const Expression: FC<ExpressionProps> = ({
   allowedOperators = ALL_OPERATORS,
   expression,
   onChange,
@@ -32,13 +32,13 @@ export const Expression: React.FC<ExpressionProps> = ({
   const { key, operator, values } = expression;
   const { t } = useTranslation();
   const valueDisabled = UNARY_OPERATORS.includes(operator as Operator);
-  const [isDropdownOpen, setIsDropdownOpen] = React.useState<boolean>(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
   return (
     <FormGroup isInline label=" " role="group">
       <FormGroup fieldId="expression-key" label={t('Key')}>
         <TextInput
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
             onChange({ ...expression, key: e.target.value })
           }
           type="text"
@@ -52,7 +52,7 @@ export const Expression: React.FC<ExpressionProps> = ({
           onOpenChange={setIsDropdownOpen}
           onSelect={() => setIsDropdownOpen(false)}
           selected={expression.operator}
-          toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
+          toggle={(toggleRef: Ref<MenuToggleElement>) => (
             <MenuToggle
               id="toggle-udns-operator"
               isExpanded={isDropdownOpen}
@@ -65,15 +65,15 @@ export const Expression: React.FC<ExpressionProps> = ({
           )}
         >
           <DropdownList>
-            {allowedOperators.map((o, i) => (
+            {allowedOperators.map((allowedOperator, i) => (
               <DropdownItem
                 key={`operator-${i}`}
                 onClick={() => {
-                  onChange({ ...expression, operator: o });
+                  onChange({ ...expression, operator: allowedOperator });
                 }}
-                value={o}
+                value={allowedOperator}
               >
-                {o}
+                {allowedOperator}
               </DropdownItem>
             ))}
           </DropdownList>
@@ -82,7 +82,7 @@ export const Expression: React.FC<ExpressionProps> = ({
       <FormGroup fieldId="expression-values" label={t('Values')}>
         <TextInput
           isDisabled={valueDisabled}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
             onChange({
               key,
               operator,

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { MatchExpression, Operator } from '@openshift-console/dynamic-plugin-sdk';
@@ -16,7 +16,7 @@ export type MatchExpressionsProps = {
   onChange: (matchExpressions: MatchExpression[]) => void;
 };
 
-export const MatchExpressions: React.FC<MatchExpressionsProps> = ({
+export const MatchExpressions: FC<MatchExpressionsProps> = ({
   allowedOperators = ALL_OPERATORS,
   matchExpressions = [],
   onChange,

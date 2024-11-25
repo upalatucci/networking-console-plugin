@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, JSX } from 'react';
 
 import { DetailsItemComponentProps } from '@openshift-console/dynamic-plugin-sdk';
 import {
@@ -81,7 +81,7 @@ const UDNLayerDetails: FC<
     );
   };
 
-  const getList = (children: React.JSX.Element[]) => {
+  const getList = (children: JSX.Element[]) => {
     if (!children.length) {
       return getEmptyText();
     }

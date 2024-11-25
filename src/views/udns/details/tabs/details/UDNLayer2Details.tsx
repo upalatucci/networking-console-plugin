@@ -1,14 +1,14 @@
-import React, { FC } from 'react';
+import React, { FC, JSX } from 'react';
 
 import { DetailsItem } from '@utils/components/DetailsItem/DetailsItem';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { ClusterUserDefinedNetworkKind, UserDefinedNetworkKind } from '@utils/resources/udns/types';
 
 type UDNLayer2DetailsProps = {
-  emptyText: React.JSX.Element;
-  joinSubnets: React.JSX.Element;
+  emptyText: JSX.Element;
+  joinSubnets: JSX.Element;
   obj: ClusterUserDefinedNetworkKind | UserDefinedNetworkKind;
-  subnets: React.JSX.Element;
+  subnets: JSX.Element;
 };
 
 const UDNLayerDetails: FC<UDNLayer2DetailsProps> = ({ emptyText, joinSubnets, obj, subnets }) => {
