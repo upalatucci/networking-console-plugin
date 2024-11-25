@@ -5,8 +5,6 @@ import {
   Dropdown,
   DropdownItem,
   DropdownList,
-  Flex,
-  FlexItem,
   FormGroup,
   MenuToggle,
   MenuToggleElement,
@@ -33,16 +31,14 @@ const UserDefinedNetworkTopologySelect: FC = () => {
           label={
             <Popover
               bodyContent={
-                <Flex direction={{ default: 'column' }}>
-                  <FlexItem>
-                    {` - ${t(
+                <ul className="pf-v5-c-list" role="list">
+                  <li>
+                    {t(
                       'Layer3 topology creates a layer 2 segment per node, each with a different subnet. Layer 3 routing is used to interconnect node subnets.',
-                    )}`}
-                  </FlexItem>
-                  <FlexItem>
-                    {` - ${t('Layer2 topology creates one logical switch shared by all nodes.')}`}
-                  </FlexItem>
-                </Flex>
+                    )}
+                  </li>
+                  <li>{t('Layer2 topology creates one logical switch shared by all nodes.')}</li>
+                </ul>
               }
             >
               <label className="pf-v5-c-form__label">{t('Topology')}</label>

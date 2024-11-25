@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { Flex, FlexItem, FormGroup, FormSection, Popover } from '@patternfly/react-core';
+import { FormGroup, FormSection, Popover } from '@patternfly/react-core';
 import FormGroupHelperText from '@utils/components/FormGroupHelperText/FormGroupHelperText';
 import { MatchExpressions } from '@utils/components/MatchExpression/MatchExpression';
 import SelectorInput from '@utils/components/PodSelectorModal/SelectorInput';
@@ -50,11 +50,19 @@ const ClusterUserDefinedNetworkNamespaceSelector: FC = () => {
             label={
               <Popover
                 bodyContent={
-                  <Flex direction={{ default: 'column' }}>
-                    <FlexItem>{` - ${t('key is the label key that the selector applies')}`}</FlexItem>
-                    <FlexItem>{` - ${t("operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.")}`}</FlexItem>
-                    <FlexItem>{` - ${t('values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch.')}`}</FlexItem>
-                  </Flex>
+                  <ul className="pf-v5-c-list" role="list">
+                    <li>{t('key is the label key that the selector applies')}</li>
+                    <li>
+                      {t(
+                        "operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.",
+                      )}
+                    </li>
+                    <li>
+                      {t(
+                        'values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch.',
+                      )}
+                    </li>
+                  </ul>
                 }
               >
                 <label className="pf-v5-c-form__label">{t('Match Expressions')}</label>
