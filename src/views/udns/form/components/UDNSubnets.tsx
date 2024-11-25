@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, FormEvent, ReactNode } from 'react';
 
 import { useModal } from '@openshift-console/dynamic-plugin-sdk';
 import {
@@ -17,10 +17,10 @@ import {
 } from '@utils/resources/udns/types';
 
 type UDNSubnetsProps = {
-  description: React.ReactNode;
+  description: ReactNode;
   onSubnetsChange: (subnets: UserDefinedNetworkSubnet[]) => void;
   subnets: UserDefinedNetworkSubnet[];
-  title: React.ReactNode;
+  title: ReactNode;
   withHostSubnet?: boolean;
 };
 
@@ -43,7 +43,7 @@ const UDNSubnets: FC<UDNSubnetsProps> = ({
   };
 
   const updateSubnet = (
-    event: React.FormEvent<HTMLInputElement>,
+    event: FormEvent<HTMLInputElement>,
     idx: number,
     value: UserDefinedNetworkSubnet,
   ) => {
