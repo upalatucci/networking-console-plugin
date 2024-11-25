@@ -90,18 +90,18 @@ const Layer2Parameters: FC = () => {
         label={
           <Popover
             bodyContent={
-              <Flex direction={{ default: 'column' }}>
-                <FlexItem>
-                  {` - ${t(
+              <ul className="pf-v5-c-list" role="list">
+                <li>
+                  {t(
                     'Primary network is automatically assigned to every pod created in the same namespace.',
-                  )}`}
-                </FlexItem>
-                <FlexItem>
-                  {` - ${t(
+                  )}
+                </li>
+                <li>
+                  {t(
                     'Secondary network is only assigned to pods that use k8s.v1.cni.cncf.io/networks annotation to select given network.',
-                  )}`}
-                </FlexItem>
-              </Flex>
+                  )}
+                </li>
+              </ul>
             }
           >
             <label className="pf-v5-c-form__label">{t('Role')}</label>
