@@ -1,5 +1,4 @@
 import React, { ChangeEvent, FC, Ref, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { MatchExpression, Operator } from '@openshift-console/dynamic-plugin-sdk';
 import {
@@ -13,6 +12,7 @@ import {
   TextInput,
 } from '@patternfly/react-core';
 import { MinusCircleIcon } from '@patternfly/react-icons/dist/esm/icons/minus-circle-icon';
+import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 import { ALL_OPERATORS, UNARY_OPERATORS } from './MatchExpression';
 
@@ -30,7 +30,7 @@ export const Expression: FC<ExpressionProps> = ({
   onClickRemove,
 }) => {
   const { key, operator, values } = expression;
-  const { t } = useTranslation();
+  const { t } = useNetworkingTranslation();
   const valueDisabled = UNARY_OPERATORS.includes(operator as Operator);
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
