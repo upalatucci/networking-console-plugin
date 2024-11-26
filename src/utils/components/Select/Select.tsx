@@ -1,11 +1,11 @@
-import React, { FC, PropsWithChildren, Ref, useState } from 'react';
+import React, { FC, JSX, PropsWithChildren, Ref, useState } from 'react';
 
 import { Dropdown, DropdownList, MenuToggle, MenuToggleElement } from '@patternfly/react-core';
 
 type SelectProps = PropsWithChildren<{
   id?: string;
   selected: any;
-  toggleContent: Element | React.JSX.Element | string;
+  toggleContent: Element | JSX.Element | string;
 }>;
 
 const Select: FC<SelectProps> = ({ children, id, selected, toggleContent }) => {

@@ -162,7 +162,9 @@ naming conflicts. For example, the plugin template uses the
 with this namespace as follows:
 
 ```tsx
-conster Header: React.FC = () => {
+import React, { FC } from 'react';
+
+conster Header: FC = () => {
   const { t } = useTranslation('plugin__networking-console-plugin');
   return <h1>{t('Hello, World!')}</h1>;
 };

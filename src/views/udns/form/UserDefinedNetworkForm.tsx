@@ -11,6 +11,7 @@ import {
   ButtonVariant,
   Form,
   FormGroup,
+  FormSection,
   Grid,
   PageSection,
   PageSectionVariants,
@@ -19,19 +20,20 @@ import {
 import PopoverHelpIcon from '@utils/components/PopoverHelpIcon/PopoverHelpIcon';
 import { ALL_NAMESPACES_KEY, DEFAULT_NAMESPACE } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { UserDefinedNetworkModel } from '@utils/models';
+import { ClusterUserDefinedNetworkModel, UserDefinedNetworkModel } from '@utils/models';
 import { resourcePathFromModel } from '@utils/resources/shared';
-import { UserDefinedNetworkKind } from '@utils/resources/udns/types';
+import { ClusterUserDefinedNetworkKind, UserDefinedNetworkKind } from '@utils/resources/udns/types';
 import { isEmpty } from '@utils/utils';
 
+import ClusterUserDefinedNetworkNamespaceSelector from './components/CUDNNamespaceSelector';
 import UserDefinedNetworkLayerParameters from './components/UDNLayerParameters';
 import UserDefinedNetworkTopologySelect from './components/UDNTopologySelect';
 import { UserDefinedNetworkFormInput } from './utils/types';
 import { createUDN, fromDataToUDNObj, fromUDNObjToFormData } from './utils/utils';
 
 type UserDefinedNetworkFormProps = {
-  formData: UserDefinedNetworkKind;
-  onChange: (newFormData: UserDefinedNetworkKind) => void;
+  formData: ClusterUserDefinedNetworkKind | UserDefinedNetworkKind;
+  onChange: (newFormData: ClusterUserDefinedNetworkKind | UserDefinedNetworkKind) => void;
 };
 
 const UserDefinedNetworkForm: FC<UserDefinedNetworkFormProps> = ({ formData, onChange }) => {
@@ -39,7 +41,12 @@ const UserDefinedNetworkForm: FC<UserDefinedNetworkFormProps> = ({ formData, onC
   const navigate = useNavigate();
   const [apiError, setError] = useState<Error>(null);
   const [activeNamespace] = useActiveNamespace();
-  const namespace = ALL_NAMESPACES_KEY === activeNamespace ? DEFAULT_NAMESPACE : activeNamespace;
+
+  const isCluster = formData.kind === 'ClusterUserDefinedNetwork';
+  let namespace = null;
+  if (!isCluster) {
+    namespace = ALL_NAMESPACES_KEY === activeNamespace ? DEFAULT_NAMESPACE : activeNamespace;
+  }
 
   const methods = useForm<UserDefinedNetworkFormInput>({
     defaultValues: fromUDNObjToFormData(formData),
@@ -61,7 +68,13 @@ const UserDefinedNetworkForm: FC<UserDefinedNetworkFormProps> = ({ formData, onC
   const onSubmit = (data: UserDefinedNetworkFormInput) => {
     createUDN(data, namespace)
       .then(() => {
-        navigate(resourcePathFromModel(UserDefinedNetworkModel, data?.name, namespace));
+        navigate(
+          resourcePathFromModel(
+            isCluster ? ClusterUserDefinedNetworkModel : UserDefinedNetworkModel,
+            data?.name,
+            namespace,
+          ),
+        );
       })
       .catch((err) => {
         setError(err);
@@ -90,8 +103,11 @@ const UserDefinedNetworkForm: FC<UserDefinedNetworkFormProps> = ({ formData, onC
             <FormGroup fieldId="description" label={t('Description')}>
               <TextInput {...register('description')} />
             </FormGroup>
-            <UserDefinedNetworkTopologySelect />
-            <UserDefinedNetworkLayerParameters />
+            {isCluster && <ClusterUserDefinedNetworkNamespaceSelector />}
+            <FormSection title={t('Network')} titleElement="h2">
+              <UserDefinedNetworkTopologySelect />
+              <UserDefinedNetworkLayerParameters />
+            </FormSection>
             {!isEmpty(apiError) && (
               <Alert isInline title={t('Error')} variant={AlertVariant.danger}>
                 {apiError?.message}

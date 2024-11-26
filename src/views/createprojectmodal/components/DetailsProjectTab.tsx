@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 
 import { FormGroup, TextArea, TextInput } from '@patternfly/react-core';
+import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 import { DESCRIPTION_ANNOTATION, DISPLAY_NAME_ANNOTATION } from '../constants';
 import { CreateProjectModalFormState } from '../types';
@@ -10,7 +10,7 @@ import { CreateProjectModalFormState } from '../types';
 import ProjectNamePopover from './ProjectNamePopover';
 
 const DetailsProjectTab: FC = ({}) => {
-  const { t } = useTranslation();
+  const { t } = useNetworkingTranslation();
   const { register, setValue, watch } = useFormContext<CreateProjectModalFormState>();
 
   const annotations = watch('project.metadata.annotations');
