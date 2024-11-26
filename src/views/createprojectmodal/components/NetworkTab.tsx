@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 
 import {
   Alert,
@@ -11,12 +10,13 @@ import {
   TextInput,
 } from '@patternfly/react-core';
 import Select from '@utils/components/Select/Select';
+import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 import { networkTypeLabels } from '../constants';
 import { CreateProjectModalFormState, NETWORK_TYPE } from '../types';
 
 const NetworkTab: FC = () => {
-  const { t } = useTranslation();
+  const { t } = useNetworkingTranslation();
   const { control, register, setValue, watch } = useFormContext<CreateProjectModalFormState>();
 
   const networkType = watch('networkType');

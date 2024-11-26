@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { MatchExpression, Operator } from '@openshift-console/dynamic-plugin-sdk';
 import { Button } from '@patternfly/react-core';
 import { PlusCircleIcon } from '@patternfly/react-icons/dist/esm/icons/plus-circle-icon';
+import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 import { Expression } from './Expression';
 
@@ -21,7 +21,7 @@ export const MatchExpressions: FC<MatchExpressionsProps> = ({
   matchExpressions = [],
   onChange,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useNetworkingTranslation();
 
   const updateExpression = (index: number, newExpression: MatchExpression): void =>
     onChange(matchExpressions.map((exp, i) => (i === index ? newExpression : exp)));

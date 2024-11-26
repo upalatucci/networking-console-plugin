@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import Status from '@openshift-console/dynamic-plugin-sdk/lib/app/components/status/Status';
@@ -7,6 +6,7 @@ import { Tooltip } from '@patternfly/react-core';
 import { ConnectedIcon } from '@patternfly/react-icons/dist/esm/icons/connected-icon';
 import { DisconnectedIcon } from '@patternfly/react-icons/dist/esm/icons/disconnected-icon';
 import Loading from '@utils/components/Loading/Loading';
+import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { EndPointSliceModel } from '@utils/models';
 import { EndpointSliceKind } from '@utils/types';
 
@@ -17,7 +17,7 @@ export type PodTrafficProp = {
 };
 
 export const PodTraffic: FC<PodTrafficProp> = ({ namespace, podName, tooltipFlag }) => {
-  const { t } = useTranslation();
+  const { t } = useNetworkingTranslation();
   const [data, loaded, loadError] = useK8sWatchResource<EndpointSliceKind[]>({
     groupVersionKind: {
       kind: EndPointSliceModel.kind,
