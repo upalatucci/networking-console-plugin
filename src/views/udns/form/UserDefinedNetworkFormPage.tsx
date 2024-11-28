@@ -6,7 +6,7 @@ import { PageSection, PageSectionVariants, Title } from '@patternfly/react-core'
 import { EditorType } from '@utils/components/SyncedEditor/EditorToggle';
 import { SyncedEditor } from '@utils/components/SyncedEditor/SyncedEditor';
 import { safeYAMLToJS } from '@utils/components/SyncedEditor/yaml';
-import { CUDN_HEADER_LABEL, UDN_HEADER_LABEL } from '@utils/constants';
+import { t } from '@utils/hooks/useNetworkingTranslation';
 
 import {
   generateDefaultCUDN,
@@ -17,6 +17,9 @@ import UserDefinedNetworkForm from './UserDefinedNetworkForm';
 
 const UserDefinedNetworkFormPage: FC = () => {
   const params = useParams();
+
+  const UDN_HEADER_LABEL = t('Create UserDefinedNetwork');
+  const CUDN_HEADER_LABEL = t('Create ClusterUserDefinedNetwork');
 
   return (
     <>
