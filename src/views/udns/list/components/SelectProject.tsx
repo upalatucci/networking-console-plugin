@@ -1,10 +1,10 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import { ResourceIcon } from '@openshift-console/dynamic-plugin-sdk';
-import { DropdownItem, FormGroup } from '@patternfly/react-core';
+import { FormGroup, SelectOption } from '@patternfly/react-core';
 import Loading from '@utils/components/Loading/Loading';
-import Select from '@utils/components/Select/Select';
+import SelectTypeahead from '@utils/components/SelectTypeahead/SelectTypeahead';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { getName } from '@utils/resources/shared';
 
@@ -16,9 +16,24 @@ import { UDNForm } from './constants';
 const SelectProject: FC = () => {
   const { t } = useNetworkingTranslation();
 
-  const { control, setValue } = useFormContext<UDNForm>();
+  const { control } = useFormContext<UDNForm>();
 
   const [projects, loaded] = useProjects();
+
+  const projectsOptions = useMemo(
+    () =>
+      projects.map((project) => ({
+        children: (
+          <>
+            {' '}
+            <ResourceIcon groupVersionKind={ProjectGroupVersionKind} /> {getName(project)}{' '}
+          </>
+        ),
+        key: getName(project),
+        value: getName(project),
+      })),
+    [projects],
+  );
 
   if (!loaded) return <Loading />;
 
@@ -27,37 +42,31 @@ const SelectProject: FC = () => {
       <Controller
         control={control}
         name="metadata.namespace"
-        render={({ field: { value: selectedProjectName } }) => (
-          <Select
-            id="input-project-name"
+        render={({ field: { onChange, value: selectedProjectName } }) => (
+          <SelectTypeahead
+            id="select-project"
+            options={projectsOptions}
+            placeholder={t('Select a Project')}
             selected={selectedProjectName}
-            toggleContent={
-              selectedProjectName ? (
-                <>
-                  <ResourceIcon groupVersionKind={ProjectGroupVersionKind} /> {selectedProjectName}
-                </>
-              ) : (
-                t('Select project')
-              )
-            }
+            setSelected={(newSelection) => onChange(newSelection)}
           >
             <>
               {projects?.map((project) => {
                 const projectName = getName(project);
                 return (
-                  <DropdownItem
+                  <SelectOption
                     key={projectName}
-                    onClick={() => setValue('metadata.namespace', projectName)}
+                    onClick={() => onChange(projectName)}
                     value={projectName}
                   >
                     <ResourceIcon groupVersionKind={ProjectGroupVersionKind} />
 
                     {projectName}
-                  </DropdownItem>
+                  </SelectOption>
                 );
               })}
             </>
-          </Select>
+          </SelectTypeahead>
         )}
         rules={{ required: true }}
       />

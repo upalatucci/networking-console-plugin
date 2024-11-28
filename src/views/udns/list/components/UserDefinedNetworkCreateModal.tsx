@@ -12,6 +12,8 @@ import { UDNForm } from './constants';
 import UserDefinedNetworkCreateForm from './UserDefinedNetworkCreateForm';
 import { getDefaultUDN } from './utils';
 
+import './userdefinednetworkcreatemodal.scss';
+
 type UserDefinedNetworkCreateModalProps = {
   closeModal?: () => void;
   isClusterUDN?: boolean;
@@ -60,9 +62,8 @@ const UserDefinedNetworkCreateModal: FC<UserDefinedNetworkCreateModalProps> = ({
     <Modal
       actions={[
         <Button
-          data-test="create-udn-modal"
+          data-test="create-udn-submit"
           form="create-udn-form"
-          id="create-udn-modal"
           isDisabled={isSubmitting}
           isLoading={isSubmitting}
           key="submit"
@@ -72,7 +73,7 @@ const UserDefinedNetworkCreateModal: FC<UserDefinedNetworkCreateModalProps> = ({
           {t('Create')}
         </Button>,
         <Button
-          data-test-id="create-udn-modal"
+          data-test-id="create-udn-close"
           isDisabled={isSubmitting}
           key="button"
           onClick={closeModal}
@@ -82,6 +83,7 @@ const UserDefinedNetworkCreateModal: FC<UserDefinedNetworkCreateModalProps> = ({
           {t('Cancel')}
         </Button>,
       ]}
+      id="udn-create-modal"
       isOpen
       onClose={closeModal}
       title={t('Create {{kind}}', {
