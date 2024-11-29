@@ -1,4 +1,5 @@
 import { t } from '@utils/hooks/useNetworkingTranslation';
+import { UserDefinedNetworkRole } from '@utils/resources/udns/types';
 
 import { CreateProjectModalFormState, NETWORK_TYPE } from './types';
 
@@ -9,7 +10,7 @@ export const networkTypeLabels = {
   [NETWORK_TYPE.POD_NETWORK]: t('Use the default Pod network'),
   [NETWORK_TYPE.UDN]: t('Define a new UserDefinedNetwork for this project'),
   // eslint-disable-next-line perfectionist/sort-objects
-  // [NETWORK_TYPE.CLUSTER_UDN]: t('Refer an existing ClusterUserDefinedNetwork'),
+  [NETWORK_TYPE.CLUSTER_UDN]: t('Refer an existing ClusterUserDefinedNetwork'),
 };
 
 export const initialFormState: CreateProjectModalFormState = {
@@ -33,7 +34,7 @@ export const initialFormState: CreateProjectModalFormState = {
     spec: {
       layer2: {
         ipamLifecycle: 'Persistent',
-        role: 'Primary',
+        role: UserDefinedNetworkRole.Primary,
         subnets: [],
       },
       topology: 'Layer2',
