@@ -1,7 +1,6 @@
 export * from './network-policy';
 import { modelToGroupVersionKind, modelToRef } from '@kubevirt-ui/kubevirt-api/console';
 import { K8sModel } from '@openshift-console/dynamic-plugin-sdk';
-import { t } from '@utils/hooks/useNetworkingTranslation';
 
 export const QuickStartModel: K8sModel = {
   abbr: 'CQS',
@@ -50,9 +49,11 @@ export const NetworkOperatorModel: K8sModel = {
   id: 'Network',
   kind: 'Network',
   label: 'network',
-  labelKey: t('network'),
+  // t('plugin__networking-console-plugin~network')
+  labelKey: 'network',
   labelPlural: 'Networks',
-  labelPluralKey: t('networks'),
+  // t('plugin__networking-console-plugin~networks')
+  labelPluralKey: 'networks',
   namespaced: false,
   plural: 'networks',
 };
@@ -65,9 +66,11 @@ export const UserDefinedNetworkModel: K8sModel = {
   id: 'userdefinednetwork',
   kind: 'UserDefinedNetwork',
   label: 'userdefinednetwork',
-  labelKey: t('UserDefinedNetwork'),
+  // t('plugin__networking-console-plugin~UserDefinedNetwork')
+  labelKey: 'UserDefinedNetwork',
   labelPlural: 'UserDefinedNetworks',
-  labelPluralKey: t('UserDefinedNetworks'),
+  // t('plugin__networking-console-plugin~UserDefinedNetworks')
+  labelPluralKey: 'UserDefinedNetworks',
   namespaced: true,
   plural: 'userdefinednetworks',
 };
@@ -84,9 +87,11 @@ export const ClusterUserDefinedNetworkModel: K8sModel = {
   id: 'clusteruserdefinednetwork',
   kind: 'ClusterUserDefinedNetwork',
   label: 'clusteruserdefinednetwork',
-  labelKey: t('ClusterUserDefinedNetwork'),
+  // t('plugin__networking-console-plugin~ClusterUserDefinedNetwork')
+  labelKey: 'ClusterUserDefinedNetwork',
   labelPlural: 'ClusterUserDefinedNetworks',
-  labelPluralKey: t('ClusterUserDefinedNetworks'),
+  // t('plugin__networking-console-plugin~ClusterUserDefinedNetworks')
+  labelPluralKey: 'ClusterUserDefinedNetworks',
   namespaced: false,
   plural: 'clusteruserdefinednetworks',
 };
