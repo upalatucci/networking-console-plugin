@@ -1,32 +1,29 @@
 import React, { FC, FormEventHandler } from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
 
 import { Alert, AlertVariant, Form, FormGroup, Text, TextInput } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
-import ProjectSelector from './ProjectSelector';
+import ClusterUDNNamespaceSelector from './ClusterUDNNamespaceSelector';
+import { UDNForm } from './constants';
+import SelectProject from './SelectProject';
 
 type UserDefinedNetworkCreateFormProps = {
   error: Error;
+  isClusterUDN?: boolean;
   onSubmit: FormEventHandler<HTMLFormElement>;
-  selectedProjectName: string;
-  setSelectedProjectName: (newProjectName: string) => void;
-  setSubnet: (newProjectName: string) => void;
-  setUDNName: (newProjectName: string) => void;
-  subnet: string;
-  udnName: string;
 };
 
 const UserDefinedNetworkCreateForm: FC<UserDefinedNetworkCreateFormProps> = ({
   error,
+  isClusterUDN,
   onSubmit,
-  selectedProjectName,
-  setSelectedProjectName,
-  setSubnet,
-  setUDNName,
-  subnet,
-  udnName,
 }) => {
   const { t } = useNetworkingTranslation();
+
+  const { control, register, setValue } = useFormContext<UDNForm>();
+
+  const subnetField = isClusterUDN ? 'spec.network.layer2.subnets' : 'spec.layer2.subnets';
 
   return (
     <Form id="create-udn-form" onSubmit={onSubmit}>
@@ -35,35 +32,44 @@ const UserDefinedNetworkCreateForm: FC<UserDefinedNetworkCreateFormProps> = ({
           'Define the network used by VirtualMachines and Pods to communicate in the given project',
         )}
       </Text>
-      <ProjectSelector
-        selectedProjectName={selectedProjectName}
-        setSelectedProjectName={setSelectedProjectName}
-      />
+      {!isClusterUDN && <SelectProject />}
       <FormGroup fieldId="input-name" isRequired label={t('Name')}>
         <TextInput
           autoFocus
           data-test="input-name"
           id="input-name"
+          {...register('metadata.name', { required: true })}
           isRequired
           name="name"
-          onChange={(_, value) => setUDNName(value)}
-          type="text"
-          value={udnName}
         />
       </FormGroup>
 
       <FormGroup fieldId="input-udn-subnet" isRequired label={t('Subnet')}>
-        <TextInput
-          autoFocus
-          data-test="input-udn-subnet"
-          id="input-udn-subnet"
-          isRequired
-          name="input-udn-subnet"
-          onChange={(_, value) => setSubnet(value)}
-          type="text"
-          value={subnet}
+        <Controller
+          control={control}
+          name={subnetField}
+          render={({ field: { value } }) => (
+            <TextInput
+              autoFocus
+              data-test="input-udn-subnet"
+              id="input-udn-subnet"
+              isRequired
+              name="input-udn-subnet"
+              onChange={(_, newValue) =>
+                setValue(subnetField, newValue.split(','), {
+                  shouldValidate: true,
+                })
+              }
+              type="text"
+              value={value?.join(',')}
+            />
+          )}
+          rules={{ required: true }}
         />
       </FormGroup>
+
+      {isClusterUDN && <ClusterUDNNamespaceSelector />}
+
       {error && (
         <Alert isInline title={t('Error')} variant={AlertVariant.danger}>
           {error?.message}
