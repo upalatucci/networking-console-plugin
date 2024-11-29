@@ -2,8 +2,17 @@ import React, { FC, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
-import { ProjectModel, ProjectRequestModel } from '@kubevirt-ui/kubevirt-api/console';
-import { k8sCreate, k8sDelete, K8sResourceCommon } from '@openshift-console/dynamic-plugin-sdk';
+import {
+  NamespaceModel,
+  ProjectModel,
+  ProjectRequestModel,
+} from '@kubevirt-ui/kubevirt-api/console';
+import {
+  k8sCreate,
+  k8sDelete,
+  k8sPatch,
+  K8sResourceCommon,
+} from '@openshift-console/dynamic-plugin-sdk';
 import { Button, ButtonVariant, Modal, ModalVariant } from '@patternfly/react-core';
 import ExternalLink from '@utils/components/ExternalLink/ExternalLink';
 import { documentationURLs, getDocumentationURL, isManaged } from '@utils/constants/documentation';
@@ -34,16 +43,13 @@ const CreateProjectModal: FC<{
   const {
     formState: { isSubmitting, isValid },
     handleSubmit,
-    watch,
   } = methods;
-
-  const project = watch('project');
-  const udn = watch('udn');
-  const networkType = watch('networkType');
 
   const [errorMessage, setErrorMessage] = useState('');
 
-  const create = async () => {
+  const create = async (formData: CreateProjectModalFormState) => {
+    const { clusterUDN, networkType, project, udn } = formData;
+
     try {
       const projectCreated = await k8sCreate({ data: project, model: ProjectRequestModel });
 
@@ -52,6 +58,22 @@ const CreateProjectModal: FC<{
           k8sDelete({ model: ProjectModel, resource: projectCreated });
           throw err;
         });
+
+      if (networkType === NETWORK_TYPE.CLUSTER_UDN) {
+        const labelsToAdd = Object.entries(clusterUDN.spec.namespaceSelector.matchLabels || {}).map(
+          ([labelKey, labelValue]) => ({
+            op: 'add',
+            path: `/metadata/labels/${labelKey}`,
+            value: labelValue,
+          }),
+        );
+
+        await k8sPatch({
+          data: [{ op: 'add', path: '/metadata/labels', value: {} }, ...labelsToAdd],
+          model: NamespaceModel,
+          resource: projectCreated,
+        });
+      }
 
       closeModal();
       navigate(getResourceURL({ model: ProjectModel, resource: projectCreated }));

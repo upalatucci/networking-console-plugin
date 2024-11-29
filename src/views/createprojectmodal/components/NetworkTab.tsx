@@ -10,13 +10,18 @@ import {
   TextInput,
 } from '@patternfly/react-core';
 import Select from '@utils/components/Select/Select';
+import { useIsAdmin } from '@utils/hooks/useIsAdmin';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 import { networkTypeLabels } from '../constants';
 import { CreateProjectModalFormState, NETWORK_TYPE } from '../types';
 
+import SelectClusterUDN from './SelectClusterUDN';
+
 const NetworkTab: FC = () => {
   const { t } = useNetworkingTranslation();
+  const isAdmin = useIsAdmin();
+
   const { control, register, setValue, watch } = useFormContext<CreateProjectModalFormState>();
 
   const networkType = watch('networkType');
@@ -48,9 +53,9 @@ const NetworkTab: FC = () => {
             >
               <>
                 {Object.entries(networkTypeLabels)
-                  // .filter(([type]) =>
-                  //   !isAdmin && type === NETWORK_TYPE.CLUSTER_UDN.toString() ? false : true,
-                  // )
+                  .filter(([type]) =>
+                    !isAdmin && type === NETWORK_TYPE.CLUSTER_UDN.toString() ? false : true,
+                  )
                   .map(([type, label]) => (
                     <DropdownItem key={type} onClick={() => onChange(parseInt(type))} value={type}>
                       {label}
@@ -100,6 +105,17 @@ const NetworkTab: FC = () => {
             />
           </FormGroup>
         </>
+      )}
+
+      {networkType === NETWORK_TYPE.CLUSTER_UDN && (
+        <Controller
+          control={control}
+          name="clusterUDN"
+          render={({ field: { onChange, value: selectedClusterUDN } }) => (
+            <SelectClusterUDN onChange={onChange} selectedClusterUDN={selectedClusterUDN} />
+          )}
+          rules={{ required: true }}
+        />
       )}
     </div>
   );
