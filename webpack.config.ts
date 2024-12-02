@@ -25,7 +25,7 @@ const config: Configuration = {
     client: {
       progress: true,
       webSocketURL: {
-        port: 9001,
+        port: process.env.PORT || 9001,
       },
     },
     devMiddleware: {
@@ -39,7 +39,7 @@ const config: Configuration = {
     },
     hot: true,
     liveReload: true,
-    port: 9001,
+    port: process.env.PORT || 9001,
     static: {
       directory: path.join(__dirname, 'dist'),
     },
