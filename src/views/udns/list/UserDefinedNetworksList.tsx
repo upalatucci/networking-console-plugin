@@ -82,7 +82,11 @@ const UserDefinedNetworksList: FC<UserDefinedNetworksListProps> = ({ namespace }
             ClusterUserDefinedNetwork: t('ClusterUserDefinedNetwork'),
             UserDefinedNetwork: t('UserDefinedNetwork'),
           }}
-          onClick={() => createModal(UserDefinedNetworkCreateModal, {})}
+          onClick={(item) =>
+            createModal(UserDefinedNetworkCreateModal, {
+              isClusterUDN: item === 'ClusterUserDefinedNetwork',
+            })
+          }
         >
           {t('Create')}
         </ListPageCreateDropdown>

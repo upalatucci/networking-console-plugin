@@ -4,7 +4,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { FormGroup, FormSection, Popover } from '@patternfly/react-core';
 import FormGroupHelperText from '@utils/components/FormGroupHelperText/FormGroupHelperText';
 import { MatchExpressions } from '@utils/components/MatchExpression/MatchExpression';
-import SelectorInput from '@utils/components/PodSelectorModal/SelectorInput';
+import MatchLabels from '@utils/components/MatchLabels/MatchLabels';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 import { UserDefinedNetworkFormInput } from '../utils/types';
@@ -20,25 +20,7 @@ const ClusterUserDefinedNetworkNamespaceSelector: FC = () => {
         control={control}
         name="namespaceSelector.matchLabels"
         render={({ field: { onChange, value } }) => (
-          <FormGroup fieldId="basic-settings-matchLabels" label={t('Match Labels')}>
-            <SelectorInput
-              autoFocus
-              onChange={(arr) =>
-                onChange(
-                  arr.reduce((acc, v) => {
-                    const split = v.split('=');
-                    return (acc[split[0]] = split[1]), acc;
-                  }, {}),
-                )
-              }
-              tags={Object.keys(value).map((key) => `${key}=${value[key]}`)}
-            />
-            <FormGroupHelperText>
-              {t(
-                'matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.',
-              )}
-            </FormGroupHelperText>
-          </FormGroup>
+          <MatchLabels matchLabels={value} onChange={onChange} />
         )}
       />
       <Controller

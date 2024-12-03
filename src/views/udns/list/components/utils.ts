@@ -1,6 +1,18 @@
-export const createUDN = (name: string, namespace: string, subnet: string) => ({
-  apiVersion: 'k8s.ovn.org/v1',
-  kind: 'UserDefinedNetwork',
+import { K8sResourceCommon, MatchLabels } from '@openshift-console/dynamic-plugin-sdk';
+import { ALL_NAMESPACES_KEY, DEFAULT_NAMESPACE } from '@utils/constants';
+import { ClusterUserDefinedNetworkModel, UserDefinedNetworkModel } from '@utils/models';
+import {
+  ClusterUserDefinedNetworkKind,
+  UserDefinedNetworkKind,
+  UserDefinedNetworkRole,
+} from '@utils/resources/udns/types';
+import { generateName } from '@utils/utils';
+
+import { UDNForm } from './constants';
+
+export const createUDN = (name: string, namespace: string): UserDefinedNetworkKind => ({
+  apiVersion: `${UserDefinedNetworkModel.apiGroup}/${UserDefinedNetworkModel.apiVersion}`,
+  kind: UserDefinedNetworkModel.kind,
   metadata: {
     name,
     namespace,
@@ -8,9 +20,42 @@ export const createUDN = (name: string, namespace: string, subnet: string) => ({
   spec: {
     layer2: {
       ipamLifecycle: 'Persistent',
-      role: 'Primary',
-      subnets: [subnet],
+      role: UserDefinedNetworkRole.Primary,
+      subnets: [''],
     },
     topology: 'Layer2',
   },
 });
+
+export const createClusterUDN = (name: string): ClusterUserDefinedNetworkKind => ({
+  apiVersion: `${ClusterUserDefinedNetworkModel.apiGroup}/${ClusterUserDefinedNetworkModel.apiVersion}`,
+  kind: ClusterUserDefinedNetworkModel.kind,
+  metadata: {
+    name,
+  },
+  spec: {
+    namespaceSelector: { matchLabels: {} },
+    network: {
+      layer2: {
+        ipamLifecycle: 'Persistent',
+        role: UserDefinedNetworkRole.Primary,
+        subnets: [''],
+      },
+      topology: 'Layer2',
+    },
+  },
+});
+
+export const getDefaultUDN = (isClusterUDN: boolean, namespace: string): UDNForm => {
+  return isClusterUDN
+    ? createClusterUDN(generateName('cluster-udn'))
+    : createUDN(
+        generateName('udn'),
+        namespace === ALL_NAMESPACES_KEY ? DEFAULT_NAMESPACE : namespace,
+      );
+};
+
+export const match = (resource: K8sResourceCommon, matchLabels: MatchLabels) =>
+  Object.entries(matchLabels || {})?.every(
+    ([key, value]) => resource?.metadata?.labels?.[key] === value,
+  );
