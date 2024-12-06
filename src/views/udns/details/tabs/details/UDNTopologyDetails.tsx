@@ -4,13 +4,13 @@ import { DetailsItemComponentProps } from '@openshift-console/dynamic-plugin-sdk
 import MutedText from '@utils/components/MutedText/MutedText';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { getTopology } from '@utils/resources/udns/selectors';
-import { UserDefinedNetworkKind } from '@utils/resources/udns/types';
+import { ClusterUserDefinedNetworkKind, UserDefinedNetworkKind } from '@utils/resources/udns/types';
 
-const UDNTopologyDetails: FC<DetailsItemComponentProps<UserDefinedNetworkKind>> = ({
-  obj: udn,
-}) => {
+const UDNTopologyDetails: FC<
+  DetailsItemComponentProps<ClusterUserDefinedNetworkKind | UserDefinedNetworkKind>
+> = ({ obj }) => {
   const { t } = useNetworkingTranslation();
-  const topology = getTopology(udn);
+  const topology = getTopology(obj);
 
   if (!topology) return <MutedText content={t('Not available')} />;
 

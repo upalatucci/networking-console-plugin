@@ -1,61 +1,69 @@
 import React, { FC, useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { k8sCreate, useActiveNamespace } from '@openshift-console/dynamic-plugin-sdk';
 import { Button, ButtonVariant, Modal, ModalVariant } from '@patternfly/react-core';
-import { ALL_NAMESPACES_KEY } from '@utils/constants';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { UserDefinedNetworkModel } from '@utils/models';
-import { resourcePathFromModel } from '@utils/resources/shared';
+import { ClusterUserDefinedNetworkModel, UserDefinedNetworkModel } from '@utils/models';
+import { getName, getNamespace, resourcePathFromModel } from '@utils/resources/shared';
 
+import { UDNForm } from './constants';
 import UserDefinedNetworkCreateForm from './UserDefinedNetworkCreateForm';
-import { createUDN } from './utils';
+import { getDefaultUDN } from './utils';
+
+import './userdefinednetworkcreatemodal.scss';
 
 type UserDefinedNetworkCreateModalProps = {
   closeModal?: () => void;
+  isClusterUDN?: boolean;
 };
 
-const UserDefinedNetworkCreateModal: FC<UserDefinedNetworkCreateModalProps> = ({ closeModal }) => {
+const UserDefinedNetworkCreateModal: FC<UserDefinedNetworkCreateModalProps> = ({
+  closeModal,
+  isClusterUDN = false,
+}) => {
   const { t } = useNetworkingTranslation();
   const navigate = useNavigate();
 
   const [activeNamespace] = useActiveNamespace();
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setIsError] = useState<Error>();
-  const [selectedProjectName, setSelectedProjectName] = useState<string>(
-    activeNamespace !== ALL_NAMESPACES_KEY ? activeNamespace : null,
-  );
-  const [udnName, setUDNName] = useState<string>();
-  const [subnet, setSubnet] = useState<string>();
+  const methods = useForm<UDNForm>({
+    defaultValues: getDefaultUDN(isClusterUDN, activeNamespace),
+    mode: 'all',
+  });
 
-  const submit = async (event) => {
-    setIsSubmitting(true);
-    event.preventDefault();
+  const {
+    formState: { isSubmitting },
+    handleSubmit,
+  } = methods;
+
+  const [error, setIsError] = useState<Error>();
+  const submit = async (udn: UDNForm) => {
     try {
-      const udn = createUDN(udnName, selectedProjectName, subnet);
+      const model =
+        udn.kind === ClusterUserDefinedNetworkModel.kind
+          ? ClusterUserDefinedNetworkModel
+          : UserDefinedNetworkModel;
 
       await k8sCreate({
         data: udn,
-        model: UserDefinedNetworkModel,
+        model,
       });
       closeModal();
 
-      navigate(resourcePathFromModel(UserDefinedNetworkModel, udnName, selectedProjectName));
+      navigate(resourcePathFromModel(model, getName(udn), getNamespace(udn)));
     } catch (apiError) {
       setIsError(apiError);
     }
-
-    setIsSubmitting(false);
   };
 
   return (
     <Modal
       actions={[
         <Button
-          data-test="create-udn-modal"
+          data-test="create-udn-submit"
           form="create-udn-form"
-          id="create-udn-modal"
           isDisabled={isSubmitting}
           isLoading={isSubmitting}
           key="submit"
@@ -65,7 +73,7 @@ const UserDefinedNetworkCreateModal: FC<UserDefinedNetworkCreateModalProps> = ({
           {t('Create')}
         </Button>,
         <Button
-          data-test-id="create-udn-modal"
+          data-test-id="create-udn-close"
           isDisabled={isSubmitting}
           key="button"
           onClick={closeModal}
@@ -75,21 +83,21 @@ const UserDefinedNetworkCreateModal: FC<UserDefinedNetworkCreateModalProps> = ({
           {t('Cancel')}
         </Button>,
       ]}
+      id="udn-create-modal"
       isOpen
       onClose={closeModal}
-      title={t('Create UserDefinedNetwork')}
+      title={t('Create {{kind}}', {
+        kind: isClusterUDN ? ClusterUserDefinedNetworkModel.kind : UserDefinedNetworkModel.kind,
+      })}
       variant={ModalVariant.small}
     >
-      <UserDefinedNetworkCreateForm
-        error={error}
-        onSubmit={submit}
-        selectedProjectName={selectedProjectName}
-        setSelectedProjectName={setSelectedProjectName}
-        setSubnet={setSubnet}
-        setUDNName={setUDNName}
-        subnet={subnet}
-        udnName={udnName}
-      />
+      <FormProvider {...methods}>
+        <UserDefinedNetworkCreateForm
+          error={error}
+          isClusterUDN={isClusterUDN}
+          onSubmit={handleSubmit(submit)}
+        />
+      </FormProvider>
     </Modal>
   );
 };

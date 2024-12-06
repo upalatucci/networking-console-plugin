@@ -1,9 +1,9 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 
 import { ResourceIcon } from '@openshift-console/dynamic-plugin-sdk';
-import { DropdownItem, FormGroup } from '@patternfly/react-core';
+import { FormGroup, SelectOption } from '@patternfly/react-core';
 import Loading from '@utils/components/Loading/Loading';
-import Select from '@utils/components/Select/Select';
+import SelectTypeahead from '@utils/components/SelectTypeahead/SelectTypeahead';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { getName } from '@utils/resources/shared';
 
@@ -23,28 +23,42 @@ const ProjectSelector: FC<ProjectSelectorProps> = ({
 
   const [projects, loaded] = useProjects();
 
+  const handleChange = (value: string) => {
+    event.preventDefault();
+    setSelectedProjectName(value);
+  };
+
+  const projectsOptions = useMemo(
+    () =>
+      projects.map((project) => ({
+        children: (
+          <>
+            {' '}
+            <ResourceIcon groupVersionKind={ProjectGroupVersionKind} /> {getName(project)}{' '}
+          </>
+        ),
+        key: getName(project),
+        value: getName(project),
+      })),
+    [projects],
+  );
+
   if (!loaded) return <Loading />;
 
   return (
     <FormGroup fieldId="input-project-name" isRequired label={t('Project name')}>
-      <Select
-        id="input-project-name"
+      <SelectTypeahead
+        id="select-project"
+        options={projectsOptions}
+        placeholder={t('Select a Project')}
         selected={selectedProjectName}
-        toggleContent={
-          selectedProjectName ? (
-            <>
-              <ResourceIcon groupVersionKind={ProjectGroupVersionKind} /> {selectedProjectName}
-            </>
-          ) : (
-            t('Select project')
-          )
-        }
+        setSelected={handleChange}
       >
         <>
           {projects?.map((project) => {
             const projectName = getName(project);
             return (
-              <DropdownItem
+              <SelectOption
                 key={projectName}
                 onClick={() => setSelectedProjectName(projectName)}
                 value={projectName}
@@ -52,11 +66,11 @@ const ProjectSelector: FC<ProjectSelectorProps> = ({
                 <ResourceIcon groupVersionKind={ProjectGroupVersionKind} />
 
                 {projectName}
-              </DropdownItem>
+              </SelectOption>
             );
           })}
         </>
-      </Select>
+      </SelectTypeahead>
     </FormGroup>
   );
 };
