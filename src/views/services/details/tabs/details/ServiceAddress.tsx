@@ -11,28 +11,28 @@ const ServiceAddress: FC<{ service: IoK8sApiCoreV1Service }> = ({ service }) => 
     switch (type) {
       case 'NodePort':
         return ServiceIPsRow({
-          name: t('Node port'),
           desc: t('Accessible outside the cluster'),
           ips: service?.spec?.ports?.map((port) => port.nodePort.toString()),
+          name: t('Node port'),
           note: t('(all nodes): '),
-      });
+        });
       case 'LoadBalancer':
         return ServiceIPsRow({
-          name: t('External load balancer'),
           desc: t('Ingress points of load balancer'),
           ips: service?.status?.loadBalancer?.ingress?.map((i) => i.hostname || i.ip || '-'),
+          name: t('External load balancer'),
         });
       case 'ExternalName':
         return ServiceIPsRow({
-          name: t('External service name'),
           desc: t('Location of the resource that backs the service'),
           ips: [service?.spec?.externalName],
+          name: t('External service name'),
         });
       default:
-        return ServiceIPsRow({ 
-          name: t('Cluster IP'), 
+        return ServiceIPsRow({
           desc: t('Accessible within the cluster only'),
-          ips: [ service?.spec?.clusterIP, ]
+          ips: [service?.spec?.clusterIP],
+          name: t('Cluster IP'),
         });
     }
   };
@@ -47,16 +47,21 @@ const ServiceAddress: FC<{ service: IoK8sApiCoreV1Service }> = ({ service }) => 
         {ServiceType(service.spec.type)}
         {service.spec.externalIPs &&
           ServiceIPsRow({
-            name: t('External IP'),
             desc: t('IP Addresses accepting traffic for service'),
             ips: service?.spec?.externalIPs,
+            name: t('External IP'),
           })}
       </div>
     </div>
   );
 };
 
-const ServiceIPsRow: FC<{ name:string, desc:string, ips: string[], note?:string }> = ({ name, desc, ips, note = null} ) => {
+const ServiceIPsRow: FC<{ desc: string; ips: string[]; name: string; note?: string }> = ({
+  desc,
+  ips,
+  name,
+  note = null,
+}) => {
   const { t } = useNetworkingTranslation();
 
   return (
@@ -67,12 +72,11 @@ const ServiceIPsRow: FC<{ name:string, desc:string, ips: string[], note?:string 
           <p className="ip-desc">{desc}</p>
         </div>
         <div className="col-xs-6">
-          {note && <MutedText content={note} isSpan />}
-          {ips ? ips.join(', '): t('Pending')}
+          {note && <MutedText content={note} isSpan />};{ips ? ips.join(', ') : t('Pending')}
         </div>
       </div>
     </div>
-  )
+  );
 };
 
 export default ServiceAddress;
