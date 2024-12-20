@@ -1,11 +1,9 @@
 import React, { FC } from 'react';
-import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { modelToGroupVersionKind, NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
 import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
   ListPageBody,
-  ListPageCreateButton,
   ListPageFilter,
   useK8sWatchResource,
   useListPageFilter,
@@ -13,12 +11,9 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import { Pagination } from '@patternfly/react-core';
 import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
-import { DEFAULT_NAMESPACE } from '@utils/constants';
 import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/constants/ui';
-import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import usePagination from '@utils/hooks/usePagination/usePagination';
 import { paginationDefaultValues } from '@utils/hooks/usePagination/utils/constants';
-import { resourcePathFromModel } from '@utils/resources/shared';
 import { isEmpty } from '@utils/utils';
 
 import NetworkPolicyEmptyState from './components/NetworkPolicyEmptyState';
@@ -32,9 +27,6 @@ type NetworkPolicyListProps = {
 };
 
 const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
-  const { t } = useNetworkingTranslation();
-  const navigate = useNavigate();
-
   const [networkPolicies, loaded, loadError] = useK8sWatchResource<
     IoK8sApiNetworkingV1NetworkPolicy[]
   >({
@@ -56,26 +48,6 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
       learnMoreLink="https://kubernetes.io/docs/concepts/services-networking/network-policies/"
       loaded={loaded}
     >
-      {!isEmpty(data.length) && (
-        <ListPageCreateButton
-          className="list-page-create-button-margin"
-          createAccessReview={{
-            groupVersionKind: modelToGroupVersionKind(NetworkPolicyModel),
-            namespace,
-          }}
-          onClick={() =>
-            navigate(
-              `${resourcePathFromModel(
-                NetworkPolicyModel,
-                null,
-                namespace || DEFAULT_NAMESPACE,
-              )}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}`,
-            )
-          }
-        >
-          {t('Create NetworkPolicy')}
-        </ListPageCreateButton>
-      )}
       <ListPageBody>
         <div className="list-management-group">
           <ListPageFilter

@@ -1,10 +1,14 @@
 import React, { FC, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom-v5-compat';
 
-import { ListPageHeader } from '@openshift-console/dynamic-plugin-sdk';
+import { modelToGroupVersionKind, NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
+import { ListPageCreateButton, ListPageHeader } from '@openshift-console/dynamic-plugin-sdk';
 import { Tab, Tabs, TabTitleText } from '@patternfly/react-core';
-import { ALL_NAMESPACES } from '@utils/constants';
+import { ALL_NAMESPACES, DEFAULT_NAMESPACE } from '@utils/constants';
+import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/constants/ui';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { MultiNetworkPolicyModel } from '@utils/models';
+import { resourcePathFromModel } from '@utils/resources/shared';
 
 import useIsMultiEnabled from './hooks/useIsMultiEnabled';
 import { TAB_INDEXES } from './constants';
@@ -28,13 +32,33 @@ const NetworkPolicyPage: FC<NetworkPolicyPageNavProps> = ({ namespace }) => {
   const [isMultiEnabled] = useIsMultiEnabled();
   const { t } = useNetworkingTranslation();
 
+  const selectedModel =
+    locationTabKey === TAB_INDEXES.NETWORK ? NetworkPolicyModel : MultiNetworkPolicyModel;
+
   return (
     <>
-      <ListPageHeader
-        title={
-          locationTabKey === TAB_INDEXES.NETWORK ? t('NetworkPolicies') : t('MultiNetworkPolicies')
-        }
-      ></ListPageHeader>
+      <ListPageHeader title={t(selectedModel.labelPluralKey)}>
+        {locationTabKey !== TAB_INDEXES.ENABLE_MULTI && (
+          <ListPageCreateButton
+            className="list-page-create-button-margin"
+            createAccessReview={{
+              groupVersionKind: modelToGroupVersionKind(selectedModel),
+              namespace,
+            }}
+            onClick={() =>
+              navigate(
+                `${resourcePathFromModel(
+                  selectedModel,
+                  null,
+                  namespace || DEFAULT_NAMESPACE,
+                )}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}`,
+              )
+            }
+          >
+            {t('Create {{kind}}', { kind: selectedModel.kind })}
+          </ListPageCreateButton>
+        )}
+      </ListPageHeader>
       <Tabs
         activeKey={locationTabKey}
         onSelect={(_, tabIndex: number | string) => {
