@@ -4,26 +4,13 @@ import { useFormContext } from 'react-hook-form';
 import { FormGroup, TextArea, TextInput } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
-import { DESCRIPTION_ANNOTATION, DISPLAY_NAME_ANNOTATION } from '../constants';
 import { CreateProjectModalFormState } from '../types';
 
 import ProjectNamePopover from './ProjectNamePopover';
 
 const DetailsProjectTab: FC = ({}) => {
   const { t } = useNetworkingTranslation();
-  const { register, setValue, watch } = useFormContext<CreateProjectModalFormState>();
-
-  const annotations = watch('project.metadata.annotations');
-
-  const description = annotations[DESCRIPTION_ANNOTATION];
-  const displayName = annotations[DISPLAY_NAME_ANNOTATION];
-
-  const changeAnnotations = (newDescription: string, newDisplayName: string) => {
-    setValue('project.metadata.annotations', {
-      [DESCRIPTION_ANNOTATION]: newDescription,
-      [DISPLAY_NAME_ANNOTATION]: newDisplayName,
-    });
-  };
+  const { register, setValue } = useFormContext<CreateProjectModalFormState>();
 
   return (
     <>
@@ -50,18 +37,12 @@ const DetailsProjectTab: FC = ({}) => {
         <TextInput
           id="input-display-name"
           name="displayName"
-          onChange={(_, newValue) => changeAnnotations(description, newValue)}
+          {...register('project.displayName')}
           type="text"
-          value={displayName}
         />
       </FormGroup>
       <FormGroup fieldId="input-description" label={t('Description')}>
-        <TextArea
-          id="input-description"
-          name="description"
-          onChange={(_, newValue) => changeAnnotations(newValue, displayName)}
-          value={description}
-        />
+        <TextArea id="input-description" name="description" {...register('project.description')} />
       </FormGroup>
     </>
   );
