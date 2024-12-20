@@ -4,6 +4,7 @@ import { NetworkPolicyModel } from '@kubevirt-ui/kubevirt-api/console';
 import {
   IoK8sApiNetworkingV1NetworkPolicy,
   IoK8sApiNetworkingV1NetworkPolicyIngressRule,
+  IoK8sApiNetworkingV1NetworkPolicyPort,
 } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { Selector } from '@openshift-console/dynamic-plugin-sdk';
 import { t } from '@utils/hooks/useNetworkingTranslation';
@@ -51,7 +52,7 @@ export interface NetworkPolicyIPBlock {
 
 export type NetworkPolicyPort = {
   key: string;
-  port: string;
+  port: number | string;
   protocol: string;
 };
 
@@ -148,10 +149,13 @@ const ruleToK8s = (
     }
   }
   if (rule.ports.length > 0) {
-    res.ports = rule.ports.map((p) => ({
-      port: p.port,
-      protocol: p.protocol,
-    }));
+    res.ports = rule.ports.map(
+      (p) =>
+        ({
+          port: p.port,
+          protocol: p.protocol,
+        }) as IoK8sApiNetworkingV1NetworkPolicyPort,
+    );
   }
   return res;
 };
@@ -306,10 +310,18 @@ const selectorFromK8s = (
   return _.isEmpty(matchLabels) ? [] : _.map(matchLabels, (key: string, val: string) => [val, key]);
 };
 
+export const convertPort = (port: number | string) => {
+  if (!port) return '';
+
+  const portString = port.toString();
+
+  return /[a-z]/.test(portString) ? port : parseInt(portString);
+};
+
 const portFromK8s = (port: K8SPort): ConversionError | NetworkPolicyPort => {
   return {
     key: _.uniqueId('port-'),
-    port: port.port ? String(port.port) : '',
+    port: convertPort(port.port || ''),
     protocol: port.protocol || 'TCP',
   };
 };
