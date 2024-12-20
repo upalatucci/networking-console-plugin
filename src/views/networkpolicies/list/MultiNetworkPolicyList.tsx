@@ -1,11 +1,9 @@
 import React, { FC } from 'react';
-import { useNavigate } from 'react-router-dom-v5-compat';
 
 import { modelToGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console';
 import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
   ListPageBody,
-  ListPageCreateButton,
   ListPageFilter,
   useK8sWatchResource,
   useListPageFilter,
@@ -13,13 +11,10 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import { Pagination } from '@patternfly/react-core';
 import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
-import { DEFAULT_NAMESPACE } from '@utils/constants';
 import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/constants/ui';
-import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import usePagination from '@utils/hooks/usePagination/usePagination';
 import { paginationDefaultValues } from '@utils/hooks/usePagination/utils/constants';
 import { MultiNetworkPolicyModel } from '@utils/models';
-import { resourcePathFromModel } from '@utils/resources/shared';
 import { isEmpty } from '@utils/utils';
 
 import NetworkPolicyEmptyState from './components/NetworkPolicyEmptyState';
@@ -33,9 +28,6 @@ type MultiNetworkPolicyListProps = {
 };
 
 const MultiNetworkPolicyList: FC<MultiNetworkPolicyListProps> = ({ namespace }) => {
-  const { t } = useNetworkingTranslation();
-  const navigate = useNavigate();
-
   const [multinetworkPolicies, loaded, loadError] = useK8sWatchResource<
     IoK8sApiNetworkingV1NetworkPolicy[]
   >({
@@ -58,26 +50,6 @@ const MultiNetworkPolicyList: FC<MultiNetworkPolicyListProps> = ({ namespace }) 
       learnMoreLink="https://docs.openshift.com/container-platform/4.16/networking/multiple_networks/configuring-multi-network-policy.html"
       loaded={loaded}
     >
-      {!isEmpty(data.length) && (
-        <ListPageCreateButton
-          className="list-page-create-button-margin"
-          createAccessReview={{
-            groupVersionKind: modelToGroupVersionKind(MultiNetworkPolicyModel),
-            namespace,
-          }}
-          onClick={() =>
-            navigate(
-              `${resourcePathFromModel(
-                MultiNetworkPolicyModel,
-                null,
-                namespace || DEFAULT_NAMESPACE,
-              )}/${SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM}`,
-            )
-          }
-        >
-          {t('Create MultiNetworkPolicy')}
-        </ListPageCreateButton>
-      )}
       <ListPageBody>
         <div className="list-management-group">
           <ListPageFilter
