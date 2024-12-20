@@ -16,11 +16,9 @@ export const networkTypeLabels = {
 export const initialFormState: CreateProjectModalFormState = {
   networkType: NETWORK_TYPE.POD_NETWORK,
   project: {
+    description: '',
+    displayName: '',
     metadata: {
-      annotations: {
-        [DESCRIPTION_ANNOTATION]: null,
-        [DISPLAY_NAME_ANNOTATION]: null,
-      },
       name: '',
     },
   },
