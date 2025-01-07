@@ -2,27 +2,19 @@ import React, { FC, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom-v5-compat';
 
-import {
-  NamespaceModel,
-  ProjectModel,
-  ProjectRequestModel,
-} from '@kubevirt-ui/kubevirt-api/console';
-import {
-  k8sCreate,
-  k8sDelete,
-  k8sPatch,
-  K8sResourceCommon,
-} from '@openshift-console/dynamic-plugin-sdk';
+import { ProjectModel, ProjectRequestModel } from '@kubevirt-ui/kubevirt-api/console';
+import { k8sCreate, k8sDelete, K8sResourceCommon } from '@openshift-console/dynamic-plugin-sdk';
 import { Button, ButtonVariant, Modal, ModalVariant } from '@patternfly/react-core';
 import ExternalLink from '@utils/components/ExternalLink/ExternalLink';
 import { documentationURLs, getDocumentationURL, isManaged } from '@utils/constants/documentation';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { UserDefinedNetworkModel } from '@utils/models';
-import { getResourceURL } from '@utils/resources/shared';
+import { getName, getResourceURL } from '@utils/resources/shared';
 
 import CreateProjectModalForm from './components/CreateProjectModalForm';
 import { initialFormState } from './constants';
 import { CreateProjectModalFormState, NETWORK_TYPE } from './types';
+import { patchClusterUDN } from './utils';
 
 import './CreateProjectModal.scss';
 
@@ -54,25 +46,10 @@ const CreateProjectModal: FC<{
       const projectCreated = await k8sCreate({ data: project, model: ProjectRequestModel });
 
       if (networkType === NETWORK_TYPE.UDN)
-        await k8sCreate({ data: udn, model: UserDefinedNetworkModel }).catch((err) => {
-          k8sDelete({ model: ProjectModel, resource: projectCreated });
-          throw err;
-        });
+        await k8sCreate({ data: udn, model: UserDefinedNetworkModel });
 
       if (networkType === NETWORK_TYPE.CLUSTER_UDN) {
-        const labelsToAdd = Object.entries(clusterUDN.spec.namespaceSelector.matchLabels || {}).map(
-          ([labelKey, labelValue]) => ({
-            op: 'add',
-            path: `/metadata/labels/${labelKey}`,
-            value: labelValue,
-          }),
-        );
-
-        await k8sPatch({
-          data: [{ op: 'add', path: '/metadata/labels', value: {} }, ...labelsToAdd],
-          model: NamespaceModel,
-          resource: projectCreated,
-        });
+        await patchClusterUDN(clusterUDN, getName(project));
       }
 
       closeModal();
@@ -83,6 +60,8 @@ const CreateProjectModal: FC<{
       }
       setErrorMessage('');
     } catch (error) {
+      k8sDelete({ model: ProjectModel, resource: project });
+
       setErrorMessage(error?.message || t('An error occurred. Please try again.'));
     }
   };
