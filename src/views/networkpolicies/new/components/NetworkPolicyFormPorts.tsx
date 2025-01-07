@@ -5,7 +5,7 @@ import { Button } from '@patternfly/react-core';
 import { MinusCircleIcon } from '@patternfly/react-icons/dist/esm/icons/minus-circle-icon';
 import { PlusCircleIcon } from '@patternfly/react-icons/dist/esm/icons/plus-circle-icon';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { NetworkPolicyPort } from '@utils/models';
+import { convertPort, NetworkPolicyPort } from '@utils/models';
 
 import PortsDropdown from '../NetworkPolicyPortsDropdown';
 
@@ -49,7 +49,13 @@ const NetworkPolicyPorts: FC<NetworkPolicyPortsProps> = (props) => {
                   id={`${key}-port`}
                   name={`${key}-port`}
                   onChange={(event) =>
-                    onSingleChange({ ...port, port: event.currentTarget.value }, idx)
+                    onSingleChange(
+                      {
+                        ...port,
+                        port: convertPort(event.currentTarget.value),
+                      },
+                      idx,
+                    )
                   }
                   placeholder="443"
                   value={port.port}
