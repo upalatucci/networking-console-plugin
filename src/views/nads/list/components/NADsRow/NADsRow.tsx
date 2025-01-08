@@ -8,8 +8,10 @@ import {
   RowProps,
   TableData,
 } from '@openshift-console/dynamic-plugin-sdk';
+import { Badge } from '@patternfly/react-core';
 import MutedText from '@utils/components/MutedText/MutedText';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { isUserDefinedNetworkNAD } from '@utils/resources/nads/helpers';
 import { getConfigAsJSON, getType } from '@utils/resources/nads/selectors';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
 import { getName, getNamespace } from '@utils/resources/shared';
@@ -23,15 +25,19 @@ const NADsRow: FC<NADsRowType> = ({ activeColumnIDs, obj }) => {
   const name = getName(obj);
 
   const type = getType(getConfigAsJSON(obj));
+  const isUDNManaged = isUserDefinedNetworkNAD(obj);
 
   return (
     <>
       <TableData activeColumnIDs={activeColumnIDs} id="name">
         <ResourceLink
           groupVersionKind={getGroupVersionKindForModel(NetworkAttachmentDefinitionModel)}
+          inline
           name={name}
           namespace={namespace}
         />
+
+        {isUDNManaged && <Badge>{t('UserDefinedNetwork')}</Badge>}
       </TableData>
       <TableData activeColumnIDs={activeColumnIDs} id="namespace">
         <ResourceLink groupVersionKind={modelToGroupVersionKind(NamespaceModel)} name={namespace} />

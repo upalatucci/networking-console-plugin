@@ -9,6 +9,7 @@ import {
   useLabelsModal,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { isUserDefinedNetworkNAD } from '@utils/resources/nads/helpers';
 import { NetworkAttachmentDefinitionKind } from '@utils/resources/nads/types';
 import { asAccessReview, getName, getNamespace } from '@utils/resources/shared';
 
@@ -17,6 +18,7 @@ type NADsActionsProps = (obj: NetworkAttachmentDefinitionKind) => [actions: Acti
 const useNADsActions: NADsActionsProps = (obj) => {
   const { t } = useNetworkingTranslation();
 
+  const isUDNManaged = isUserDefinedNetworkNAD(obj);
   const navigate = useNavigate();
   const launchDeleteModal = useDeleteModal(obj);
   const launchLabelsModal = useLabelsModal(obj);
@@ -29,12 +31,16 @@ const useNADsActions: NADsActionsProps = (obj) => {
     {
       accessReview: asAccessReview(NetworkAttachmentDefinitionModel, obj, 'update'),
       cta: launchLabelsModal,
+      description: isUDNManaged && t('Managed by UserDefinedNetwork'),
+      disabled: isUDNManaged,
       id: 'edit-labels-nad',
       label: t('Edit labels'),
     },
     {
       accessReview: asAccessReview(NetworkAttachmentDefinitionModel, obj, 'update'),
       cta: launchAnnotationsModal,
+      description: isUDNManaged && t('Managed by UserDefinedNetwork'),
+      disabled: isUDNManaged,
       id: 'edit-annotations-nad',
       label: t('Edit annotations'),
     },
@@ -42,12 +48,16 @@ const useNADsActions: NADsActionsProps = (obj) => {
       accessReview: asAccessReview(NetworkAttachmentDefinitionModel, obj, 'update'),
       cta: () =>
         navigate(`/k8s/ns/${objNamespace}/${NetworkAttachmentDefinitionModelRef}/${objName}/yaml`),
+      description: isUDNManaged && t('Managed by UserDefinedNetwork'),
+      disabled: isUDNManaged,
       id: 'edit-nad',
       label: t('Edit NetworkAttachmentDefinition'),
     },
     {
       accessReview: asAccessReview(NetworkAttachmentDefinitionModel, obj, 'delete'),
       cta: launchDeleteModal,
+      description: isUDNManaged && t('Managed by UserDefinedNetwork'),
+      disabled: isUDNManaged,
       id: 'delete-nad',
       label: t('Delete NetworkAttachmentDefinition'),
     },
