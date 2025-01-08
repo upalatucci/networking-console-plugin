@@ -205,6 +205,7 @@
   "Location": "Location",
   "Location of the resource that backs the service": "Location of the resource that backs the service",
   "MAC spoof check": "MAC spoof check",
+  "Managed by UserDefinedNetwork": "Managed by UserDefinedNetwork",
   "Match Expressions": "Match Expressions",
   "Match Labels": "Match Labels",
   "matchExpressions is a list of label selector requirements. The requirements are ANDed.": "matchExpressions is a list of label selector requirements. The requirements are ANDed.",
