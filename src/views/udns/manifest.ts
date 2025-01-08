@@ -8,6 +8,8 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import { ConsolePluginBuildMetadata } from '@openshift-console/dynamic-plugin-sdk-webpack/lib/build-types';
 
+import { FLAG_UDN_ENABLED } from '../../utils/flags/consts';
+
 const ClusterUserDefinedNetworkExtensionModel = {
   group: 'k8s.ovn.org',
   kind: 'ClusterUserDefinedNetwork',
@@ -36,6 +38,9 @@ export const UserDefinedNetworksExtensions: EncodedExtension[] = [
     type: 'console.page/resource/list',
   } as EncodedExtension<ResourceListPage>,
   {
+    flags: {
+      required: [FLAG_UDN_ENABLED],
+    },
     properties: {
       dataAttributes: {
         'data-quickstart-id': 'qs-nav-udns',
