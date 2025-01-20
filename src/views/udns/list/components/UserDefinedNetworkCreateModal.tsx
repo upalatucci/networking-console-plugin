@@ -10,7 +10,7 @@ import { getName, getNamespace, resourcePathFromModel } from '@utils/resources/s
 
 import { UDNForm } from './constants';
 import UserDefinedNetworkCreateForm from './UserDefinedNetworkCreateForm';
-import { getDefaultUDN } from './utils';
+import { getDefaultUDN, isUDNValid } from './utils';
 
 import './userdefinednetworkcreatemodal.scss';
 
@@ -36,6 +36,7 @@ const UserDefinedNetworkCreateModal: FC<UserDefinedNetworkCreateModalProps> = ({
   const {
     formState: { isSubmitting },
     handleSubmit,
+    watch,
   } = methods;
 
   const [error, setIsError] = useState<Error>();
@@ -58,13 +59,15 @@ const UserDefinedNetworkCreateModal: FC<UserDefinedNetworkCreateModalProps> = ({
     }
   };
 
+  const udn = watch();
+
   return (
     <Modal
       actions={[
         <Button
           data-test="create-udn-submit"
           form="create-udn-form"
-          isDisabled={isSubmitting}
+          isDisabled={isSubmitting || !isUDNValid(udn)}
           isLoading={isSubmitting}
           key="submit"
           type="submit"
