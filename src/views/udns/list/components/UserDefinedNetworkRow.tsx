@@ -11,7 +11,7 @@ import MutedText from '@utils/components/MutedText/MutedText';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { UserDefinedNetworkModel } from '@utils/models';
 import { getName, getNamespace } from '@utils/resources/shared';
-import { getModel, getTopology } from '@utils/resources/udns/selectors';
+import { getModel, getMTU, getTopology } from '@utils/resources/udns/selectors';
 import { ClusterUserDefinedNetworkKind, UserDefinedNetworkKind } from '@utils/resources/udns/types';
 import UDNActions from '@views/udns/actions/UDNActions';
 
@@ -23,6 +23,8 @@ const UserDefinedNetworkRow: FC<UserDefinedNetworkRowType> = ({ activeColumnIDs,
   const name = getName(obj);
   const topology = getTopology(obj);
   const model = getModel(obj);
+
+  const mtu = getMTU(obj);
 
   return (
     <>
@@ -45,6 +47,9 @@ const UserDefinedNetworkRow: FC<UserDefinedNetworkRowType> = ({ activeColumnIDs,
       </TableData>
       <TableData activeColumnIDs={activeColumnIDs} id="topology">
         {topology || <MutedText content={t('Not available')} />}
+      </TableData>
+      <TableData activeColumnIDs={activeColumnIDs} id="mtu">
+        {mtu || <MutedText content={t('Not available')} />}
       </TableData>
       <TableData
         activeColumnIDs={activeColumnIDs}
