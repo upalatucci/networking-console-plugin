@@ -48,9 +48,17 @@ export const getDescription = (udn: UserDefinedNetworkKind): string => {
 };
 
 export const getModel = (obj: ClusterUserDefinedNetworkKind | UserDefinedNetworkKind) => {
-  if (obj.kind === 'ClusterUserDefinedNetwork') {
+  if (obj.kind === ClusterUserDefinedNetworkModel.kind) {
     return ClusterUserDefinedNetworkModel;
   } else {
     return UserDefinedNetworkModel;
   }
+};
+
+export const getMTU = (udn: ClusterUserDefinedNetworkKind | UserDefinedNetworkKind): number => {
+  if (udn.kind === ClusterUserDefinedNetworkModel.kind) {
+    return udn?.spec?.network?.layer2?.mtu || udn?.spec?.network?.layer3?.mtu;
+  }
+
+  return udn?.spec?.layer2?.mtu || udn?.spec?.layer3?.mtu;
 };

@@ -7,7 +7,7 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import { sortable } from '@patternfly/react-table';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
-import { getTopology } from '@utils/resources/udns/selectors';
+import { getMTU, getTopology } from '@utils/resources/udns/selectors';
 
 const sortUDNTopologies = (direction: string) => (a: K8sResourceCommon, b: K8sResourceCommon) => {
   const { first, second } = direction === 'asc' ? { first: a, second: b } : { first: b, second: a };
@@ -18,6 +18,14 @@ const sortUDNTopologies = (direction: string) => (a: K8sResourceCommon, b: K8sRe
     numeric: true,
     sensitivity: 'base',
   });
+};
+
+const sortUDNByMTU = (direction: string) => (a: K8sResourceCommon, b: K8sResourceCommon) => {
+  const { first, second } = direction === 'asc' ? { first: a, second: b } : { first: b, second: a };
+  const firstMTU = getMTU(first);
+  const secondMTU = getMTU(second);
+
+  return firstMTU > secondMTU ? -1 : 1;
 };
 
 const useUDNColumns = (): { id: string; title: string }[] => {
@@ -41,6 +49,12 @@ const useUDNColumns = (): { id: string; title: string }[] => {
         id: 'topology',
         sort: (data, direction) => data?.sort(sortUDNTopologies(direction)),
         title: t('Topology'),
+        transforms: [sortable],
+      },
+      {
+        id: 'mtu',
+        sort: (data, direction) => data?.sort(sortUDNByMTU(direction)),
+        title: t('MTU'),
         transforms: [sortable],
       },
       {
