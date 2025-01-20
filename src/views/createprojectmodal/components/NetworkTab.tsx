@@ -22,7 +22,7 @@ const NetworkTab: FC = () => {
   const { t } = useNetworkingTranslation();
   const isAdmin = useIsAdmin();
 
-  const { control, register, setValue, watch } = useFormContext<CreateProjectModalFormState>();
+  const { control, setValue, watch } = useFormContext<CreateProjectModalFormState>();
 
   const networkType = watch('networkType');
 
@@ -69,18 +69,6 @@ const NetworkTab: FC = () => {
 
       {networkType === NETWORK_TYPE.UDN && (
         <>
-          <FormGroup fieldId="input-name" isRequired label={t('Name')}>
-            <TextInput
-              autoFocus
-              data-test="input-udn-name"
-              id="input-udn-name"
-              name="input-udn-name"
-              {...register('udn.metadata.name', { required: true })}
-              isRequired
-              type="text"
-            />
-          </FormGroup>
-
           <FormGroup fieldId="input-name" isRequired label={t('Subnet')}>
             <Controller
               control={control}

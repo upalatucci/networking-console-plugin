@@ -33,16 +33,19 @@ const UserDefinedNetworkCreateForm: FC<UserDefinedNetworkCreateFormProps> = ({
         )}
       </Text>
       {!isClusterUDN && <SelectProject />}
-      <FormGroup fieldId="input-name" isRequired label={t('Name')}>
-        <TextInput
-          autoFocus
-          data-test="input-name"
-          id="input-name"
-          {...register('metadata.name', { required: true })}
-          isRequired
-          name="name"
-        />
-      </FormGroup>
+
+      {isClusterUDN && (
+        <FormGroup fieldId="input-name" isRequired label={t('Name')}>
+          <TextInput
+            autoFocus
+            data-test="input-name"
+            id="input-name"
+            {...register('metadata.name', { required: true })}
+            isRequired
+            name="name"
+          />
+        </FormGroup>
+      )}
 
       <FormGroup fieldId="input-udn-subnet" isRequired label={t('Subnet')}>
         <Controller
