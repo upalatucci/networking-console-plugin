@@ -1,19 +1,20 @@
 import { ALL_NAMESPACES_KEY, DEFAULT_NAMESPACE } from '@utils/constants';
 import { ClusterUserDefinedNetworkModel, UserDefinedNetworkModel } from '@utils/models';
+import { FIXED_PRIMARY_UDN_NAME } from '@utils/resources/udns/constants';
 import {
   ClusterUserDefinedNetworkKind,
   UserDefinedNetworkKind,
   UserDefinedNetworkRole,
 } from '@utils/resources/udns/types';
-import { generateName } from '@utils/utils';
+import { generateName, isEmpty } from '@utils/utils';
 
 import { UDNForm } from './constants';
 
-export const createUDN = (name: string, namespace: string): UserDefinedNetworkKind => ({
+export const createUDN = (namespace: string): UserDefinedNetworkKind => ({
   apiVersion: `${UserDefinedNetworkModel.apiGroup}/${UserDefinedNetworkModel.apiVersion}`,
   kind: UserDefinedNetworkModel.kind,
   metadata: {
-    name,
+    name: FIXED_PRIMARY_UDN_NAME,
     namespace,
   },
   spec: {
@@ -48,8 +49,16 @@ export const createClusterUDN = (name: string): ClusterUserDefinedNetworkKind =>
 export const getDefaultUDN = (isClusterUDN: boolean, namespace: string): UDNForm => {
   return isClusterUDN
     ? createClusterUDN(generateName('cluster-udn'))
-    : createUDN(
-        generateName('udn'),
-        namespace === ALL_NAMESPACES_KEY ? DEFAULT_NAMESPACE : namespace,
-      );
+    : createUDN(namespace === ALL_NAMESPACES_KEY ? DEFAULT_NAMESPACE : namespace);
+};
+
+export const isUDNValid = (udn: UDNForm): boolean => {
+  const clusterUDNConnected =
+    Object.values(
+      udn?.spec?.namespaceSelector?.matchExpressions ||
+        udn?.spec?.namespaceSelector?.matchLabels ||
+        {},
+    ).length > 0;
+
+  return !isEmpty(udn?.metadata?.namespace) || clusterUDNConnected;
 };

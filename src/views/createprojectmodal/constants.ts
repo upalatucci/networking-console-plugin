@@ -1,4 +1,5 @@
 import { t } from '@utils/hooks/useNetworkingTranslation';
+import { FIXED_PRIMARY_UDN_NAME } from '@utils/resources/udns/constants';
 import { UserDefinedNetworkRole } from '@utils/resources/udns/types';
 
 import { CreateProjectModalFormState, NETWORK_TYPE } from './types';
@@ -26,7 +27,7 @@ export const initialFormState: CreateProjectModalFormState = {
     apiVersion: 'k8s.ovn.org/v1',
     kind: 'UserDefinedNetwork',
     metadata: {
-      name: '',
+      name: FIXED_PRIMARY_UDN_NAME,
       namespace: '',
     },
     spec: {
