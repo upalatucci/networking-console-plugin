@@ -1,15 +1,7 @@
 import React, { FC, JSX } from 'react';
 
 import { DetailsItemComponentProps } from '@openshift-console/dynamic-plugin-sdk';
-import {
-  Card,
-  CardBody,
-  ClipboardCopy,
-  Flex,
-  FlexItem,
-  List,
-  ListItem,
-} from '@patternfly/react-core';
+import { ClipboardCopy, Flex, FlexItem, List, ListItem } from '@patternfly/react-core';
 import { DetailsItem } from '@utils/components/DetailsItem/DetailsItem';
 import MutedText from '@utils/components/MutedText/MutedText';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
@@ -113,11 +105,7 @@ const UDNLayerDetails: FC<
     }
   };
 
-  return (
-    <Card isPlain>
-      <CardBody>{getContent()}</CardBody>
-    </Card>
-  );
+  return <>{getContent()}</>;
 };
 
 export default UDNLayerDetails;
