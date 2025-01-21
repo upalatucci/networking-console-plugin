@@ -33,7 +33,7 @@ const RouteFormActions: FC<RouteFormActionsProps> = ({ apiError, isCreationForm 
           type="submit"
           variant={ButtonVariant.primary}
         >
-          {isCreationForm ? t('Create') : t('Edit')}
+          {isCreationForm ? t('Create') : t('Save')}
         </Button>
         <Button
           id="cancel"
