@@ -72,7 +72,7 @@ const NetworkAttachmentDefinitionList: FC<NetworkAttachmentDefinitionListProps> 
               )
             }
           >
-            {t('Create NetworkArrachmentDefinition')}
+            {t('Create NetworkAttachmentDefinition')}
           </ListPageCreateButton>
         )}
       </ListPageHeader>
