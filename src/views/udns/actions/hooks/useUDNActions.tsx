@@ -4,7 +4,6 @@ import {
   Action,
   useActiveNamespace,
   useAnnotationsModal,
-  useDeleteModal,
   useLabelsModal,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
@@ -21,7 +20,6 @@ const useUDNActions: UDNActionsProps = (obj) => {
   const model = getModel(obj);
   const [activeNamespace] = useActiveNamespace();
   const navigate = useNavigate();
-  const launchDeleteModal = useDeleteModal(obj);
   const launchLabelsModal = useLabelsModal(obj);
   const launchAnnotationsModal = useAnnotationsModal(obj);
 
@@ -51,12 +49,6 @@ const useUDNActions: UDNActionsProps = (obj) => {
         ),
       id: 'edit-udn',
       label: t('Edit {{kind}}', { kind: model.kind }),
-    },
-    {
-      accessReview: asAccessReview(model, obj, 'delete'),
-      cta: launchDeleteModal,
-      id: 'delete-udn',
-      label: t('Delete {{kind}}', { kind: model.kind }),
     },
   ];
 
