@@ -1,16 +1,17 @@
-import React, { FC, MouseEvent, useMemo, useState } from 'react';
+import React, { FC, MouseEvent, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { Operator, ResourceIcon } from '@openshift-console/dynamic-plugin-sdk';
+import { ResourceIcon } from '@openshift-console/dynamic-plugin-sdk';
 import { ExpandableSection, FormGroup, List, ListItem } from '@patternfly/react-core';
-import SelectMultiTypeahead from '@utils/components/SelectMultiTypeahead/SelectMultiTypeahead';
+import MatchLabels from '@utils/components/MatchLabels/MatchLabels';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { getName } from '@utils/resources/shared';
-import { PROJECT_LABEL_FOR_MATCH_EXPRESSION } from '@utils/resources/udns/constants';
 import { ClusterUserDefinedNetworkKind } from '@utils/resources/udns/types';
 
 import { ProjectGroupVersionKind } from '../constants';
 import useProjects from '../hooks/useProjects';
+
+import { match } from './utils';
 
 const ClusterUDNNamespaceSelector: FC = () => {
   const { t } = useNetworkingTranslation();
@@ -19,48 +20,23 @@ const ClusterUDNNamespaceSelector: FC = () => {
 
   const { setValue, watch } = useFormContext<ClusterUserDefinedNetworkKind>();
 
-  const matchExpressions = watch('spec.namespaceSelector.matchExpressions');
-
-  const matchingProjectNames = matchExpressions?.[0]?.values;
-
-  const matchingProjects = projects?.filter((project) =>
-    matchingProjectNames?.includes(getName(project)),
-  );
-
   const [isExpanded, setIsExpanded] = useState(false);
 
   const onToggle = (_event: MouseEvent, expanded: boolean) => {
     setIsExpanded(expanded);
   };
 
-  const handleChange = (newSelection) => {
-    setValue('spec.namespaceSelector.matchExpressions', [
-      { key: PROJECT_LABEL_FOR_MATCH_EXPRESSION, operator: Operator.In, values: newSelection },
-    ]);
-  };
+  const matchLabels = watch('spec.namespaceSelector.matchLabels');
 
-  const projectsOptions = useMemo(
-    () =>
-      projects.map((project) => ({
-        children: (
-          <>
-            <ResourceIcon groupVersionKind={ProjectGroupVersionKind} />
-
-            {getName(project)}
-          </>
-        ),
-        value: getName(project),
-      })),
-    [projects],
-  );
+  const matchingProjects = projects?.filter((project) => match(project, matchLabels));
 
   return (
     <FormGroup fieldId="cluster-udn-projects" isRequired label={t('Project(s)')}>
-      <SelectMultiTypeahead
-        options={projectsOptions}
-        placeholder={t('Select a Project')}
-        selected={matchingProjectNames}
-        setSelected={handleChange}
+      <MatchLabels
+        matchLabels={matchLabels}
+        onChange={(newMatchLabels) =>
+          setValue('spec.namespaceSelector.matchLabels', newMatchLabels)
+        }
       />
 
       <ExpandableSection
