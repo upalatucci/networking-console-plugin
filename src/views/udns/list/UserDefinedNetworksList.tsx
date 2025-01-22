@@ -2,7 +2,6 @@ import React, { FC } from 'react';
 
 import {
   ListPageBody,
-  ListPageCreateDropdown,
   ListPageFilter,
   ListPageHeader,
   useK8sWatchResources,
@@ -19,6 +18,7 @@ import {
 } from '@utils/models';
 import { ClusterUserDefinedNetworkKind, UserDefinedNetworkKind } from '@utils/resources/udns/types';
 
+import UDNListCreateButton from './components/UDNListCreateButton';
 import UserDefinedNetworkCreateModal from './components/UserDefinedNetworkCreateModal';
 import UserDefinedNetworkRow from './components/UserDefinedNetworkRow';
 import useUDNColumns from './hooks/useUDNColumns';
@@ -73,23 +73,7 @@ const UserDefinedNetworksList: FC<UserDefinedNetworksListProps> = ({ namespace }
       title={title}
     >
       <ListPageHeader title={title}>
-        <ListPageCreateDropdown
-          createAccessReview={{
-            groupVersionKind: UserDefinedNetworkModelGroupVersionKind,
-            namespace,
-          }}
-          items={{
-            ClusterUserDefinedNetwork: t('ClusterUserDefinedNetwork'),
-            UserDefinedNetwork: t('UserDefinedNetwork'),
-          }}
-          onClick={(item) =>
-            createModal(UserDefinedNetworkCreateModal, {
-              isClusterUDN: item === 'ClusterUserDefinedNetwork',
-            })
-          }
-        >
-          {t('Create')}
-        </ListPageCreateDropdown>
+        <UDNListCreateButton allUDNs={allResources} namespace={namespace} />
       </ListPageHeader>
       <ListPageBody>
         <ListPageFilter
