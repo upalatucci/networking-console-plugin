@@ -9,6 +9,7 @@ import {
   Text,
   TextInput,
 } from '@patternfly/react-core';
+import FormGroupHelperText from '@utils/components/FormGroupHelperText/FormGroupHelperText';
 import Select from '@utils/components/Select/Select';
 import { useIsAdmin } from '@utils/hooks/useIsAdmin';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
@@ -69,7 +70,7 @@ const NetworkTab: FC = () => {
 
       {networkType === NETWORK_TYPE.UDN && (
         <>
-          <FormGroup fieldId="input-name" isRequired label={t('Subnet')}>
+          <FormGroup fieldId="input-name" isRequired label={t('Subnet CIRD')}>
             <Controller
               control={control}
               name="udn.spec.layer2.subnets"
@@ -91,6 +92,12 @@ const NetworkTab: FC = () => {
               )}
               rules={{ required: true }}
             />
+
+            <FormGroupHelperText>
+              {t(
+                'Dual-stack clusters may set 2 subnets (one for each IP family), otherwise only 1 subnet is allowed.  The format should match standard CIDR notation (for example, "10.128.0.0/16").',
+              )}
+            </FormGroupHelperText>
           </FormGroup>
         </>
       )}
