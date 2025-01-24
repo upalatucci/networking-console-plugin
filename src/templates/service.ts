@@ -4,7 +4,7 @@ export const ServiceYAMLTemplates = `
 apiVersion: ${ServiceModel.apiVersion}
 kind: ${ServiceModel.kind}
 metadata:
-  name: exampleasd
+  name: example
 spec:
   selector:
     app: MyApp
