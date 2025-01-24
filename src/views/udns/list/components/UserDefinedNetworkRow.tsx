@@ -13,6 +13,7 @@ import { UserDefinedNetworkModel } from '@utils/models';
 import { getName, getNamespace } from '@utils/resources/shared';
 import { getModel, getTopology } from '@utils/resources/udns/selectors';
 import { ClusterUserDefinedNetworkKind, UserDefinedNetworkKind } from '@utils/resources/udns/types';
+import { NO_DATA_DASH } from '@utils/utils/constants';
 import UDNActions from '@views/udns/actions/UDNActions';
 
 type UserDefinedNetworkRowType = RowProps<ClusterUserDefinedNetworkKind | UserDefinedNetworkKind>;
@@ -40,7 +41,7 @@ const UserDefinedNetworkRow: FC<UserDefinedNetworkRowType> = ({ activeColumnIDs,
             name={namespace}
           />
         ) : (
-          t('All namespaces')
+          NO_DATA_DASH
         )}
       </TableData>
       <TableData activeColumnIDs={activeColumnIDs} id="topology">
