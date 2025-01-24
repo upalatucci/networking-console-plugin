@@ -51,7 +51,7 @@ const NADListEmpty: FC<NADListEmptyProps> = ({ namespace }) => {
             )
           }
         >
-          {t('Create NetworkArrachmentDefinition')}
+          {t('Create NetworkAttachmentDefinition')}
         </Button>
 
         {hasQuickStarts && (
