@@ -7,7 +7,7 @@ import {
   UserDefinedNetworkKind,
   UserDefinedNetworkRole,
 } from '@utils/resources/udns/types';
-import { generateName } from '@utils/utils';
+import { generateName, isEmpty } from '@utils/utils';
 
 import { UDNForm } from './constants';
 
@@ -56,4 +56,12 @@ export const getDefaultUDN = (isClusterUDN: boolean, namespace: string): UDNForm
   return isClusterUDN
     ? createClusterUDN(generateName('cluster-udn'))
     : createUDN(namespace === ALL_NAMESPACES_KEY ? DEFAULT_NAMESPACE : namespace);
+};
+
+export const isUDNValid = (udn: UDNForm): boolean => {
+  const clusterUDNConnected =
+    !isEmpty(udn?.spec?.namespaceSelector?.matchExpressions) ||
+    !isEmpty(udn?.spec?.namespaceSelector?.matchLabels);
+
+  return !isEmpty(udn?.metadata?.namespace) || clusterUDNConnected;
 };
