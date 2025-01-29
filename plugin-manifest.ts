@@ -2,10 +2,6 @@ import { EncodedExtension } from '@openshift/dynamic-plugin-sdk-webpack';
 import { ConsolePluginBuildMetadata } from '@openshift-console/dynamic-plugin-sdk-webpack/lib/build-types';
 
 import { FlagsExposedModules, FlagsExtensions } from './src/utils/flags/manifest';
-import {
-  CreateProjectModalExposedModules,
-  CreateProjectModalExtensions,
-} from './src/views/createprojectmodal/manifest';
 import { IngressesExposedModules, IngressesExtensions } from './src/views/ingresses/manifest';
 import { NADsExposedModules, NADsExtensions } from './src/views/nads/manifest';
 import {
@@ -33,7 +29,6 @@ export const pluginMetadata: ConsolePluginBuildMetadata = {
     ...FlagsExposedModules,
     ...RoutesExposedModules,
     ...UserDefinedNetworksExposedModules,
-    ...CreateProjectModalExposedModules,
     yamlTemplates: './templates/index.ts',
   },
   name: 'networking-console-plugin',
@@ -48,5 +43,4 @@ export const extensions: EncodedExtension[] = [
   ...NADsExtensions,
   ...FlagsExtensions,
   ...UserDefinedNetworksExtensions,
-  ...CreateProjectModalExtensions,
 ];
