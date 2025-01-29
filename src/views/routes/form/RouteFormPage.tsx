@@ -20,6 +20,8 @@ import { LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY } from '@views/networkpolicies/
 import RouteForm from './RouteForm';
 import { generateDefaultRoute } from './utils';
 
+import './networking-route-form.scss';
+
 type RouteFormPageProps = { initialRoute?: RouteKind };
 
 const RouteFormPage: FC<RouteFormPageProps> = ({ initialRoute }) => {
@@ -32,7 +34,7 @@ const RouteFormPage: FC<RouteFormPageProps> = ({ initialRoute }) => {
 
   return (
     <>
-      <PageSection variant={PageSectionVariants.light}>
+      <PageSection className="networking-route-form" variant={PageSectionVariants.light}>
         <Title headingLevel="h2">
           {initialRoute
             ? t('Edit {{label}}', { label: RouteModel.label })
