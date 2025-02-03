@@ -109,7 +109,11 @@ const ServiceSelector: FC<ServiceSelectorProps> = ({ namespace }) => {
                 {t('Service to route to.')}
               </FormGroupHelperText>
             </FormGroup>
-            <FormGroup fieldId={SERVICE_WEIGHT_FIELD_ID} label={t('Service weight')}>
+            <FormGroup
+              className="networking-route-form__service-weight-input"
+              fieldId={SERVICE_WEIGHT_FIELD_ID}
+              label={t('Service weight')}
+            >
               <TextInput
                 defaultValue={DEFAULT_SERVICE_WEIGHT}
                 id={SERVICE_WEIGHT_FIELD_ID}
