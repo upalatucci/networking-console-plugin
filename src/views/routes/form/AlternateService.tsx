@@ -99,6 +99,7 @@ const AlternateService: FC<AlternateServiceProps> = ({
             </FormGroupHelperText>
           </FormGroup>
           <FormGroup
+            className="networking-route-form__service-weight-input"
             fieldId={`${AS_WEIGHT_PREFIX_FIELD_ID}${field.id}`}
             isRequired
             label={t('Alternate Service weight')}
