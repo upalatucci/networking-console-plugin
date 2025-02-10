@@ -25,7 +25,7 @@ export const createUDN = (namespace: string): UserDefinedNetworkKind => ({
   },
   spec: {
     layer2: {
-      ipamLifecycle: 'Persistent',
+      ipam: { lifecycle: 'Persistent' },
       role: UserDefinedNetworkRole.Primary,
       subnets: [''],
     },
@@ -43,7 +43,7 @@ export const createClusterUDN = (name: string): ClusterUserDefinedNetworkKind =>
     namespaceSelector: { matchExpressions: [] },
     network: {
       layer2: {
-        ipamLifecycle: 'Persistent',
+        ipam: { lifecycle: 'Persistent' },
         role: UserDefinedNetworkRole.Primary,
         subnets: [''],
       },
