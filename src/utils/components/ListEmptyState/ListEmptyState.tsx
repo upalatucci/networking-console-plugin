@@ -24,6 +24,7 @@ import ListSkeleton from './ListSkeleton';
 
 type ListEmptyStateProps<T> = {
   children: ReactNode;
+  createButtonAction?: ReactNode;
   createButtonlink?: string;
   data: T[];
   error: any;
@@ -36,6 +37,7 @@ type ListEmptyStateProps<T> = {
 
 const ListEmptyState = <T extends K8sResourceCommon>({
   children,
+  createButtonAction,
   createButtonlink,
   data,
   error,
@@ -59,50 +61,51 @@ const ListEmptyState = <T extends K8sResourceCommon>({
       </>
     );
 
-  if (isEmpty(data))
-    return (
-      <>
-        {title && <ListPageHeader title={title} />}
-        <EmptyState>
-          <EmptyStateHeader
-            headingLevel="h4"
-            icon={<EmptyStateIcon icon={AddCircleOIcon} />}
-            titleText={t('No {{kind}} found', { kind })}
-          />
-          <EmptyStateBody>
-            <Trans t={t}>
-              Click <b>Create {{ kind }}</b> to create your first {{ kind }}
-            </Trans>
-          </EmptyStateBody>
-          <EmptyStateFooter>
-            <EmptyStateActions>
-              <Button
-                onClick={
-                  onCreate
-                    ? onCreate
-                    : () =>
-                        navigate(
-                          params?.ns
-                            ? createButtonlink
-                            : `/k8s/ns/default/${params.plural}/${createButtonlink}`,
-                        )
-                }
-                variant={ButtonVariant.primary}
-              >
-                {t('Create {{ kind }}', { kind })}
-              </Button>
-            </EmptyStateActions>
-            <EmptyStateActions>
-              <ExternalLink href={learnMoreLink}>
-                {t('Learn more about {{ kind }}', { kind })}
-              </ExternalLink>
-            </EmptyStateActions>
-          </EmptyStateFooter>
-        </EmptyState>
-      </>
-    );
+  if (!isEmpty(data)) return <>{children}</>;
 
-  return <>{children}</>;
+  const defaultCreateButton = (
+    <Button
+      onClick={
+        onCreate
+          ? onCreate
+          : () =>
+              navigate(
+                params?.ns
+                  ? createButtonlink
+                  : `/k8s/ns/default/${params.plural}/${createButtonlink}`,
+              )
+      }
+      variant={ButtonVariant.primary}
+    >
+      {t('Create {{ kind }}', { kind })}
+    </Button>
+  );
+
+  return (
+    <>
+      {title && <ListPageHeader title={title} />}
+      <EmptyState>
+        <EmptyStateHeader
+          headingLevel="h4"
+          icon={<EmptyStateIcon icon={AddCircleOIcon} />}
+          titleText={t('No {{kind}} found', { kind })}
+        />
+        <EmptyStateBody>
+          <Trans t={t}>
+            Click <b>Create {{ kind }}</b> to create your first {{ kind }}
+          </Trans>
+        </EmptyStateBody>
+        <EmptyStateFooter>
+          <EmptyStateActions>{createButtonAction || defaultCreateButton}</EmptyStateActions>
+          <EmptyStateActions>
+            <ExternalLink href={learnMoreLink}>
+              {t('Learn more about {{ kind }}', { kind })}
+            </ExternalLink>
+          </EmptyStateActions>
+        </EmptyStateFooter>
+      </EmptyState>
+    </>
+  );
 };
 
 export default ListEmptyState;
