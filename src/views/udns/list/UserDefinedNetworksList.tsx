@@ -64,6 +64,7 @@ const UserDefinedNetworksList: FC<UserDefinedNetworksListProps> = ({ namespace }
 
   return (
     <ListEmptyState<ClusterUserDefinedNetworkKind | UserDefinedNetworkKind>
+      createButtonAction={<UDNListCreateButton allUDNs={allResources} namespace={namespace} />}
       data={data}
       error={loadError}
       kind={UserDefinedNetworkModel.kind}
