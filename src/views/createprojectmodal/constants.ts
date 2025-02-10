@@ -32,7 +32,7 @@ export const initialFormState: CreateProjectModalFormState = {
     },
     spec: {
       layer2: {
-        ipamLifecycle: 'Persistent',
+        ipam: { lifecycle: 'Persistent' },
         role: UserDefinedNetworkRole.Primary,
         subnets: [],
       },

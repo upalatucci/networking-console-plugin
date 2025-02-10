@@ -53,10 +53,10 @@ const Layer2Parameters: FC = () => {
         <Controller
           control={control}
           defaultValue={false as never}
-          name={`${TopologyKeys.Layer2}.ipamLifecycle`}
+          name={`${TopologyKeys.Layer2}.ipam.lifecycle`}
           render={({ field: { onChange, value } }) => (
             <Checkbox
-              id={`${TopologyKeys.Layer2}.ipamLifecycle`}
+              id={`${TopologyKeys.Layer2}.ipam.lifecycle`}
               isChecked={value}
               label={t('Persistent')}
               onChange={onChange}
