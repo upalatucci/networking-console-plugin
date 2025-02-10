@@ -24,6 +24,9 @@ export const DOC_URL_STORAGE_CLASSES_SCALEIO = `${KUBE_DOCS}/concepts/storage/st
 export const DOC_URL_STORAGE_CLASSES_STORAGEOS = `${KUBE_DOCS}/concepts/storage/storage-classes/#storageos`;
 export const DOC_URL_STORAGE_CLASSES_VSPHERE = `${KUBE_DOCS}/concepts/storage/storage-classes/#vsphere`;
 
+export const DOC_URL_NETWORK_SERVICE = `${KUBE_DOCS}/concepts/services-networking/service/`;
+export const DOC_URL_NETWORK_INGRESS = `${KUBE_DOCS}/concepts/services-networking/ingress/`;
+
 export const documentationURLs: documentationURLsType = {
   applicationHealth: {
     downstream: 'html/building_applications/application-health',
@@ -38,6 +41,10 @@ export const documentationURLs: documentationURLsType = {
   deprecatedDeploymentConfig: {
     downstream: 'html/building_applications/deployments',
     upstream: 'applications/deployments/what-deployments-are.html',
+  },
+  multipleNetworks: {
+    downstream: 'html/networking/multiple-networks',
+    upstream: 'networking/multiple_networks/understanding-multiple-networks.html',
   },
   networkPolicy: {
     downstream: 'html/networking/network-policy#about-network-policy',
@@ -55,6 +62,10 @@ export const documentationURLs: documentationURLsType = {
   postInstallationMachineConfigurationTasks: {
     downstream: 'html/post-installation_configuration/index',
     upstream: 'post_installation_configuration/machine-configuration-tasks.html',
+  },
+  routes: {
+    downstream: 'html/networking/configuring-routes',
+    upstream: 'networking/routes/route-configuration.html',
   },
   understandingUpgradeChannels: {
     downstream:

@@ -5,12 +5,15 @@ import { IoK8sApiNetworkingV1NetworkPolicy } from '@kubevirt-ui/kubevirt-api/kub
 import {
   ListPageBody,
   ListPageFilter,
+  useFlag,
   useK8sWatchResource,
   useListPageFilter,
   VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { Pagination } from '@patternfly/react-core';
 import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
+import { FLAGS } from '@utils/constants';
+import { getNetworkPolicyDocURL } from '@utils/constants/documentation';
 import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/constants/ui';
 import usePagination from '@utils/hooks/usePagination/usePagination';
 import { paginationDefaultValues } from '@utils/hooks/usePagination/utils/constants';
@@ -38,6 +41,7 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
   const { onPaginationChange, pagination } = usePagination();
   const [data, filteredData, onFilterChange] = useListPageFilter(networkPolicies);
   const [columns, activeColumns] = useNetworkPolicyColumn(pagination, filteredData);
+  const hasOpenshiftFlag = useFlag(FLAGS.OPENSHIFT);
 
   return (
     <ListEmptyState<IoK8sApiNetworkingV1NetworkPolicy>
@@ -45,7 +49,7 @@ const NetworkPolicyList: FC<NetworkPolicyListProps> = ({ namespace }) => {
       data={data}
       error={loadError}
       kind={NetworkPolicyModel.kind}
-      learnMoreLink="https://kubernetes.io/docs/concepts/services-networking/network-policies/"
+      learnMoreLink={getNetworkPolicyDocURL(hasOpenshiftFlag)}
       loaded={loaded}
     >
       <ListPageBody>

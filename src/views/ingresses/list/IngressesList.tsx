@@ -14,6 +14,7 @@ import {
   VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
 import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
+import { DOC_URL_NETWORK_INGRESS } from '@utils/constants/documentation';
 import { SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML } from '@utils/constants/ui';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { getResourceURL } from '@utils/resources/shared';
@@ -47,7 +48,7 @@ const IngressesList: FC<IngressesListProps> = ({ namespace }) => {
       data={data}
       error={loadError}
       kind={IngressModel.kind}
-      learnMoreLink="https://kubernetes.io/docs/concepts/services-networking/ingress/"
+      learnMoreLink={DOC_URL_NETWORK_INGRESS}
       loaded={loaded}
       title={title}
     >
