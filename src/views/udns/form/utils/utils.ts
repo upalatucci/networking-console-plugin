@@ -35,7 +35,7 @@ export const fromUDNObjToFormData = (
     topology: Object.keys(TopologyKeys).find((key) => TopologyKeys[key] === networkSpec.topology),
     [TopologyKeys.Layer2]: {
       ...networkSpec.layer2,
-      ipamLifecycle: networkSpec.layer2?.ipamLifecycle === 'Persistent' ? 'true' : undefined,
+      ipamLifecycle: networkSpec.layer2?.ipam?.lifecycle === 'Persistent' ? 'true' : undefined,
       role: UserDefinedNetworkRole[networkSpec.layer2?.role],
     },
     [TopologyKeys.Layer3]: {
@@ -71,7 +71,7 @@ export const fromDataToUDNObj = (
       topology === TopologyKeys.Layer2
         ? {
             ...Layer2,
-            ipamLifecycle: Layer2?.ipamLifecycle ? 'Persistent' : undefined,
+            ipam: Layer2?.ipam?.lifecycle ? { lifecycle: 'Persistent' } : undefined,
             mtu: Layer2.mtu ? Number(Layer2.mtu) : undefined,
           }
         : undefined,

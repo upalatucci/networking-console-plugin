@@ -10,7 +10,9 @@ export enum UserDefinedNetworkRole {
 }
 
 export type UserDefinedNetworkLayer2 = {
-  ipamLifecycle?: string;
+  ipam?: {
+    lifecycle?: string;
+  };
   joinSubnets?: string[];
   mtu?: number;
   role: UserDefinedNetworkRole;
