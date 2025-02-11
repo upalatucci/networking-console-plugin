@@ -71,6 +71,10 @@ export const documentationURLs: documentationURLsType = {
       'html/updating_clusters/performing-a-cluster-update#update-using-custom-machine-config-pools',
     upstream: 'updating/updating_a_cluster/update-using-custom-machine-config-pools.html',
   },
+  userdefinedNetwork: {
+    downstream: 'networking/multiple_networks/understanding-multiple-networks.html',
+    upstream: 'networking/multiple_networks/understanding-multiple-networks.html',
+  },
   usingInsights: {
     downstream:
       'html/support/remote-health-monitoring-with-connected-clusters#using-insights-to-identify-issues-with-your-cluster',

@@ -10,6 +10,7 @@ import {
   VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
 import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
+import { documentationURLs, getDocumentationURL } from '@utils/constants/documentation';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import {
   ClusterUserDefinedNetworkModelGroupVersionKind,
@@ -67,7 +68,7 @@ const UserDefinedNetworksList: FC<UserDefinedNetworksListProps> = ({ namespace }
       data={data}
       error={loadError}
       kind={UserDefinedNetworkModel.kind}
-      learnMoreLink="https://docs.openshift.com/container-platform/4.17/networking/multiple_networks/understanding-user-defined-network.html"
+      learnMoreLink={getDocumentationURL(documentationURLs.userdefinedNetwork)}
       loaded={loaded}
       onCreate={() => createModal(UserDefinedNetworkCreateModal, {})}
       title={title}
