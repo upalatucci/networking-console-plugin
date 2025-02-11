@@ -14,6 +14,7 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
 import { DEFAULT_NAMESPACE } from '@utils/constants';
+import { DOC_URL_NETWORK_SERVICE } from '@utils/constants/documentation';
 import {
   SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM,
   SHARED_DEFAULT_PATH_NEW_RESOURCE_YAML,
@@ -49,7 +50,7 @@ const ServiceList: FC<ServiceListProps> = ({ namespace }) => {
       data={data}
       error={loadError}
       kind={ServiceModel.kind}
-      learnMoreLink="https://kubernetes.io/docs/concepts/services-networking/service/"
+      learnMoreLink={DOC_URL_NETWORK_SERVICE}
       loaded={loaded}
       title={title}
     >

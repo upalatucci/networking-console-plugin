@@ -11,6 +11,7 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import { Pagination } from '@patternfly/react-core';
 import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
+import { documentationURLs, getDocumentationURL } from '@utils/constants/documentation';
 import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/constants/ui';
 import usePagination from '@utils/hooks/usePagination/usePagination';
 import { paginationDefaultValues } from '@utils/hooks/usePagination/utils/constants';
@@ -47,7 +48,7 @@ const MultiNetworkPolicyList: FC<MultiNetworkPolicyListProps> = ({ namespace }) 
       data={data}
       error={loadError}
       kind={MultiNetworkPolicyModel.kind}
-      learnMoreLink="https://docs.openshift.com/container-platform/4.16/networking/multiple_networks/configuring-multi-network-policy.html"
+      learnMoreLink={getDocumentationURL(documentationURLs.multipleNetworks)}
       loaded={loaded}
     >
       <ListPageBody>

@@ -13,6 +13,7 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import ListEmptyState from '@utils/components/ListEmptyState/ListEmptyState';
 import { DEFAULT_NAMESPACE } from '@utils/constants';
+import { documentationURLs, getDocumentationURL } from '@utils/constants/documentation';
 import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/constants/ui';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { resourcePathFromModel } from '@utils/resources/shared';
@@ -47,7 +48,7 @@ const RoutesList: FC<RoutesListProps> = ({ namespace }) => {
       data={routesFetch}
       error={loadError}
       kind={RouteModel.kind}
-      learnMoreLink="https://docs.redhat.com/en/documentation/openshift_container_platform/4.16/html/networking/configuring-routes"
+      learnMoreLink={getDocumentationURL(documentationURLs.routes)}
       loaded={loaded}
       title={title}
     >
