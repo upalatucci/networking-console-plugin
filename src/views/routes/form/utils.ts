@@ -12,7 +12,6 @@ export const generateDefaultRoute = (namespace: string): RouteKind => ({
     namespace,
   },
   spec: {
-    path: '/',
     to: {
       kind: 'Service',
       name: '',
