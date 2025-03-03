@@ -69,13 +69,13 @@ const NetworkPolicyRuleConfigPanelRulePeer: FC<NetworkPolicyRuleConfigPanelRuleP
                 aria-label={t('Remove peer')}
                 className="co-create-networkpolicy__remove-peer"
                 data-test="remove-peer"
+                icon={<TrashIcon />}
                 onClick={() => removePeer(index)}
                 type="button"
                 variant="plain"
-              >
-                <TrashIcon />
-              </Button>
+              />
             }
+            style={{ paddingBlockStart: '1rem' }}
             titleText={{
               id: `peer-header-${index}`,
               text: getPeerRuleTitle(direction, peer),

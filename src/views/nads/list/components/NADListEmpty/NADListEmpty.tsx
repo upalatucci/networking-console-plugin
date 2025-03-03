@@ -5,13 +5,7 @@ import NetworkAttachmentDefinitionModel from '@kubevirt-ui/kubevirt-api/console/
 import { modelToGroupVersionKind } from '@kubevirt-ui/kubevirt-api/console/modelUtils';
 import { useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { QuickStart } from '@patternfly/quickstarts';
-import {
-  Button,
-  EmptyState,
-  EmptyStateActions,
-  EmptyStateFooter,
-  EmptyStateHeader,
-} from '@patternfly/react-core';
+import { Button, EmptyState, EmptyStateActions, EmptyStateFooter } from '@patternfly/react-core';
 import { RocketIcon } from '@patternfly/react-icons/dist/esm/icons/rocket-icon';
 import { DEFAULT_NAMESPACE } from '@utils/constants';
 import { SHARED_DEFAULT_PATH_NEW_RESOURCE_FORM } from '@utils/constants/ui';
@@ -41,8 +35,7 @@ const NADListEmpty: FC<NADListEmptyProps> = ({ namespace }) => {
     );
 
   return (
-    <EmptyState>
-      <EmptyStateHeader headingLevel="h4" titleText={t('No NetworkAttachmentDefinition found')} />
+    <EmptyState headingLevel="h4" titleText={t('No NetworkAttachmentDefinition found')}>
       <EmptyStateFooter>
         <Button
           onClick={() =>
@@ -58,10 +51,10 @@ const NADListEmpty: FC<NADListEmptyProps> = ({ namespace }) => {
           <EmptyStateActions>
             <Button
               data-test-id="nad-quickstart"
+              icon={<RocketIcon />}
               onClick={() => navigate('/quickstart?keyword=network+attachment+definition')}
               variant="secondary"
             >
-              <RocketIcon />
               {t('Learn how to use NetworkAttachmentDefinitions')}
             </Button>
           </EmptyStateActions>

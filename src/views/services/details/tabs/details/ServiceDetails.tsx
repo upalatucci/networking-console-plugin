@@ -90,6 +90,8 @@ const ServiceDetails: FC<DetailsProps> = ({ obj: service }) => {
                 {canUpdate ? (
                   <Button
                     data-test="edit-annotations"
+                    icon={<PencilAltIcon className="co-icon-space-l pf-v6-c-button-icon--plain" />}
+                    iconPosition="end"
                     isInline
                     onClick={annotationsModalLauncher}
                     type="button"
@@ -98,7 +100,6 @@ const ServiceDetails: FC<DetailsProps> = ({ obj: service }) => {
                     {t('{{count}} annotation', {
                       count: _.size(metadata?.annotations),
                     })}
-                    <PencilAltIcon className="co-icon-space-l pf-v5-c-button-icon--plain" />
                   </Button>
                 ) : (
                   t('{{count}} annotation', {

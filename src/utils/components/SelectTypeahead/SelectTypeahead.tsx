@@ -60,6 +60,7 @@ const SelectTypeahead: FC<SelectTypeaheadProps> = ({
     <Select
       id={id}
       isOpen={isOpen}
+      isScrollable
       onOpenChange={() => setIsOpen(false)}
       onSelect={(ev, selection) => onSelect(selection as string)}
       selected={selected}

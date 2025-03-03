@@ -46,13 +46,14 @@ const EditButton: SFC<EditButtonProps> = (props) => {
       data-test={
         props.testId ? `${props.testId}-details-item__edit-button` : 'details-item__edit-button'
       }
+      icon={<PencilAltIcon className="co-icon-space-l pf-v6-c-button-icon--plain" />}
+      iconPosition="end"
       isInline
       onClick={props.onClick}
       type="button"
       variant="link"
     >
       {props.children}
-      <PencilAltIcon className="co-icon-space-l pf-v5-c-button-icon--plain" />
     </Button>
   );
 };
