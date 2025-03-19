@@ -2,11 +2,11 @@ import React, { FC } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import {
+  Content,
+  ContentVariants,
   DropdownItem,
   FileUpload,
   FormGroup,
-  Text,
-  TextVariants,
   Title,
 } from '@patternfly/react-core';
 import Select from '@utils/components/Select/Select';
@@ -109,11 +109,11 @@ const TLSTermination: FC = () => {
             <>
               <Title headingLevel="h3">{t('Certificates')}</Title>
 
-              <Text component={TextVariants.p}>
+              <Content component={ContentVariants.p}>
                 {t(
                   "TLS certificates for edge and re-encrypt termination. If not specified, the router's default certificate is used.",
                 )}
-              </Text>
+              </Content>
 
               <FormGroup fieldId={CERTIFICATE_FIELD_ID} label={t('Certificate')}>
                 <FileUpload

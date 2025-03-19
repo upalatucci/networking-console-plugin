@@ -1,5 +1,6 @@
 import React, { ChangeEvent, FC } from 'react';
 
+import { TextInput } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { NetworkPolicy } from '@utils/models';
 
@@ -22,14 +23,12 @@ const NetworkPolicyFormName: FC<NetworkPolicyFormNameProps> = ({
       <label className="co-required" htmlFor="name">
         {t('Policy name')}
       </label>
-      <input
-        className="pf-v5-c-form-control"
+      <TextInput
         id="name"
         name="name"
         onChange={handleNameChange}
         placeholder="my-policy"
         required
-        type="text"
         value={networkPolicy.name}
       />
     </div>

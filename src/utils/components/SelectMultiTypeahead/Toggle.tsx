@@ -11,8 +11,8 @@ import React, {
 import {
   Button,
   ButtonVariant,
-  Chip,
-  ChipGroup,
+  Label,
+  LabelGroup,
   MenuToggle,
   MenuToggleElement,
   SelectOptionProps,
@@ -128,33 +128,33 @@ const Toggle: FC<ToggleProps> = ({
           role="combobox"
           value={inputValue}
         >
-          <ChipGroup aria-label={t('Current selections')}>
+          <LabelGroup aria-label={t('Current selections')}>
             {selected?.map((selection, index) => (
-              <Chip
+              <Label
                 key={index}
-                onClick={(ev) => {
+                onClose={(ev) => {
                   ev.stopPropagation();
                   onSelect(selection);
                 }}
+                variant="outline"
               >
                 {selection}
-              </Chip>
+              </Label>
             ))}
-          </ChipGroup>
+          </LabelGroup>
         </TextInputGroupMain>
         <TextInputGroupUtilities>
           {!isEmpty(selected) && (
             <Button
               aria-label={t('Clear input value')}
+              icon={<TimesIcon aria-hidden />}
               onClick={() => {
                 setInputValue('');
                 setSelected([]);
                 textInputRef?.current?.focus();
               }}
               variant={ButtonVariant.plain}
-            >
-              <TimesIcon aria-hidden />
-            </Button>
+            />
           )}
         </TextInputGroupUtilities>
       </TextInputGroup>

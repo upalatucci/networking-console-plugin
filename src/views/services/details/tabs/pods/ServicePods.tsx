@@ -6,7 +6,6 @@ import {
   IoK8sApiCoreV1Service,
 } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import {
-  ListPageBody,
   ListPageFilter,
   PrometheusEndpoint,
   useK8sWatchResource,
@@ -14,6 +13,7 @@ import {
   usePrometheusPoll,
   VirtualizedTable,
 } from '@openshift-console/dynamic-plugin-sdk';
+import { PageSection } from '@patternfly/react-core';
 import { getNamespace } from '@utils/resources/shared';
 
 import PodRow from './components/PodRow';
@@ -57,20 +57,18 @@ const ServicePods: FC<ServicePodsProps> = ({ obj: service }) => {
   const columns = usePodColumns(cpuUsageData, memoryUsageData);
 
   return (
-    <>
-      <ListPageBody>
-        <ListPageFilter data={data} loaded={loaded} onFilterChange={onFilterChange} />
-        <VirtualizedTable<IoK8sApiCoreV1Pod>
-          columns={columns}
-          data={filteredData}
-          loaded={loaded}
-          loadError={loadError}
-          Row={PodRow}
-          rowData={{ cpuUsageData, memoryUsageData }}
-          unfilteredData={data}
-        />
-      </ListPageBody>
-    </>
+    <PageSection>
+      <ListPageFilter data={data} loaded={loaded} onFilterChange={onFilterChange} />
+      <VirtualizedTable<IoK8sApiCoreV1Pod>
+        columns={columns}
+        data={filteredData}
+        loaded={loaded}
+        loadError={loadError}
+        Row={PodRow}
+        rowData={{ cpuUsageData, memoryUsageData }}
+        unfilteredData={data}
+      />
+    </PageSection>
   );
 };
 

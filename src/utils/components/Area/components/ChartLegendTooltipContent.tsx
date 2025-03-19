@@ -1,19 +1,19 @@
 import React, { cloneElement, FC } from 'react';
 
+import { ChartLegendTooltipStyles } from '@patternfly/react-charts/dist/esm/victory/components/ChartTheme/ChartStyles';
+import {
+  getLegendTooltipDataProps,
+  getLegendTooltipSize,
+  getLegendTooltipVisibleData,
+  getLegendTooltipVisibleText,
+} from '@patternfly/react-charts/dist/esm/victory/components/ChartUtils/chart-tooltip';
 import {
   ChartLabel,
   ChartLegend,
   ChartLegendTooltipContentProps,
   ChartLegendTooltipLabel,
   getTheme,
-} from '@patternfly/react-charts';
-import { ChartLegendTooltipStyles } from '@patternfly/react-charts/dist/esm/components/ChartTheme/ChartStyles';
-import {
-  getLegendTooltipDataProps,
-  getLegendTooltipSize,
-  getLegendTooltipVisibleData,
-  getLegendTooltipVisibleText,
-} from '@patternfly/react-charts/dist/esm/components/ChartUtils/chart-tooltip';
+} from '@patternfly/react-charts/victory';
 
 import { evaluateProp } from '../utils/utils';
 

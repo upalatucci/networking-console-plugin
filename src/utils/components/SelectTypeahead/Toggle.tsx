@@ -89,6 +89,10 @@ const Toggle: FC<ToggleProps> = ({
     }
   };
 
+  const onInputClick = () => {
+    setIsOpen(true);
+  };
+
   const onToggleClick = () => {
     setIsOpen(!isOpen);
   };
@@ -116,7 +120,7 @@ const Toggle: FC<ToggleProps> = ({
           innerRef={textInputRef}
           isExpanded={isOpen}
           onChange={onTextInputChange}
-          onClick={onToggleClick}
+          onClick={onInputClick}
           onKeyDown={onInputKeyDown}
           placeholder={placeholder}
           role="combobox"
@@ -126,15 +130,14 @@ const Toggle: FC<ToggleProps> = ({
           {!isEmpty(selected) && (
             <Button
               aria-label={t('Clear input value')}
+              icon={<TimesIcon aria-hidden />}
               onClick={() => {
                 setInputValue('');
                 setSelected(null);
                 textInputRef?.current?.focus();
               }}
               variant={ButtonVariant.plain}
-            >
-              <TimesIcon aria-hidden />
-            </Button>
+            />
           )}
         </TextInputGroupUtilities>
       </TextInputGroup>

@@ -71,13 +71,16 @@ const LabelSelectorEditor: FC<LabelSelectorEditorProps> = ({
                 <Button
                   className="pairs-list__span-btns"
                   data-test-id="pairs-list__delete-from-btn"
+                  icon={
+                    <>
+                      <MinusCircleIcon className="pairs-list__side-btn pairs-list__delete-icon" />
+                      <span className="sr-only">{t('Delete')}</span>
+                    </>
+                  }
                   onClick={() => onRemove(index)}
                   type="button"
                   variant="plain"
-                >
-                  <MinusCircleIcon className="pairs-list__side-btn pairs-list__delete-icon" />
-                  <span className="sr-only">{t('Delete')}</span>
-                </Button>
+                />
               </Tooltip>
             </div>
           </div>
@@ -87,11 +90,12 @@ const LabelSelectorEditor: FC<LabelSelectorEditorProps> = ({
         <div className="col-xs-12">
           <Button
             className="pf-m-link--align-left"
+            icon={<PlusCircleIcon />}
             onClick={onAddPair}
             type="button"
             variant="link"
           >
-            <PlusCircleIcon /> {t('Add label')}
+            {t('Add label')}
           </Button>
         </div>
       </div>
