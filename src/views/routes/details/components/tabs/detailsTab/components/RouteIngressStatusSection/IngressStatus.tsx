@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 
+import { Title as PFTitle } from '@patternfly/react-core';
 import { DetailsItem } from '@utils/components/DetailsItem/DetailsItem';
 import Title from '@utils/components/Title/Title';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
@@ -44,7 +45,9 @@ const IngressStatus: FC<IngressStatusProps> = ({ ingress, route }) => {
           )}
         </DetailsItem>
       </dl>
-      <h3 className="co-section-heading-secondary">{t('Conditions')}</h3>
+      <PFTitle className="pf-v6-u-my-lg" headingLevel="h3">
+        {t('Conditions')}
+      </PFTitle>
       <Conditions conditions={ingress?.conditions} />
     </div>
   );

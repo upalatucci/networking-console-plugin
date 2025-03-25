@@ -1,21 +1,21 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom-v5-compat';
 
-import { modelToRef, RouteModel } from '@kubevirt-ui/kubevirt-api/console';
+import { IngressModel, modelToRef } from '@kubevirt-ui/kubevirt-api/console';
+import { IoK8sApiNetworkingV1Ingress } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { Breadcrumb, BreadcrumbItem, Title } from '@patternfly/react-core';
 import DetailsPageTitle from '@utils/components/DetailsPageTitle/DetailsPageTitle';
 import PaneHeading from '@utils/components/PaneHeading/PaneHeading';
 import { useLastNamespacePath } from '@utils/hooks/useLastNamespacePath';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { getName } from '@utils/resources/shared';
-import { RouteKind } from '@utils/types';
-import RouteActions from '@views/routes/actions/RouteActions';
+import IngressActions from '@views/ingresses/actions/IngressActions';
 
-type RouteDetailsPageTitleProps = {
-  route: RouteKind;
+type IngressDetailsPageTitleProps = {
+  ingress: IoK8sApiNetworkingV1Ingress;
 };
 
-const RouteDetailsPageTitle: FC<RouteDetailsPageTitleProps> = ({ route }) => {
+const IngressDetailsPageTitle: FC<IngressDetailsPageTitleProps> = ({ ingress }) => {
   const { t } = useNetworkingTranslation();
   const namespacePath = useLastNamespacePath();
 
@@ -24,26 +24,21 @@ const RouteDetailsPageTitle: FC<RouteDetailsPageTitleProps> = ({ route }) => {
       breadcrumb={
         <Breadcrumb>
           <BreadcrumbItem>
-            <Link to={`/k8s/${namespacePath}/${modelToRef(RouteModel)}`}>{t('Routes')}</Link>
+            <Link to={`/k8s/${namespacePath}/${modelToRef(IngressModel)}`}>{t('Ingresses')}</Link>
           </BreadcrumbItem>
-          <BreadcrumbItem>{t('Route details')}</BreadcrumbItem>
+          <BreadcrumbItem>{t('Ingress details')}</BreadcrumbItem>
         </Breadcrumb>
       }
     >
       <PaneHeading>
-        <Title headingLevel="h1">
-          <span
-            className="co-m-resource-icon co-m-resource-service co-m-resource-icon--lg"
-            title="Route"
-          >
-            {t('RT')}
-          </span>
-          {getName(route)}
+        <Title className="co-resource-item__resource-name" headingLevel="h1">
+          <span className="co-m-resource-icon co-m-resource-icon--lg">{t(IngressModel?.abbr)}</span>
+          {getName(ingress)}
         </Title>
-        <RouteActions route={route} />
+        <IngressActions ingress={ingress} />
       </PaneHeading>
     </DetailsPageTitle>
   );
 };
 
-export default RouteDetailsPageTitle;
+export default IngressDetailsPageTitle;

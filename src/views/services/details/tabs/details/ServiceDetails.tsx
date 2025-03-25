@@ -48,102 +48,96 @@ const ServiceDetails: FC<DetailsProps> = ({ obj: service }) => {
     );
 
   return (
-    <>
-      <div className="co-m-pane__body">
-        <div className="row">
-          <div className="col-md-6">
-            <Title headingLevel="h2">{t('Service details')}</Title>
-            <dl className="co-m-pane__details" data-test-id="resource-summary">
-              <DetailsItem label={t('Name')} obj={service} path={'metadata.name'} />
-              {metadata?.namespace && (
-                <DetailsItem label={t('Namespace')} obj={service} path="metadata.namespace">
-                  <ResourceLink
-                    kind="Namespace"
-                    name={metadata?.namespace}
-                    namespace={null}
-                    title={metadata?.uid}
-                  />
-                </DetailsItem>
-              )}
-              <DetailsItem
-                canEdit={canUpdate}
-                editAsGroup
-                label={t('Labels')}
-                obj={service}
-                onEdit={labelsModalLauncher}
-                path="metadata.labels"
-                valueClassName="details-item__value--labels"
-              >
-                <LabelList
-                  groupVersionKind={modelToGroupVersionKind(ServiceModel)}
-                  labels={metadata?.labels}
+    <PageSection>
+      <div className="row">
+        <div className="col-md-6">
+          <Title headingLevel="h2">{t('Service details')}</Title>
+          <dl className="co-m-pane__details" data-test-id="resource-summary">
+            <DetailsItem label={t('Name')} obj={service} path={'metadata.name'} />
+            {metadata?.namespace && (
+              <DetailsItem label={t('Namespace')} obj={service} path="metadata.namespace">
+                <ResourceLink
+                  kind="Namespace"
+                  name={metadata?.namespace}
+                  namespace={null}
+                  title={metadata?.uid}
                 />
               </DetailsItem>
-
-              <DetailsItem label={t('Pod selector')} obj={service} path="spec.selector">
-                <Selector
-                  namespace={_.get(service, 'metadata.namespace')}
-                  selector={_.get(service, 'spec.selector')}
-                />
-              </DetailsItem>
-              <DetailsItem label={t('Annotations')} obj={service} path="metadata.annotations">
-                {canUpdate ? (
-                  <Button
-                    data-test="edit-annotations"
-                    icon={<PencilAltIcon className="co-icon-space-l pf-v6-c-button-icon--plain" />}
-                    iconPosition="end"
-                    isInline
-                    onClick={annotationsModalLauncher}
-                    type="button"
-                    variant="link"
-                  >
-                    {t('{{count}} annotation', {
-                      count: _.size(metadata?.annotations),
-                    })}
-                  </Button>
-                ) : (
-                  t('{{count}} annotation', {
-                    count: _.size(metadata?.annotations),
-                  })
-                )}
-              </DetailsItem>
-              <DetailsItem
-                label={t('Session affinity')}
-                obj={service}
-                path="spec.sessionAffinity"
+            )}
+            <DetailsItem
+              canEdit={canUpdate}
+              editAsGroup
+              label={t('Labels')}
+              obj={service}
+              onEdit={labelsModalLauncher}
+              path="metadata.labels"
+              valueClassName="details-item__value--labels"
+            >
+              <LabelList
+                groupVersionKind={modelToGroupVersionKind(ServiceModel)}
+                labels={metadata?.labels}
               />
-              <DetailsItem label={t('Created at')} obj={service} path="metadata.creationTimestamp">
-                <Timestamp timestamp={metadata?.creationTimestamp} />
-              </DetailsItem>
-              <DetailsItem label={t('Owner')} obj={service} path="metadata.ownerReferences">
-                <OwnerReferences resource={service} />
-              </DetailsItem>
-            </dl>
-          </div>
-          <div className="col-md-6">
-            <Title headingLevel="h2">{t('Service routing')}</Title>
-            <dl>
-              <dt>{t('Hostname')}</dt>
-              <dd>
-                <div className="co-select-to-copy">
-                  {metadata?.name}.{metadata?.namespace}.svc.cluster.local
-                </div>
-                <div>{t('Accessible within the cluster only')}</div>
-              </dd>
-              <dt>{t('Service address')}</dt>
-              <dd className="service-ips">
-                <ServiceAddress service={service} />
-              </dd>
-              <DetailsItem label={t('Service port mapping')} obj={service} path="spec.ports">
-                <div className="service-ips">
-                  {service?.spec?.ports ? <ServicePortMapping ports={service.spec.ports} /> : '-'}
-                </div>
-              </DetailsItem>
-            </dl>
-          </div>
+            </DetailsItem>
+
+            <DetailsItem label={t('Pod selector')} obj={service} path="spec.selector">
+              <Selector
+                namespace={_.get(service, 'metadata.namespace')}
+                selector={_.get(service, 'spec.selector')}
+              />
+            </DetailsItem>
+            <DetailsItem label={t('Annotations')} obj={service} path="metadata.annotations">
+              {canUpdate ? (
+                <Button
+                  data-test="edit-annotations"
+                  icon={<PencilAltIcon className="co-icon-space-l pf-v6-c-button-icon--plain" />}
+                  iconPosition="end"
+                  isInline
+                  onClick={annotationsModalLauncher}
+                  type="button"
+                  variant="link"
+                >
+                  {t('{{count}} annotation', {
+                    count: _.size(metadata?.annotations),
+                  })}
+                </Button>
+              ) : (
+                t('{{count}} annotation', {
+                  count: _.size(metadata?.annotations),
+                })
+              )}
+            </DetailsItem>
+            <DetailsItem label={t('Session affinity')} obj={service} path="spec.sessionAffinity" />
+            <DetailsItem label={t('Created at')} obj={service} path="metadata.creationTimestamp">
+              <Timestamp timestamp={metadata?.creationTimestamp} />
+            </DetailsItem>
+            <DetailsItem label={t('Owner')} obj={service} path="metadata.ownerReferences">
+              <OwnerReferences resource={service} />
+            </DetailsItem>
+          </dl>
+        </div>
+        <div className="col-md-6">
+          <Title headingLevel="h2">{t('Service routing')}</Title>
+          <dl>
+            <dt>{t('Hostname')}</dt>
+            <dd>
+              <div className="co-select-to-copy">
+                {metadata?.name}.{metadata?.namespace}.svc.cluster.local
+              </div>
+              <div>{t('Accessible within the cluster only')}</div>
+            </dd>
+            <dt>{t('Service address')}</dt>
+            <dd className="service-ips">
+              <ServiceAddress service={service} />
+            </dd>
+            <DetailsItem label={t('Service port mapping')} obj={service} path="spec.ports">
+              <div className="service-ips">
+                {service?.spec?.ports ? <ServicePortMapping ports={service.spec.ports} /> : '-'}
+              </div>
+            </DetailsItem>
+          </dl>
         </div>
       </div>
-    </>
+    </PageSection>
   );
 };
 

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { Title } from '@patternfly/react-core';
+import { PageSection, Title } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { RouteKind } from '@utils/types';
 import TrafficSettings from '@views/routes/details/components/tabs/detailsTab/components/TrafficSection/TrafficSettings';
@@ -13,10 +13,10 @@ const TrafficSection: FC<TrafficSectionProps> = ({ route }) => {
   const { t } = useNetworkingTranslation();
 
   return (
-    <div className="co-m-pane__body">
+    <PageSection>
       <Title headingLevel="h2">{t('Traffic')}</Title>
       <TrafficSettings route={route} />
-    </div>
+    </PageSection>
   );
 };
 
