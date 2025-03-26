@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { Alert, AlertVariant } from '@patternfly/react-core';
+import { Alert, AlertVariant, PageSection } from '@patternfly/react-core';
 
 type NetworkPolicyFormAlertProps = {
   message: string;
@@ -9,11 +9,11 @@ type NetworkPolicyFormAlertProps = {
 
 const NetworkPolicyFormAlert: FC<NetworkPolicyFormAlertProps> = ({ message, title }) => {
   return (
-    <div className="co-m-pane__body">
+    <PageSection>
       <Alert title={title} variant={AlertVariant.danger}>
         {message}
       </Alert>
-    </div>
+    </PageSection>
   );
 };
 

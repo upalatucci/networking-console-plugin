@@ -4,7 +4,7 @@ import { IngressModel, modelToGroupVersionKind } from '@kubevirt-ui/kubevirt-api
 import { IoK8sApiNetworkingV1Ingress } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
 import { HorizontalNav, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import StatusBox from '@utils/components/StatusBox/StatusBox';
-import IngressDetailsPageTitle from '@views/ingresses/details/components/IngressDetailsPageTitle/IngressDetailsPageTitle';
+import IngressDetailsPageTitle from '@views/ingresses/details/components/IngressDetailsPageTitle';
 import useIngressTabs from '@views/ingresses/details/hooks/useIngressTabs';
 
 type IngressDetailsPageProps = {

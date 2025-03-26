@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 
+import { PageSection } from '@patternfly/react-core';
 import { RouteIngress, RouteKind } from '@utils/types';
 import IngressStatus from '@views/routes/details/components/tabs/detailsTab/components/RouteIngressStatusSection/IngressStatus';
 
@@ -9,11 +10,11 @@ type IngressStatusSectionProps = {
 
 const IngressStatusSection: FC<IngressStatusSectionProps> = ({ route }) => {
   return (
-    <div className="co-m-pane__body">
+    <PageSection>
       {route?.status?.ingress.map((ingress: RouteIngress) => (
         <IngressStatus ingress={ingress} key={ingress.routerName} route={route} />
       ))}
-    </div>
+    </PageSection>
   );
 };
 

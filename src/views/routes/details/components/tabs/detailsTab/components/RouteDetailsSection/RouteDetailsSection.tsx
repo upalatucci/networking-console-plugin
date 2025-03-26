@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 
+import { PageSection } from '@patternfly/react-core';
 import Title from '@utils/components/Title/Title';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { RouteKind } from '@utils/types';
@@ -14,13 +15,13 @@ const RouteDetailsSection: FC<RouteDetailsSectionProps> = ({ route }) => {
   const { t } = useNetworkingTranslation();
 
   return (
-    <div className="co-m-pane__body">
+    <PageSection>
       <Title titleText={t('Route details')} />
       <div className="row">
         <DetailsSectionLeftColumn route={route} />
         <DetailsSectionRightColumn route={route} />
       </div>
-    </div>
+    </PageSection>
   );
 };
 
