@@ -5,6 +5,7 @@ import {
   K8sResourceCondition,
   Timestamp,
 } from '@openshift-console/dynamic-plugin-sdk';
+import { Td, Tr } from '@patternfly/react-table';
 import LinkifyExternal from '@views/routes/details/components/tabs/detailsTab/components/RouteIngressStatusSection/LinkifyExternal';
 import { ClusterServiceVersionCondition, ConditionTypes } from '@views/routes/details/utils/types';
 import { getStatusLabel } from '@views/routes/details/utils/utils';
@@ -17,42 +18,40 @@ type ConditionRowProps = {
 
 const ConditionRow: FC<ConditionRowProps> = ({ condition, index, type }) => {
   return (
-    <div
-      className="row"
+    <Tr
       data-test={type === ConditionTypes.ClusterServiceVersion ? condition.phase : condition.type}
       key={index}
     >
       {type === ConditionTypes.ClusterServiceVersion ? (
-        <div className="col-xs-4 col-sm-2 col-md-2" data-test={`condition[${index}].phase`}>
+        <Td data-test={`condition[${index}].phase`}>
           <CamelCaseWrap value={condition.phase} />
-        </div>
+        </Td>
       ) : (
         <>
-          <div className="col-xs-4 col-sm-2 col-md-2" data-test={`condition[${index}].type`}>
+          <Td data-test={`condition[${index}].type`}>
             <CamelCaseWrap value={condition.type} />
-          </div>
-          <div className="col-xs-4 col-sm-2 col-md-2" data-test={`condition[${index}].status`}>
-            {getStatusLabel(condition.status)}
-          </div>
+          </Td>
+          <Td data-test={`condition[${index}].status`}>{getStatusLabel(condition.status)}</Td>
         </>
       )}
-      <div
-        className="hidden-xs hidden-sm col-md-2"
+      <Td
         data-test={`condition[${index}].lastTransitionTime`}
+        visibility={['hidden', 'visibleOnMd']}
       >
         <Timestamp timestamp={condition.lastTransitionTime} />
-      </div>
-      <div className="col-xs-4 col-sm-3 col-md-2" data-test={`condition[${index}].reason`}>
+      </Td>
+      <Td data-test={`condition[${index}].reason`}>
         <CamelCaseWrap value={condition.reason} />
-      </div>
+      </Td>
       {/* remove initial newline which appears in route messages */}
-      <div
-        className="hidden-xs col-sm-5 col-md-4 co-break-word co-pre-line co-conditions__message"
+      <Td
+        className="co-break-word co-pre-line co-conditions__message"
         data-test={`condition[${index}].message`}
+        visibility={['hidden', 'visibleOnSm']}
       >
         <LinkifyExternal>{condition.message?.trim() || '-'}</LinkifyExternal>
-      </div>
-    </div>
+      </Td>
+    </Tr>
   );
 };
 

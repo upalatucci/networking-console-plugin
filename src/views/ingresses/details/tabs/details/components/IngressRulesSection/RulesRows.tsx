@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 
 import { IoK8sApiNetworkingV1IngressSpec } from '@kubevirt-ui/kubevirt-api/kubernetes/models/IoK8sApiNetworkingV1IngressSpec';
+import { Tbody } from '@patternfly/react-table';
 import EmptyBox from '@utils/components/EmptyBox/EmptyBox';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { isEmpty } from '@utils/utils';
@@ -49,11 +50,11 @@ const RulesRows: FC<RulesRowsProps> = ({ namespace, spec }) => {
   }, []);
 
   return (
-    <div className="co-m-table-grid__body">
+    <Tbody>
       {rules.map((rule) => {
         return <RulesRow key={rule.serviceName} namespace={namespace} rule={rule} />;
       })}
-    </div>
+    </Tbody>
   );
 };
 
