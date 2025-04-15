@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 
 import { ServiceModel } from '@kubevirt-ui/kubevirt-api/console';
 import { getGroupVersionKindForModel, ResourceLink } from '@openshift-console/dynamic-plugin-sdk';
+import { Td, Tr } from '@patternfly/react-table';
 import { IngressPathRule } from '@views/ingresses/details/tabs/details/utils/types';
 
 type RulesRowProps = {
@@ -11,17 +12,13 @@ type RulesRowProps = {
 
 const RulesRow: FC<RulesRowProps> = ({ namespace, rule }) => {
   return (
-    <div className="row co-resource-list__item">
-      <div className="col-xs-6 col-sm-4 col-md-2 co-break-word">
-        <div>{rule?.host}</div>
-      </div>
-      <div className="col-xs-6 col-sm-4 col-md-2 co-break-word">
-        <div>{rule?.path}</div>
-      </div>
-      <div className="col-md-3 hidden-sm hidden-xs co-break-word">
-        <div>{rule?.pathType}</div>
-      </div>
-      <div className="col-sm-4 col-md-2 hidden-xs">
+    <Tr>
+      <Td className="co-break-word">{rule?.host}</Td>
+      <Td className="co-break-word">{rule?.path}</Td>
+      <Td className="co-break-word" visibility={['hidden', 'visibleOnMd']}>
+        {rule?.pathType}
+      </Td>
+      <Td visibility={['hidden', 'visibleOnSm']}>
         {rule?.serviceName ? (
           <ResourceLink
             groupVersionKind={getGroupVersionKindForModel(ServiceModel)}
@@ -31,11 +28,9 @@ const RulesRow: FC<RulesRowProps> = ({ namespace, rule }) => {
         ) : (
           '-'
         )}
-      </div>
-      <div className="col-xs-2 hidden-sm hidden-xs">
-        <div>{rule?.servicePort || '-'}</div>
-      </div>
-    </div>
+      </Td>
+      <Td visibility={['hidden', 'visibleOnMd']}>{rule?.servicePort || '-'}</Td>
+    </Tr>
   );
 };
 

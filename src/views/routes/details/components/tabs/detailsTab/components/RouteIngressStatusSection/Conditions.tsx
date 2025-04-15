@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import * as _ from 'lodash';
 
 import { K8sResourceCondition } from '@openshift-console/dynamic-plugin-sdk';
+import { Table, Tbody, Th, Thead, Tr } from '@patternfly/react-table';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import ConditionRow from '@views/routes/details/components/tabs/detailsTab/components/RouteIngressStatusSection/ConditionRow';
 import { ClusterServiceVersionCondition, ConditionTypes } from '@views/routes/details/utils/types';
@@ -29,22 +30,24 @@ const Conditions: FC<ConditionsProps> = ({ conditions, type = ConditionTypes.K8s
   }
 
   return (
-    <div className="co-m-table-grid co-m-table-grid--bordered">
-      <div className="row co-m-table-grid__head">
-        {type === ConditionTypes.ClusterServiceVersion ? (
-          <div className="col-xs-4 col-sm-2 col-md-2">{t('Phase')}</div>
-        ) : (
-          <>
-            <div className="col-xs-4 col-sm-2 col-md-2">{t('Type')}</div>
-            <div className="col-xs-4 col-sm-2 col-md-2">{t('Status')}</div>
-          </>
-        )}
-        <div className="hidden-xs hidden-sm col-md-2">{t('Updated')}</div>
-        <div className="col-xs-4 col-sm-3 col-md-2">{t('Reason')}</div>
-        <div className="hidden-xs col-sm-5 col-md-4">{t('Message')}</div>
-      </div>
-      <div className="co-m-table-grid__body">{rows}</div>
-    </div>
+    <Table gridBreakPoint="">
+      <Thead>
+        <Tr>
+          {type === ConditionTypes.ClusterServiceVersion ? (
+            <Th>{t('Phase')}</Th>
+          ) : (
+            <>
+              <Th>{t('Type')}</Th>
+              <Th>{t('Status')}</Th>
+            </>
+          )}
+          <Th visibility={['hidden', 'visibleOnMd']}>{t('Updated')}</Th>
+          <Th>{t('Reason')}</Th>
+          <Th visibility={['hidden', 'visibleOnSm']}>{t('Message')}</Th>
+        </Tr>
+      </Thead>
+      <Tbody>{rows}</Tbody>
+    </Table>
   );
 };
 

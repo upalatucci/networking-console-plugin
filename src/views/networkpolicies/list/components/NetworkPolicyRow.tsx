@@ -52,11 +52,7 @@ const NetworkPolicyRow: FC<NetworkPolicyRowType> = ({ activeColumnIDs, obj }) =>
           <Selector namespace={obj.metadata.namespace} selector={obj.spec.podSelector} />
         )}
       </TableData>
-      <TableData
-        activeColumnIDs={activeColumnIDs}
-        className="dropdown-kebab-pf pf-v6-c-table__action"
-        id=""
-      >
+      <TableData activeColumnIDs={activeColumnIDs} className="pf-v6-c-table__action" id="">
         <NetworkPolicyActions isKebabToggle obj={obj} />
       </TableData>
     </>

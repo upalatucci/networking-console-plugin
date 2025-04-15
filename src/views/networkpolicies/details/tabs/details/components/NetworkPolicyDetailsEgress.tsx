@@ -2,7 +2,8 @@ import React from 'react';
 import { Trans } from 'react-i18next';
 
 import { useFlag } from '@openshift-console/dynamic-plugin-sdk';
-import { Divider, Grid, GridItem, Title } from '@patternfly/react-core';
+import { Title } from '@patternfly/react-core';
+import { Table, Tbody, Th, Thead, Tr } from '@patternfly/react-table';
 import ExternalLink from '@utils/components/ExternalLink/ExternalLink';
 import { FLAGS } from '@utils/constants';
 import { getNetworkPolicyDocURL, isManaged } from '@utils/constants/documentation';
@@ -46,15 +47,15 @@ const NetworkPolicyDetailsEgress = ({ networkPolicy }) => {
           namespace: networkPolicy.metadata.namespace,
         })
       ) : (
-        <>
-          <Grid>
-            <GridItem span={4}>{t('From pods')}</GridItem>
-            <GridItem span={4}>{t('To')}</GridItem>
-            <GridItem span={4}>{t('To ports')}</GridItem>
-          </Grid>
-          <Divider />
-
-          <div className="co-m-table-grid__body">
+        <Table gridBreakPoint="">
+          <Thead>
+            <Tr>
+              <Th>{t('From pods')}</Th>
+              <Th>{t('To')}</Th>
+              <Th>{t('To ports')}</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
             {(networkPolicy.spec.egress || []).map((rule, i) =>
               consolidatePeers(rule.to).map((row, j) => (
                 <NetworkPolicyDetailsRow
@@ -66,8 +67,8 @@ const NetworkPolicyDetailsEgress = ({ networkPolicy }) => {
                 />
               )),
             )}
-          </div>
-        </>
+          </Tbody>
+        </Table>
       )}
     </>
   );

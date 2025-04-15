@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 
 import { IoK8sApiNetworkingV1Ingress } from '@kubevirt-ui/kubevirt-api/kubernetes/models';
+import { Table } from '@patternfly/react-table';
 import Title from '@utils/components/Title/Title';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { getNamespace } from '@utils/resources/shared';
@@ -22,10 +23,10 @@ const IngressRulesSection: FC<IngressRulesSectionProps> = ({ ingress }) => {
           'These rules are handled by a routing layer (Ingress Controller) which is updated as the rules are modified. The Ingress controller implementation defines how headers and other metadata are forwarded or manipulated',
         )}
       </p>
-      <div className="co-m-table-grid co-m-table-grid--bordered">
+      <Table gridBreakPoint="">
         <RulesHeader />
         <RulesRows namespace={getNamespace(ingress)} spec={ingress?.spec} />
-      </div>
+      </Table>
     </>
   );
 };

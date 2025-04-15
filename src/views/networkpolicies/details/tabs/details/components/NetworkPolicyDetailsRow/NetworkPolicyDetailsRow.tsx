@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
 import { Selector as K8sSelector } from '@openshift-console/dynamic-plugin-sdk';
-import { Grid, GridItem } from '@patternfly/react-core';
+import { Td, Tr } from '@patternfly/react-table';
 import { NetworkPolicyPort } from '@utils/resources/networkpolicies/types';
 
 import { ConsolidatedRow } from '../../utils/types';
@@ -24,22 +24,22 @@ const NetworkPolicyDetailsRow: FC<NetworkPolicyDetailsRowProps> = ({
   row,
 }) => {
   return (
-    <Grid>
-      <GridItem span={4}>
+    <Tr>
+      <Td>
         <NetworkPolicyDetailsRowPodSelector
           mainPodSelector={mainPodSelector}
           namespace={namespace}
         />
-      </GridItem>
-      <GridItem span={4}>
+      </Td>
+      <Td>
         <NetworkPolicyDetailsRowSelector namespace={namespace} row={row} />
-      </GridItem>
-      <GridItem span={4}>
+      </Td>
+      <Td>
         {(ports || []).map((port) => (
           <NetworkPolicyDetailsRowIP key={port.port} port={port} />
         ))}
-      </GridItem>
-    </Grid>
+      </Td>
+    </Tr>
   );
 };
 

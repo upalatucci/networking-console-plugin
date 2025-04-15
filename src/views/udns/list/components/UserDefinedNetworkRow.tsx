@@ -52,11 +52,7 @@ const UserDefinedNetworkRow: FC<UserDefinedNetworkRowType> = ({ activeColumnIDs,
       <TableData activeColumnIDs={activeColumnIDs} id="mtu">
         {mtu || <MutedText content={t('Not available')} />}
       </TableData>
-      <TableData
-        activeColumnIDs={activeColumnIDs}
-        className="dropdown-kebab-pf pf-v6-c-table__action"
-        id=""
-      >
+      <TableData activeColumnIDs={activeColumnIDs} className="pf-v6-c-table__action" id="">
         <UDNActions obj={obj} />
       </TableData>
     </>

@@ -58,7 +58,7 @@ const useServiceColumn = (): { id: string; title: string }[] => {
       },
       {
         id: '',
-        props: { className: 'dropdown-kebab-pf pf-c-table__action' },
+        props: { className: 'pf-c-table__action' },
         title: '',
       },
     ],
