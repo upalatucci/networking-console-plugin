@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { FieldPath, useFormContext, useWatch } from 'react-hook-form';
 
 import { FormGroup, TextInput } from '@patternfly/react-core';
-import SubnetCIRDHelperText from '@utils/components/SubnetCIRDHelperText/SubnetCIRDHelperText';
+import SubnetCIDRHelperText from '@utils/components/SubnetCIDRHelperText/SubnetCIDRHelperText';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import {
   UserDefinedNetworkLayer3Subnet,
@@ -33,7 +33,7 @@ const SubnetsInput: FC<SubnetsInputProps> = ({ isClusterUDN }) => {
     : subnets?.join(',');
 
   return (
-    <FormGroup fieldId="input-udn-subnet" isRequired label={t('Subnet CIRD')}>
+    <FormGroup fieldId="input-udn-subnet" isRequired label={t('Subnet CIDR')}>
       <TextInput
         autoFocus
         data-test="input-udn-subnet"
@@ -54,7 +54,7 @@ const SubnetsInput: FC<SubnetsInputProps> = ({ isClusterUDN }) => {
         type="text"
         value={subnetsText}
       />
-      <SubnetCIRDHelperText />
+      <SubnetCIDRHelperText />
     </FormGroup>
   );
 };
