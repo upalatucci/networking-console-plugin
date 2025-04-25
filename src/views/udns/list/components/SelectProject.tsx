@@ -6,10 +6,10 @@ import { FormGroup, SelectOption } from '@patternfly/react-core';
 import Loading from '@utils/components/Loading/Loading';
 import SelectTypeahead from '@utils/components/SelectTypeahead/SelectTypeahead';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import useProjectsWithPrimaryUserDefinedLabel from '@utils/hooks/useProjectsWithPrimaryUserDefinedLabel';
 import { getName } from '@utils/resources/shared';
 
-import { ProjectGroupVersionKind } from '../constants';
-import useProjects from '../hooks/useProjects';
+import { PROJECT_NAME, ProjectGroupVersionKind } from '../constants';
 
 import { UDNForm } from './constants';
 
@@ -18,7 +18,7 @@ const SelectProject: FC = () => {
 
   const { control } = useFormContext<UDNForm>();
 
-  const [projects, loaded] = useProjects();
+  const [projects, loaded] = useProjectsWithPrimaryUserDefinedLabel();
 
   const projectsOptions = useMemo(
     () =>
@@ -41,7 +41,7 @@ const SelectProject: FC = () => {
     <FormGroup fieldId="input-project-name" isRequired label={t('Project name')}>
       <Controller
         control={control}
-        name="metadata.namespace"
+        name={PROJECT_NAME}
         render={({ field: { onChange, value: selectedProjectName } }) => (
           <SelectTypeahead
             id="select-project"

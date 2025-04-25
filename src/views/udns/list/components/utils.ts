@@ -1,5 +1,4 @@
 import { K8sResourceCommon, MatchLabels } from '@openshift-console/dynamic-plugin-sdk';
-import { ALL_NAMESPACES_KEY, DEFAULT_NAMESPACE } from '@utils/constants';
 import { ClusterUserDefinedNetworkModel, UserDefinedNetworkModel } from '@utils/models';
 import { FIXED_PRIMARY_UDN_NAME } from '@utils/resources/udns/constants';
 import {
@@ -16,7 +15,7 @@ export const match = (resource: K8sResourceCommon, matchLabels: MatchLabels) =>
     ([key, value]) => resource?.metadata?.labels?.[key] === value,
   );
 
-export const createUDN = (namespace: string): UserDefinedNetworkKind => ({
+export const createUDN = (namespace?: string): UserDefinedNetworkKind => ({
   apiVersion: `${UserDefinedNetworkModel.apiGroup}/${UserDefinedNetworkModel.apiVersion}`,
   kind: UserDefinedNetworkModel.kind,
   metadata: {
@@ -52,10 +51,8 @@ export const createClusterUDN = (name: string): ClusterUserDefinedNetworkKind =>
   },
 });
 
-export const getDefaultUDN = (isClusterUDN: boolean, namespace: string): UDNForm => {
-  return isClusterUDN
-    ? createClusterUDN(generateName('cluster-udn'))
-    : createUDN(namespace === ALL_NAMESPACES_KEY ? DEFAULT_NAMESPACE : namespace);
+export const getDefaultUDN = (isClusterUDN: boolean): UDNForm => {
+  return isClusterUDN ? createClusterUDN(generateName('cluster-udn')) : createUDN();
 };
 
 export const isUDNValid = (udn: UDNForm): boolean => {
