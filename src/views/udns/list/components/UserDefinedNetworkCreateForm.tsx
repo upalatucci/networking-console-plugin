@@ -1,8 +1,11 @@
 import React, { FC, FormEventHandler } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
+import { Trans } from 'react-i18next';
+import { Link } from 'react-router-dom-v5-compat';
 
 import { Alert, AlertVariant, Content, Form, FormGroup, TextInput } from '@patternfly/react-core';
 import SubnetCIRDHelperText from '@utils/components/SubnetCIRDHelperText/SubnetCIRDHelperText';
+import { documentationURLs, getDocumentationURL } from '@utils/constants/documentation';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
 import ClusterUDNNamespaceSelector from './ClusterUDNNamespaceSelector';
@@ -29,10 +32,16 @@ const UserDefinedNetworkCreateForm: FC<UserDefinedNetworkCreateFormProps> = ({
   return (
     <Form id="create-udn-form" onSubmit={onSubmit}>
       <Content component="p">
-        {t(
-          'Define the network used by VirtualMachines and Pods to communicate in the given project',
-        )}
+        <Trans t={t}>
+          Define the network used by VirtualMachines and Pods to communicate in the given project.
+          Learn more about{' '}
+          <Link target="_blank" to={getDocumentationURL(documentationURLs.primaryUDN)}>
+            primary user-defined network
+          </Link>
+          .
+        </Trans>
       </Content>
+
       {!isClusterUDN && <SelectProject />}
 
       {isClusterUDN && (

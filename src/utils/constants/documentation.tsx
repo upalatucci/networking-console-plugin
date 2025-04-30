@@ -63,6 +63,10 @@ export const documentationURLs: documentationURLsType = {
     downstream: 'html/post-installation_configuration/index',
     upstream: 'post_installation_configuration/machine-configuration-tasks.html',
   },
+  primaryUDN: {
+    downstream: 'html/networking/multiple-networks#primary-networks',
+    upstream: 'networking/multiple_networks/primary_networks/about-user-defined-networks.html',
+  },
   routes: {
     downstream: 'html/networking/configuring-routes',
     upstream: 'networking/routes/route-configuration.html',
