@@ -49,7 +49,7 @@ export const documentationURLs: documentationURLsType = {
   networkPolicy: {
     downstream: 'html/networking/network-policy#about-network-policy',
     kube: `${KUBE_DOCS}/concepts/services-networking/network-policies/`,
-    upstream: 'networking/network_policy/about-network-policy.html',
+    upstream: 'networking/network_security/network_policy/about-network-policy.html',
   },
   operators: {
     downstream: 'html/operators/understanding-operators#olm-what-operators-are',
@@ -102,7 +102,8 @@ export const documentationURLs: documentationURLsType = {
   },
 };
 
-export const isUpstream = () => window.SERVER_FLAGS.branding === 'okd';
+export const isUpstream = () =>
+  window.SERVER_FLAGS.branding === 'okd' || openshiftHelpBase === UPSTREAM_LATEST;
 
 export const isManaged = () =>
   window.SERVER_FLAGS.branding === 'rosa' || window.SERVER_FLAGS.branding === 'dedicated';
@@ -110,7 +111,7 @@ export const isManaged = () =>
 export const getDocumentationURL = (docURLs: docURLs) =>
   isUpstream()
     ? `${UPSTREAM_LATEST}${docURLs.upstream}`
-    : `${window.SERVER_FLAGS.documentationBaseURL}${docURLs.downstream}`;
+    : `${openshiftHelpBase}${docURLs.downstream}`;
 
 export const getNetworkPolicyDocURL = (openshiftFlag: boolean): string => {
   const networkLink = getDocumentationURL(documentationURLs.networkPolicy);
