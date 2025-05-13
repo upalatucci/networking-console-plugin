@@ -110,7 +110,7 @@ const CreateProjectModal: FC<{
           isDisabled={isSubmitting}
           key="button"
           onClick={closeModal}
-          variant={ButtonVariant.secondary}
+          variant={ButtonVariant.link}
         >
           {t('Cancel')}
         </Button>
