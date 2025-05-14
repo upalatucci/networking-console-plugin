@@ -4,8 +4,6 @@ import { Button, ButtonVariant, ModalBody, ModalFooter, ModalHeader } from '@pat
 import { Modal, ModalVariant } from '@patternfly/react-core';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 
-import '@styles/modal-action.scss';
-
 export type ConfirmModalProps = {
   btnText: JSX.Element | string;
   closeModal?: () => void;
@@ -30,7 +28,6 @@ const ConfirmModal: FC<ConfirmModalProps> = ({
 
   return (
     <Modal
-      className="networking-modal"
       id="confirm-modal"
       isOpen
       onClose={closeModal}

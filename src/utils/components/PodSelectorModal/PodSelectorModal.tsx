@@ -26,8 +26,6 @@ import { get } from '@utils/utils/helpers';
 import SelectorInput from './SelectorInput';
 import { arrayify, objectify } from './selectorUtils';
 
-import '@styles/modal-action.scss';
-
 export type PodSelectorModalProps = {
   closeModal?: () => void;
   model: K8sModel;
@@ -75,7 +73,6 @@ const PodSelectorModal: FC<PodSelectorModalProps> = ({
 
   return (
     <Modal
-      className="networking-modal"
       id="pod-selector-modal"
       isOpen
       onClose={closeModal}
@@ -113,7 +110,7 @@ const PodSelectorModal: FC<PodSelectorModalProps> = ({
           </Alert>
         )}
       </ModalBody>
-      <ModalFooter className="tabmodal-footer">
+      <ModalFooter>
         <Button
           isDisabled={loading}
           isLoading={loading}
