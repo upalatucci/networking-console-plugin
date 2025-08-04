@@ -6,10 +6,11 @@ import { FormGroup, SelectOption } from '@patternfly/react-core';
 import Loading from '@utils/components/Loading/Loading';
 import SelectTypeahead from '@utils/components/SelectTypeahead/SelectTypeahead';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { ProjectGroupVersionKind } from '@utils/hooks/useProjects/constants';
 import useProjectsWithPrimaryUserDefinedLabel from '@utils/hooks/useProjectsWithPrimaryUserDefinedLabel';
 import { getName } from '@utils/resources/shared';
 
-import { PROJECT_NAME, ProjectGroupVersionKind } from '../constants';
+import { PROJECT_NAME } from '../constants';
 
 import { UDNForm } from './constants';
 
