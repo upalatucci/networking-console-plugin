@@ -44,8 +44,18 @@ export const VMNetworksExtensions: EncodedExtension[] = [
     },
     type: 'console.page/route',
   } as EncodedExtension<RoutePage>,
+  {
+    properties: {
+      component: {
+        $codeRef: 'VMNetworkPage',
+      },
+      path: ['/k8s/cluster/virtualmachine-networks/:name'],
+    },
+    type: 'console.page/route',
+  } as EncodedExtension<RoutePage>,
 ];
 
 export const VMNetworksExposedModules: ConsolePluginBuildMetadata['exposedModules'] = {
   VMNetworkList: './views/vmnetworks/list/VMNetworkList.tsx',
+  VMNetworkPage: './views/vmnetworks/details/VMNetworkPage.tsx',
 };

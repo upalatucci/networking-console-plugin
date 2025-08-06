@@ -57,7 +57,11 @@ export const getModel = (obj: ClusterUserDefinedNetworkKind | UserDefinedNetwork
 
 export const getMTU = (udn: ClusterUserDefinedNetworkKind | UserDefinedNetworkKind): number => {
   if (udn.kind === ClusterUserDefinedNetworkModel.kind) {
-    return udn?.spec?.network?.layer2?.mtu || udn?.spec?.network?.layer3?.mtu;
+    return (
+      udn?.spec?.network?.layer2?.mtu ||
+      udn?.spec?.network?.layer3?.mtu ||
+      udn?.spec?.network?.localnet?.mtu
+    );
   }
 
   return udn?.spec?.layer2?.mtu || udn?.spec?.layer3?.mtu;
