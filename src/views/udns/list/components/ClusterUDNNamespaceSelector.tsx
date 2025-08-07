@@ -5,11 +5,10 @@ import { ResourceIcon } from '@openshift-console/dynamic-plugin-sdk';
 import { ExpandableSection, FormSection, List, ListItem } from '@patternfly/react-core';
 import MatchLabels from '@utils/components/MatchLabels/MatchLabels';
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
+import { ProjectGroupVersionKind } from '@utils/hooks/useProjects/constants';
+import useProjects from '@utils/hooks/useProjects/useProjects';
 import { getName } from '@utils/resources/shared';
 import { ClusterUserDefinedNetworkKind } from '@utils/resources/udns/types';
-
-import { ProjectGroupVersionKind } from '../constants';
-import useProjects from '../hooks/useProjects';
 
 import { match } from './utils';
 

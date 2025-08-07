@@ -14,7 +14,7 @@ import { filterOptions } from './utils';
 
 type SelectMultiTypeaheadProps = {
   options: SelectOptionProps[];
-  placeholder: string;
+  placeholder?: string;
   selected: string[];
   setSelected: (newSelection: string[]) => void;
 };
@@ -77,6 +77,7 @@ const SelectMultiTypeahead: FC<SelectMultiTypeaheadProps> = ({
             className={option.className}
             id={`select-multi-typeahead-${option.value.replace(' ', '-')}`}
             isFocused={focusedItemIndex === index}
+            isSelected={selected.includes(option.value)}
             key={option.value || option.children}
             {...option}
           >
