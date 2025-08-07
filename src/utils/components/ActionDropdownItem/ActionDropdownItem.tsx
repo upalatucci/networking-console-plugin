@@ -15,7 +15,7 @@ type ActionDropdownItemProps = {
 
 const ActionDropdownItem: FC<ActionDropdownItemProps> = ({ action, setIsOpen }) => {
   const { t } = useNetworkingTranslation();
-  const [actionAllowed] = useAccessReview(action?.accessReview);
+  const [actionAllowed] = useAccessReview(action?.accessReview || {});
   const isCloneDisabled = !actionAllowed && action?.id === 'vm-action-clone';
 
   const handleClick = () => {
@@ -38,7 +38,9 @@ const ActionDropdownItem: FC<ActionDropdownItemProps> = ({ action, setIsOpen }) 
           position: TooltipPosition.left,
         },
       })}
-      className={classNames({ ActionDropdownItem__disabled: isCloneDisabled })}
+      className={classNames('networking-action-dropdown-item', {
+        'networking-action-dropdown-item__disabled': isCloneDisabled,
+      })}
     >
       {action?.label}
       {action?.icon && (

@@ -1,4 +1,6 @@
-.ActionDropdownItem {
+.networking-action-dropdown-item {
+  max-width: 350px;
+
   &__disabled {
     cursor: unset;
     color: var(--pf-global--disabled-color--100);

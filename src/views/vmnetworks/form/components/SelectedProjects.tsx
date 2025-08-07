@@ -14,7 +14,7 @@ import {
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { ProjectGroupVersionKind } from '@utils/hooks/useProjects/constants';
 import { getName } from '@utils/resources/shared';
-import { match } from '@views/udns/list/components/utils';
+import { getVMNetworkProjects } from '@utils/resources/vmnetworks/utils';
 
 import { VMNetworkForm } from '../constants';
 import useUDNProjects from '../hook/useUDNProjects';
@@ -24,19 +24,11 @@ const SelectedProjects: FC = () => {
 
   const { watch } = useFormContext<VMNetworkForm>();
 
-  const namespaceSelector = watch('network.spec.namespaceSelector');
-  const projectList = watch('projectList');
+  const vmNetwork = watch('network');
 
   const [projects] = useUDNProjects();
 
-  const matchingProjects = projects?.filter((project) => {
-    if (projectList)
-      return namespaceSelector.matchExpressions?.some((expr) =>
-        expr.values.includes(getName(project)),
-      );
-
-    return namespaceSelector.matchLabels ? match(project, namespaceSelector.matchLabels) : true;
-  });
+  const matchingProjects = getVMNetworkProjects(vmNetwork, projects);
 
   return (
     <Alert

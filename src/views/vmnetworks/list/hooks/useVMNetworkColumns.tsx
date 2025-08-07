@@ -29,6 +29,18 @@ const useVMNetworkColumns = (): { id: string; title: string }[] => {
         transforms: [sortable],
       },
       {
+        id: 'namespaces',
+        sort: (data, direction) => data?.sort(sortUDNByMTU(direction)),
+        title: t('Namespaces'),
+        transforms: [sortable],
+      },
+      {
+        id: 'physicalNetworkName',
+        sort: 'spec.network.localnet.physicalNetworkName',
+        title: t('Bridge mapping'),
+        transforms: [sortable],
+      },
+      {
         id: 'mtu',
         sort: (data, direction) => data?.sort(sortUDNByMTU(direction)),
         title: t('MTU'),
