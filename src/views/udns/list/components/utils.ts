@@ -1,4 +1,3 @@
-import { K8sResourceCommon, MatchLabels } from '@openshift-console/dynamic-plugin-sdk';
 import { ClusterUserDefinedNetworkModel, UserDefinedNetworkModel } from '@utils/models';
 import { FIXED_PRIMARY_UDN_NAME } from '@utils/resources/udns/constants';
 import {
@@ -9,11 +8,6 @@ import {
 import { generateName, isEmpty } from '@utils/utils';
 
 import { UDNForm } from './constants';
-
-export const match = (resource: K8sResourceCommon, matchLabels: MatchLabels) =>
-  Object.entries(matchLabels || {})?.every(
-    ([key, value]) => resource?.metadata?.labels?.[key] === value,
-  );
 
 export const createUDN = (namespace?: string): UserDefinedNetworkKind => ({
   apiVersion: `${UserDefinedNetworkModel.apiGroup}/${UserDefinedNetworkModel.apiVersion}`,

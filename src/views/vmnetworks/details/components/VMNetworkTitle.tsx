@@ -5,7 +5,7 @@ import DetailsPageTitle from '@utils/components/DetailsPageTitle/DetailsPageTitl
 import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation';
 import { getName } from '@utils/resources/shared';
 import { ClusterUserDefinedNetworkKind } from '@utils/resources/udns/types';
-import UDNActions from '@views/udns/actions/UDNActions';
+import VMNetworkAction from '@views/vmnetworks/actions/VMNetworkActions';
 
 type VMNetworkTitleProps = {
   network: ClusterUserDefinedNetworkKind;
@@ -22,7 +22,7 @@ const VMNetworkTitle: FC<VMNetworkTitleProps> = ({ network }) => {
       ]}
     >
       <Title headingLevel="h1">{getName(network)}</Title>
-      <UDNActions isKebabToggle={false} obj={network} />
+      <VMNetworkAction isKebabToggle={false} obj={network} />
     </DetailsPageTitle>
   );
 };

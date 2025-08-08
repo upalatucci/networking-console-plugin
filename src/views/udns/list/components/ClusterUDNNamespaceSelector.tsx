@@ -9,8 +9,7 @@ import { ProjectGroupVersionKind } from '@utils/hooks/useProjects/constants';
 import useProjects from '@utils/hooks/useProjects/useProjects';
 import { getName } from '@utils/resources/shared';
 import { ClusterUserDefinedNetworkKind } from '@utils/resources/udns/types';
-
-import { match } from './utils';
+import { match } from '@utils/utils';
 
 const ClusterUDNNamespaceSelector: FC = () => {
   const { t } = useNetworkingTranslation();

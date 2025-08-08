@@ -7,7 +7,10 @@ import { useNetworkingTranslation } from '@utils/hooks/useNetworkingTranslation'
 import { getName } from '@utils/resources/shared';
 import { getMTU } from '@utils/resources/udns/selectors';
 import { ClusterUserDefinedNetworkKind } from '@utils/resources/udns/types';
-import UDNActions from '@views/udns/actions/UDNActions';
+import { NO_DATA_DASH } from '@utils/utils/constants';
+import VMNetworkAction from '@views/vmnetworks/actions/VMNetworkActions';
+
+import MatchedProjects from './MatchedProjects';
 
 type VMNetworkRowType = RowProps<ClusterUserDefinedNetworkKind>;
 
@@ -21,11 +24,17 @@ const VMNetworkRow: FC<VMNetworkRowType> = ({ activeColumnIDs, obj }) => {
       <TableData activeColumnIDs={activeColumnIDs} id="name">
         <Link to={`/k8s/cluster/virtualmachine-networks/${name}`}>{name}</Link>
       </TableData>
+      <TableData activeColumnIDs={activeColumnIDs} id="namespaces">
+        <MatchedProjects obj={obj} />
+      </TableData>
+      <TableData activeColumnIDs={activeColumnIDs} id="physicalNetworkName">
+        {obj?.spec?.network?.localnet?.physicalNetworkName || NO_DATA_DASH}
+      </TableData>
       <TableData activeColumnIDs={activeColumnIDs} id="mtu">
         {mtu || <MutedText content={t('Not available')} />}
       </TableData>
       <TableData activeColumnIDs={activeColumnIDs} className="pf-v6-c-table__action" id="">
-        <UDNActions obj={obj} />
+        <VMNetworkAction obj={obj} />
       </TableData>
     </>
   );
