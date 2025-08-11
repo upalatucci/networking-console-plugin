@@ -37,3 +37,6 @@ export const defaultFormValue: VMNetworkForm = {
   network: defaultVMNetwork,
   projectList: true,
 };
+
+export const MIN_VLAN_ID = 1;
+export const MAX_VLAN_ID = 4094;

@@ -42,6 +42,10 @@ export type UserDefinedNetworkLocalnet = {
   physicalNetworkName: string;
   role: UserDefinedNetworkRole;
   subnets?: UserDefinedNetworkSubnet[];
+  vlan?: {
+    access?: { id?: number };
+    mode?: 'Access';
+  };
 };
 
 export type ClusterUserDefinedNetworkSpec = {
